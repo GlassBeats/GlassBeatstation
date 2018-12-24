@@ -39,3 +39,10 @@ USAGE: (must be run in seperate terminals simultaneously)
     
     
 can use a variety of programs to route audio/midi to your liking. I recommend catia from the kxstudio repos for it's simplicity and patchbay style, but I believe qjackctl is quite commonly used as well
+
+
+
+
+
+
+also credit to the project https://github.com/FMMT666/launchpad.py - the ledcolor function to map color levels to correct midi numbers and the function to organize the grid into xy coordinates
