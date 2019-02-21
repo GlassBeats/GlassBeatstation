@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-import rtmidi2, pythonosc, jack, time, argparse, subprocess, atexit, re, time
+import rtmidi2, pythonosc, jack, time, argparse, subprocess, atexit, re, time, os
 from pythonosc import dispatcher, osc_server, osc_message_builder, udp_client
 
 
@@ -519,14 +519,13 @@ if __name__ == "__main__":
     parser.add_argument("--port",
         type=int, default=9998, help="The port to listen on")
     args = parser.parse_args()
-    print('*'*50)
-    cwd = "/path/to/glass_beatstation/" # replace with proper pathway to git folder
+    cwd = os.getcwd()
 
-    #jtransporter = subprocess.Popen("./jacktransporter.py")  #check to make sure this works
+    
     slgui = subprocess.Popen(["slgui", "-l 8"], stdout=subprocess.PIPE)  # start sooperlooper
-    #jtransporter = subprocess.Popen("./jacktransporter.py")  #check to make sure this works  
+
     stagecontrol = subprocess.Popen(["open-stage-control",
-           "-l", cwd + "stagecontrol.json",
+           "-l", cwd + "/stagecontrol.json",
     "-s", "127.0.0.1:9998", "-t", "orange"], stdout=subprocess.PIPE)
 
     jackmatch = subprocess.Popen(["jack-matchmaker",  # start jack-matchmaker
@@ -612,8 +611,6 @@ if __name__ == "__main__":
         jackmatch.terminate()
         slgui.terminate()
         stagecontrol.terminate()
-
-    import jtrans
 
     atexit.register(exit_handler)
     server.serve_forever()  # blocking osc server
