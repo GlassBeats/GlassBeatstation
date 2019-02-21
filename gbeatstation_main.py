@@ -113,6 +113,7 @@ class LPad_input():
 
     def coordinator(self, x, y, vel):
         '''allocate presses based on current mode '''
+        print ('coo', x, y, vel)
         if vel == 127:
             self.pressed[x, y] = time.time()  # for tracking long button presses
         elif vel <= 64:
@@ -443,12 +444,16 @@ def jtosc_handler(*args):  # osc from jacktransporter tracking jack position
 def stage_handler(*args):  # osc from open stage control
     print (args)
     if isinstance(args[1], str):
-        if args[1][0] == "#":  # if its a string (from matrix) find the number
+        button = 'broken'
+        '''if args[1][0] == "#":  # if its a string (from matrix) find the number
             button = re.search(r"\[([A-Za-z0-9_]+)\]", args[1])
-            button = int(button.group(1))
+            button = int(button.group(1))'''
 
-    if args[0] == "/beatpad":  # open-stage-c matrix - emulation of launchpad
-        vel = args[-1]
+    if args[0][:8] == "/beatpad":  # open-stage-c matrix - emulation of launchpad
+        button = args[0][9:]
+        button = int(button)
+        vel = args[-1] * 127
+        print ('beatpad', button)
         try:
             if button < 8:  # reformat to the launchpad values
                 x, y = button, 7
@@ -473,9 +478,9 @@ def stage_handler(*args):  # osc from open stage control
 
 
     elif args[0] == "/sync":  # quantize individual loops
-        if args[1][0] == "#":
-            loopnum = (args[1][-4])
-            slclient.send("/sl/{}/set".format(loopnum), ["sync", args[-1]])
+        '''if args[1][0] == "#":'''
+        loopnum, val = args[1], args[-1]
+        slclient.send("/sl/{}/set".format(loopnum), ["sync", args[-1]])
 
 
     elif args[0] == "/quantize":  # choose global? cycle size
@@ -485,6 +490,7 @@ def stage_handler(*args):  # osc from open stage control
         slclient.send("/set", ["sync_source", args[-1]])
 
     elif args[0] == "/mode":  # change mode
+        print (args)
         modelist = ["loop", "instrument", "sequencer", "loopplay"]
         lp.mode = modelist[args[-1]]
         if lp.mode == "loop":
@@ -501,7 +507,7 @@ def stage_handler(*args):  # osc from open stage control
         slclient.send("/set", ["eighth_per_cycle", args[-1]])
 
     elif args[0] == "/common_ins":  # use common ins (per each loop)
-        slclient.send("/sl/{}set".format(button), ["use_common_ins", args[-1]])
+        slclient.send("/sl/{}set".format(args[1]), ["use_common_ins", args[-1]])
 
     else:
         print (args)
@@ -513,13 +519,21 @@ if __name__ == "__main__":
     parser.add_argument("--port",
         type=int, default=9998, help="The port to listen on")
     args = parser.parse_args()
+    print('*'*50)
+    cwd = "/path/to/glass_beatstation/" # replace with proper pathway to git folder
 
-    slgui = subprocess.Popen(["slgui", "-l 8"])  # start sooperlooper
+    #jtransporter = subprocess.Popen("./jacktransporter.py")  #check to make sure this works
+    slgui = subprocess.Popen(["slgui", "-l 8"], stdout=subprocess.PIPE)  # start sooperlooper
+    #jtransporter = subprocess.Popen("./jacktransporter.py")  #check to make sure this works  
+    stagecontrol = subprocess.Popen(["open-stage-control",
+           "-l", cwd + "stagecontrol.json",
+    "-s", "127.0.0.1:9998", "-t", "orange"], stdout=subprocess.PIPE)
+
     jackmatch = subprocess.Popen(["jack-matchmaker",  # start jack-matchmaker
                 "^a2j:lp-leds", "^Launchpad",
                 "^Launchpad", "^a2j:RTMIDI",
                  "^jack_trans_out", "^Hydrogen",
-                  "a2j:lp-instrument", "^ardour:midinstrument",
+                  "a2j:lp-instrudment", "^ardour:midinstrument",
                   "^jack_trans_out", "^ardour:Drums/midi",
                   "^a2j:lp-pd", "ardour:MIDI control in",
                 "-m 1"], stdout=subprocess.PIPE)
@@ -596,6 +610,10 @@ if __name__ == "__main__":
         print ("exiting")
         lp.reset()  # button flush
         jackmatch.terminate()
+        slgui.terminate()
+        stagecontrol.terminate()
+
+    import jtrans
 
     atexit.register(exit_handler)
     server.serve_forever()  # blocking osc server
