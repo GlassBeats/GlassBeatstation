@@ -3,18 +3,18 @@ DEPENDENCIES:
 Jack audio
     http://jackaudio.org/downloads/
     
-Python 3 (all available via pip3)
+Python 3 (all available via pip3:)
     pip3 install jack-Client
     pip3 install rtmidi2
     pip3 install python-osc
     pip3 install jack-matchmaker
     
-Open Stage Control
+Open Stage Control 0.41.4
     https://osc.ammd.net/
     or
     https://github.com/jean-emmanuel/open-stage-control
     
-Sooperlooper
+Sooperlooper 1.7.3
     http://essej.net/sooperlooper/download.html
     or
     https://github.com/essej/sooperlooper
