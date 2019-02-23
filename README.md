@@ -19,9 +19,6 @@ Sooperlooper 1.7.3
     or
     https://github.com/essej/sooperlooper
     
-Bitrot (lv2 plugin - optional if you don't want the beatrepeater effect)
-    https://github.com/grejppi/bitrot
-        
 Hydrogen (optional - used for jack sync - sequencer will not work without):
     http://hydrogen-music.org/downloads/
     
@@ -29,11 +26,7 @@ Ardour (optional - other lv2 hosts can be used for instrumentation and bitrot
     https://community.ardour.org/download  
     (costs $50 or must be compiled - but I suggest downloading the kxstudio repos which contains it already)
  
- 
- 
 USAGE: (must be run in seperate terminals simultaneously)
-    open-stage-control -l /path/to/openstage.json -s 127.0.0.1:9998
-       (9998 is the OSC send port,if changed must also change on gbgstation_main.py)
     python3 gbeatstation_main.py
     python3 jacktransporter.py
     
