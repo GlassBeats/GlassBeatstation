@@ -65,7 +65,7 @@ def callback_midi(note, time_stamp):
                 jackcli.c.transport_stop()
             print("start" if jackcli.status == 1 else "stop")
         elif note == 105:
-            midiout_pd.send_noteon(144, 36, 127)
+            midiout_cc.send_noteon(144, 36, 127)
 
 
         elif vel == 127:
@@ -113,7 +113,6 @@ class LPad_input():
 
     def coordinator(self, x, y, vel):
         '''allocate presses based on current mode '''
-        print ('coo', x, y, vel)
         if vel == 127:
             self.pressed[x, y] = time.time()  # for tracking long button presses
         elif vel <= 64:
@@ -127,7 +126,7 @@ class LPad_input():
             lpinput.loop(x, y, vel)
         elif lp.mode == "instrument":  # mode for sending midi output
             lpinput.instr(x, y, vel)
-        elif lp.mode == "sequence" and vel == 127:  # sequencer mode
+        elif lp.mode == "sequencer" and vel == 127:  # sequencer mode
             lpinput.seq(x, y)
         elif lp.mode == "loopplay":  # for dynamic playback of loops
             lpinput.loopplay(x, y, vel)
@@ -143,7 +142,7 @@ class LPad_input():
                 for i in range(8):
                     lp.ledout(i, y, 0, 0)
         elif x == 1:
-            midiout_pd.send_noteon(144, 36, 127) # if vel == 127 else 0)
+            midiout_cc.send_noteon(144, 36, 127) # if vel == 127 else 0)
 
     def loop(self, x, y, vel):
         '''sooperlooper controls for record, dubbing, pause, reverse, undo/redo,'''
@@ -177,10 +176,10 @@ class LPad_input():
 
             if x == 0:
                 lp.ledout(x, y, lp.fg[(x, y)][0], lp.fg[(x, y)][1])
-                Sloop1.command(x, y)
+                looplist[0].command(x, y)
             elif looplist[y].len > .1:  # problematic if loops shorter than 1
                 lp.ledout(x, y, lp.fg[(x, y)][0], lp.fg[(x, y)][1])
-                Sloop1.command(x, y)
+                looplist[0].command(x, y)
         elif vel <= 64:
             lp.ledout(x, y, lp.bg1[(x, y)][0], lp.bg1[(x, y)][1])
 
@@ -195,12 +194,12 @@ class LPad_input():
                     noteout(midinum, vel)
                     lp.ledout(x, y, lp.fg[(x, y)][0], lp.fg[(x, y)][1])
                 else:
-                    Sloop1.command(x, y)
+                    looplist[0].command(x, y)
             elif vel <= 64:
                 noteout(midinum, 0)
                 lp.ledout(x, y, lp.bg0[(x, y)][0], lp.bg0[(x, y)][1])
         elif x == 8 and vel == 127:
-            Sloop1.command(0, y)
+            looplist[0].command(0, y)
 
     def seq(self, x, y,):
         '''sequencer values updater'''
@@ -267,7 +266,7 @@ class SL_global():
         except IndexError:
             print ("index issue")
 
-        stage_osc.send("/loopstate/{}".format(loop_num), Sloop1.loop_state_rgb[Sloop0.statenames[loop.state]])
+        stage_osc.send("/loopstate/{}".format(loop_num), looplist[0].loop_state_rgb[looplist[0].statenames[loop.state]])
 
     def track_len(loop, loop_num, length):
             loop.len = length
@@ -316,8 +315,6 @@ class Loop(SL_global):
         cli.send("/sl/{}/register_auto_update".format(num_loops - 1), ["state", self.interval, "localhost:9998", "/sloop"])
         cli.send("/sl/{}/register_auto_update".format(num_loops - 1), ["loop_len", self.interval, "localhost:9998", "/sloop"])
         cli.send("/sl/{}/register_auto_update".format(num_loops - 1), ["loop_pos", self.interval, "localhost:9998", "/sloop"])
-        cli.send("/sl/{}/register_auto_update".format(num_loops - 1), ["tempo", self.interval, "localhost:9998", "/slooptemp"])
-
 
 class Lpad_lights():
     def __init__(self):
@@ -427,10 +424,9 @@ def slosc_handler(*args):  # osc from sooperlooper
 
 def slosc_handler2(*args):
     if args[0] == "/slooptemp":
-        temp = int(args[-1])
-        Sloop1.tempo = temp
-        print (temp)
-        midiout_pd.send_messages(176, [(0, 1, temp)])
+        tempo = int(args[-1])
+        
+        midiout_cc.send_messages(176, [(0, 1, temp)])
 
 def jtosc_handler(*args):  # osc from jacktransporter tracking jack position
     if args[0] == "/jtrans_out":
@@ -477,9 +473,12 @@ def stage_handler(*args):  # osc from open stage control
         lpinput.coordinator(x, y, vel)  # button outputs identical to launchpad
 
 
-    elif args[0] == "/sync":  # quantize individual loops
-        '''if args[1][0] == "#":'''
-        loopnum, val = args[1], args[-1]
+    elif args[0][:5] == "/sync":  # quantize individual loops
+        print ('sync', args)
+        
+        loopnum, val = args[0][6], args[-1]
+        
+        print (loopnum, val)
         slclient.send("/sl/{}/set".format(loopnum), ["sync", args[-1]])
 
 
@@ -490,7 +489,6 @@ def stage_handler(*args):  # osc from open stage control
         slclient.send("/set", ["sync_source", args[-1]])
 
     elif args[0] == "/mode":  # change mode
-        print (args)
         modelist = ["loop", "instrument", "sequencer", "loopplay"]
         lp.mode = modelist[args[-1]]
         if lp.mode == "loop":
@@ -510,7 +508,7 @@ def stage_handler(*args):  # osc from open stage control
         slclient.send("/sl/{}set".format(args[1]), ["use_common_ins", args[-1]])
 
     else:
-        print (args)
+        print ('no handler for : ', args)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -519,30 +517,25 @@ if __name__ == "__main__":
     parser.add_argument("--port",
         type=int, default=9998, help="The port to listen on")
     args = parser.parse_args()
-    cwd = os.getcwd()
+    cwd = os.getcwd() #initiate python from cwd
 
-    
     slgui = subprocess.Popen(["slgui", "-l 8"], stdout=subprocess.PIPE)  # start sooperlooper
 
-    stagecontrol = subprocess.Popen(["open-stage-control",
-           "-l", cwd + "/stagecontrol.json",
-    "-s", "127.0.0.1:9998", "-t", "orange"], stdout=subprocess.PIPE)
+    stagecontrol = subprocess.Popen(["open-stage-control","-l", cwd + "/stagecontrol.json",  # initiate stagecontrol with midi ports
+    "-s", "127.0.0.1:9998", "-t", "orange", "-m", "open-stage_fades:virtual", "open-stage_keys:virtual", "-d"], stdout=subprocess.PIPE) 
 
     jackmatch = subprocess.Popen(["jack-matchmaker",  # start jack-matchmaker
                 "^a2j:lp-leds", "^Launchpad",
                 "^Launchpad", "^a2j:RTMIDI",
                  "^jack_trans_out", "^Hydrogen",
-                  "a2j:lp-instrudment", "^ardour:midinstrument",
+                  "a2j:lp-instrument", "^ardour:midinstrument",
                   "^jack_trans_out", "^ardour:Drums/midi",
-                  "^a2j:lp-pd", "ardour:MIDI control in",
+                  "^a2j:lp-cc", "ardour:MIDI control in",
                 "-m 1"], stdout=subprocess.PIPE)
 
     time.sleep(2)  # let sooperlooper engine finish starting
 
-    ins = rtmidi2.get_in_ports()  # check midiports
-    print ('inputs :')
-    for i in range(len(ins)):
-        print (i, ins[i])
+
 
     midi_in = rtmidi2.MidiIn()  # midiinput - begin callback
     midi_in.callback = callback_midi
@@ -559,8 +552,8 @@ if __name__ == "__main__":
     midiout_inst = rtmidi2.MidiOut('lp-instrument')  #"RtMidi-Instrument")
     midiout_inst.open_virtual_port('lp-instrument') #"RtMidi-Instrument")
 
-    midiout_pd = rtmidi2.MidiOut('lp-pd')  #"RtMidi")
-    midiout_pd.open_virtual_port('lp-pd') #"RtMidi")
+    midiout_cc = rtmidi2.MidiOut('lp-cc')  # controls for plugins
+    midiout_cc.open_virtual_port('lp-cc') 
 
     slclient = OSC_Sender()  # connect to sooperlooper
     jtrans_osc = OSC_Sender(ipaddr="127.0.0.1", port=8000)  # jacktransporter.py
@@ -568,15 +561,8 @@ if __name__ == "__main__":
     pd_osc = OSC_Sender(ipaddr="127.0.0.1", port=9111)  # to puredata
 
     #instantiate loops
-    Sloop0 = Loop(slclient)
-    Sloop1 = Loop(slclient)
-    Sloop2 = Loop(slclient)
-    Sloop3 = Loop(slclient)
-    Sloop4 = Loop(slclient)
-    Sloop5 = Loop(slclient)
-    Sloop6 = Loop(slclient)
-    Sloop7 = Loop(slclient)
-    looplist = [Sloop0, Sloop1, Sloop2, Sloop3, Sloop4, Sloop5, Sloop6, Sloop7]
+    #looplist = [Sloop0, Sloop1, Sloop2, Sloop3, Sloop4, Sloop5, Sloop6, Sloop7]
+    looplist = [Loop(slclient) for i in range(8)]
 
     jackcli = Jack_Client()
 
@@ -588,9 +574,11 @@ if __name__ == "__main__":
 
     #osc from openstage, default because it has many prefixes used
     dispatcher.set_default_handler(stage_handler)
-
+    
     server = osc_server.ThreadingOSCUDPServer((args.ip, args.port), dispatcher)
     print("OSC server on {}".format(server.server_address))
+
+    slclient.send("/register_auto_update", ["tempo", 10, "localhost:9998", "/sloop"])
 
     lp = Lpad_lights()
     lp.monochrome(0, 0, 3) #foreground fill with green
@@ -612,5 +600,9 @@ if __name__ == "__main__":
         slgui.terminate()
         stagecontrol.terminate()
 
+
+
+
+    
     atexit.register(exit_handler)
     server.serve_forever()  # blocking osc server
