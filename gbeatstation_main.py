@@ -7,6 +7,12 @@ from pythonosc import dispatcher, osc_server, osc_message_builder, udp_client
 def noteout(note, vel, port = 0):
     midiout_inst.send_noteon(144, note, vel)
 
+def bitrot_conv(digit): 
+    summ = 6 
+    for i in range(digit):
+        summ += 3 if (i + 1) % 4 == 0 else 4
+    return summ
+
 def callback_midi(note, time_stamp):
     chan, note, vel = note
     if chan == 176:
@@ -380,10 +386,13 @@ def slosc_handler(*args):  # osc from sooperlooper
             elif args[2] == 'loop_pos':
                 Loop.track_pos(loop, loop_num, args[3])
 
-            elif args[2] == 'tempo':
-                SL_global.tempo = args[-1]
             else:
                 print ('no handles on this /sloop :  ', args)
+        
+    if args[2] == 'tempo':
+        tempo = int(args[-1])
+        SL_global.tempo = tempo # update global tempo
+        if tempo > 10: midiout_cc.send_noteon(144, 36, int(tempo/3.75)) #bitrot midi-tempo
             
 
 def slosc_handler2(*args):
