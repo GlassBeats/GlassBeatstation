@@ -7,51 +7,6 @@ from pythonosc import dispatcher, osc_server, osc_message_builder, udp_client
 def noteout(note, vel, port = 0):
     midiout_inst.send_noteon(144, note, vel)
 
-
-def stagelp_ingrid(button):
-    try:
-        if button < 8:  # reformat to the weird launchpad values? kinda backwards but for now
-            x, y = button, 7
-        elif button < 16:
-            x, y = button % 8, 6
-        elif button < 24:
-            x, y = button % 8, 5
-        elif button < 32:
-            x, y = button % 8, 4
-        elif button < 40:
-            x, y = button % 8, 3
-        elif button < 48:
-            x, y = button % 8, 2
-        elif button < 56:
-            x, y = button % 8, 1
-        elif button < 64:
-            x, y = button % 8, 0
-    finally:
-        print(button, x, y)
-
-    return x, y  # this is the first time I have made a return statement in this entire project!!
-
-def stagelp_outgrid(x, y):  # converting x,y to pad on openstagecontrol
-    if y == 0:
-        button = 56 + x
-    elif y == 1:
-        button = 48 + x
-    elif y == 2:
-        button = 40 + x
-    elif y == 3:
-        button = 32 + x
-    elif y == 4:
-        button = 24 + x
-    elif y == 5:
-        button = 16 + x
-    elif y == 6:
-        button = 8 + x
-    elif y == 7:
-        button =  x
-    return str(button)
-
-
-
 def callback_midi(note, time_stamp):
     chan, note, vel = note
     if chan == 176:
@@ -124,7 +79,7 @@ class LPad_input():
 
         if lp.mode == "loop":  # mode for controlling sooperlooper
             lpinput.loop(x, y, vel)
-        elif lp.mode == "instrument":  # mode for sending midi output
+        elif lp.mode == "instrument":  # mode for sending midi output            
             lpinput.instr(x, y, vel)
         elif lp.mode == "sequencer" and vel == 127:  # sequencer mode
             lpinput.seq(x, y)
@@ -262,7 +217,7 @@ class SL_global():
         loop.state = int(state)
         try:
            r, g = loop.state_clr[loop.state]
-           lp.ledout(8, loop_num, r, g)
+           #lp.ledout(8, loop_num, r, g)
         except IndexError:
             print ("index issue")
 
@@ -272,14 +227,17 @@ class SL_global():
             loop.len = length
 
             seconds = int(loop.len)# on record: lights == # of seconds recorded
-            if loop.state == 2 and seconds < 8:
-                x, r, g = seconds, 1, 0
-
-            elif loop.state == 2 and seconds < 16:
-                x, r, g = seconds - 8, 2, 0
-            elif loop.state == 2 and seconds < 24:
-                x, r, g = seconds - 16, 3, 0
-            lp.ledout(x, loop_num, r, g)
+            if loop.state == 2:
+                if seconds < 8:
+                    x, r, g = seconds, 1, 0
+                elif seconds < 16:
+                    x, r, g = seconds - 8, 2, 0
+                elif  seconds < 24:
+                    x, r, g = seconds - 16, 3, 0
+                else:
+                    x = -1
+                if x >= 0:
+                    lp.ledout(x, loop_num, r, g)
 
 
     def track_pos(loop, loop_num, pos):
@@ -287,6 +245,7 @@ class SL_global():
                 if loop.state != 2 and loop.len != 0:
                     loop.pos = pos
                     pos_8th = int(loop.pos / loop.len * 8)
+                    print (loop_num, pos_8th)
 
                     if pos_8th == 0:
                         lp.ledout(0, loop_num, 0, 1)
@@ -372,9 +331,10 @@ class Lpad_lights():
         if y < 8:  # if not an automap button, midiout on channel 144
             midiout_lp.send_noteon(144, lp.outgrid[y, x], self.ledcol(r, g))
 
-            button = stagelp_outgrid(x, y)
+            button = str(x + (8 * y))
             color = [r * 85 , g * 85, 0]
             stage_osc.send("/griddy/{}".format(button), color)
+            print ('x', x, 'y ', y)
 
         elif y == 8:  # if automap, noteon must be on channel 176 instead
             midiout_lp.send_noteon(176, lp.automap[x], self.ledcol(r, g))
@@ -419,8 +379,12 @@ def slosc_handler(*args):  # osc from sooperlooper
                 Loop.track_len(loop, loop_num, args[3])
             elif args[2] == 'loop_pos':
                 Loop.track_pos(loop, loop_num, args[3])
+
+            elif args[2] == 'tempo':
+                SL_global.tempo = args[-1]
             else:
                 print ('no handles on this /sloop :  ', args)
+            
 
 def slosc_handler2(*args):
     if args[0] == "/slooptemp":
@@ -446,30 +410,12 @@ def stage_handler(*args):  # osc from open stage control
             button = int(button.group(1))'''
 
     if args[0][:8] == "/beatpad":  # open-stage-c matrix - emulation of launchpad
-        button = args[0][9:]
-        button = int(button)
+        button = int(args[0][9:])
         vel = args[-1] * 127
-        print ('beatpad', button)
-        try:
-            if button < 8:  # reformat to the launchpad values
-                x, y = button, 7
-            elif button < 16:
-                x, y = button % 8, 6
-            elif button < 24:
-                x, y = button % 8, 5
-            elif button < 32:
-                x, y = button % 8, 4
-            elif button < 40:
-                x, y = button % 8, 3
-            elif button < 48:
-                x, y = button % 8, 2
-            elif button < 56:
-                x, y = button % 8, 1
-            elif button < 64:
-                x, y = button % 8, 0
-        finally:
-            print (button, x, y)
 
+        x = button % 8
+        y = 0 if button == 8 else int(button / 8)
+    
         lpinput.coordinator(x, y, vel)  # button outputs identical to launchpad
 
 
@@ -506,6 +452,12 @@ def stage_handler(*args):  # osc from open stage control
 
     elif args[0] == "/common_ins":  # use common ins (per each loop)
         slclient.send("/sl/{}set".format(args[1]), ["use_common_ins", args[-1]])
+
+    elif args[0][:6] == "/fader":
+        print (args)
+        vel = int(args[1] * 127)
+        note = int(args[0][7])
+        midiout_cc.send_noteon(144, note, vel) # send fader controls to EQ
 
     else:
         print ('no handler for : ', args)
