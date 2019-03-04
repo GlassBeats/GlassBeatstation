@@ -94,36 +94,38 @@
         },
         {
           "type": "multixy",
-          "top": 80,
+          "top": 460,
           "left": 880,
           "id": "multixy_1",
           "linkId": "",
-          "width": 720,
-          "height": 670,
+          "width": 400,
+          "height": 380,
           "label": "auto",
           "color": "auto",
           "css": "",
-          "points": 4,
+          "points": 1,
           "pointSize": 20,
           "snap": true,
           "spring": false,
           "pips": true,
           "rangeX": {
             "min": 0,
-            "max": 1
+            "max": 127
           },
           "rangeY": {
             "min": 0,
-            "max": 1
+            "max": 127
           },
           "logScaleX": false,
           "logScaleY": false,
           "default": "",
           "value": "",
-          "precision": 2,
-          "address": "/multixy_1",
+          "precision": 0,
+          "address": "/note",
           "preArgs": "",
-          "target": "",
+          "target": [
+            "midi:open-stage"
+          ],
           "bypass": false,
           "touchAddress": "",
           "split": false
@@ -261,8 +263,8 @@
         },
         {
           "type": "matrix",
-          "top": 780,
-          "left": 720,
+          "top": 859.9999999999999,
+          "left": 679.9999999999999,
           "id": "matrix_1",
           "linkId": "",
           "width": "auto",
@@ -289,6 +291,154 @@
           "preArgs": "",
           "target": "",
           "bypass": false
+        },
+        {
+          "type": "range",
+          "top": 890,
+          "left": 910,
+          "id": "range_1",
+          "linkId": "",
+          "width": "auto",
+          "height": "auto",
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "range": {
+            "min": 0,
+            "max": 1
+          },
+          "horizontal": true,
+          "alignRight": false,
+          "input": true,
+          "compact": false,
+          "pips": true,
+          "snap": true,
+          "spring": false,
+          "logScale": false,
+          "default": "",
+          "value": "",
+          "precision": 2,
+          "address": "/range_1",
+          "preArgs": "",
+          "target": "",
+          "bypass": false,
+          "touchAddress": "",
+          "split": false
+        },
+        {
+          "type": "fader",
+          "top": 10,
+          "left": 880,
+          "id": "fader_1",
+          "linkId": "",
+          "width": 390,
+          "height": 80,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "horizontal": true,
+          "alignRight": false,
+          "pips": true,
+          "input": true,
+          "meter": false,
+          "compact": false,
+          "dashed": false,
+          "snap": true,
+          "spring": false,
+          "doubleTap": false,
+          "range": {
+            "min": 0,
+            "max": 127
+          },
+          "steps": "",
+          "logScale": false,
+          "unit": "",
+          "origin": "auto",
+          "default": 64,
+          "value": "",
+          "precision": 0,
+          "address": "/note",
+          "preArgs": [
+            144,
+            61
+          ],
+          "target": [
+            "midi:open-stage_fades"
+          ],
+          "bypass": false,
+          "touchAddress": "",
+          "meterAddress": ""
+        },
+        {
+          "type": "fader",
+          "top": 80,
+          "left": 880,
+          "id": "fader_2",
+          "linkId": "",
+          "width": 390,
+          "height": 80,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "horizontal": true,
+          "alignRight": false,
+          "pips": true,
+          "input": true,
+          "meter": false,
+          "compact": false,
+          "dashed": false,
+          "snap": true,
+          "spring": false,
+          "doubleTap": false,
+          "range": {
+            "min": 0,
+            "max": 127
+          },
+          "steps": "",
+          "logScale": false,
+          "unit": "",
+          "origin": "auto",
+          "default": "",
+          "value": "",
+          "precision": 0,
+          "address": "/note",
+          "preArgs": [
+            144,
+            61
+          ],
+          "target": [
+            "midi:open-stage"
+          ],
+          "bypass": false,
+          "touchAddress": "",
+          "meterAddress": ""
+        },
+        {
+          "type": "keyboard",
+          "top": 160,
+          "left": 880,
+          "id": "keyboard_1",
+          "linkId": "",
+          "width": 760,
+          "height": 230,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "keys": 25,
+          "start": 48,
+          "traversing": true,
+          "on": 127,
+          "off": 0,
+          "precision": 0,
+          "address": "/note",
+          "preArgs": [
+            1
+          ],
+          "target": [
+            "midi:open-stage_keys"
+          ],
+          "bypass": false,
+          "split": false
         }
       ],
       "tabs": [],
@@ -296,7 +446,7 @@
     },
     {
       "type": "tab",
-      "id": "tab_2",
+      "id": "Sooperlooper",
       "linkId": "",
       "label": "auto",
       "color": "auto",
@@ -489,7 +639,7 @@
     },
     {
       "type": "tab",
-      "id": "tab_3",
+      "id": "EQ",
       "linkId": "",
       "label": "auto",
       "color": "auto",
@@ -502,7 +652,37 @@
       "target": "",
       "bypass": false,
       "variables": "@{parent.variables}",
-      "widgets": [],
+      "widgets": [
+        {
+          "type": "matrix",
+          "top": 40,
+          "left": 30,
+          "id": "matrix_2",
+          "linkId": "",
+          "width": 1250,
+          "height": 340,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "widgetType": "fader",
+          "matrix": [
+            10,
+            1
+          ],
+          "start": 0,
+          "spacing": 0,
+          "traversing": true,
+          "border": true,
+          "props": {},
+          "default": 0.67,
+          "value": "",
+          "precision": 2,
+          "address": "/fader",
+          "preArgs": "",
+          "target": "",
+          "bypass": false
+        }
+      ],
       "tabs": [],
       "scroll": true
     },
@@ -521,7 +701,35 @@
       "target": "",
       "bypass": false,
       "variables": "@{parent.variables}",
-      "widgets": [],
+      "widgets": [
+        {
+          "type": "keyboard",
+          "top": 110,
+          "left": 0,
+          "id": "keyboard_1",
+          "linkId": "",
+          "width": 1570,
+          "height": 220,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "keys": 60,
+          "start": 48,
+          "traversing": true,
+          "on": 127,
+          "off": 0,
+          "precision": 0,
+          "address": "/note",
+          "preArgs": [
+            1
+          ],
+          "target": [
+            "midi:open-stage_keys"
+          ],
+          "bypass": false,
+          "split": false
+        }
+      ],
       "tabs": [],
       "scroll": true
     }

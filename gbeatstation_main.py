@@ -223,16 +223,19 @@ class SL_global():
         loop.state = int(state)
         try:
            r, g = loop.state_clr[loop.state]
-           #lp.ledout(8, loop_num, r, g)
+           #lp.ledout(8, loop_num, r, g) # issue for openstagecontrol
+           print (loop_num, r, g)
+           
         except IndexError:
             print ("index issue")
-
+        
+    
         stage_osc.send("/loopstate/{}".format(loop_num), looplist[0].loop_state_rgb[looplist[0].statenames[loop.state]])
-
+        
     def track_len(loop, loop_num, length):
             loop.len = length
 
-            seconds = int(loop.len)# on record: lights == # of seconds recorded
+            seconds = int(loop.len) # on record: lights == # of seconds recorded
             if loop.state == 2:
                 if seconds < 8:
                     x, r, g = seconds, 1, 0
@@ -247,6 +250,7 @@ class SL_global():
 
 
     def track_pos(loop, loop_num, pos):
+            
             try:
                 if loop.state != 2 and loop.len != 0:
                     loop.pos = pos
@@ -256,14 +260,16 @@ class SL_global():
                     if pos_8th == 0:
                         lp.ledout(0, loop_num, 0, 1)
                         lp.ledout(7, loop_num, 0, 0)
+                    
                     else:
-                        lp.ledout(pos_8th, loop_num, 0, 1)
+                        lp.ledout(pos_8th, loop_num, 0, 1) 
                         lp.ledout(pos_8th - 1, loop_num, 0, 0)
-
+                        
+                    
             except KeyError:
-                print ('keyerror')
+                print ('keyerror') #update track length 
                 slclient.send("/sl/{}/get".format(loop_num), ["loop_len", "localhost:9998", "/sloop"])
-
+ 
 class Loop(SL_global):
     def __init__(self, cli):
         SL_global.__init__(self)
@@ -299,6 +305,7 @@ class Lpad_lights():
                    112: (0, 0), 113: (0, 1), 114: (0, 2), 115: (0, 3), 116: (0, 4), 117: (0, 5), 118: (0, 6), 119: (0, 7), 120: (0, 8)}
 
         self.outgrid = {v: k for k, v in self.ingrid.items()}
+        
 
         self.highbound = 67
         self.lowbound = 16
@@ -333,19 +340,23 @@ class Lpad_lights():
             midiout_lp.send_noteon(176, 0, 0)
 
     def ledout(self, x, y, r, g):
+        if (x, y) in self.led_cur:
+            if self.led_cur[x, y] != (r, g):                            
+                if y < 8:  # if not an automap button, midiout on channel 144
+                    midiout_lp.send_noteon(144, lp.outgrid[y, x], self.ledcol(r, g))
+                    #print ('midi vals out', lp.outgrid[y, x]) #lp.outgrid[x,y]), ((y-1) << 4) | x)
+                    button = str(x + (8 * y))
+                    color = [r * 85 , g * 85, 0]
+                    stage_osc.send("/griddy/{}".format(button), color)
+                    if x == 8:
+                        pass
+                    
+                    self.led_cur[x, y] = r, g
+                    
+                elif y == 8:  # if automap, noteon must be on channel 176 instead
+                    midiout_lp.send_noteon(176, lp.automap[x], self.ledcol(r, g))
 
-        if y < 8:  # if not an automap button, midiout on channel 144
-            midiout_lp.send_noteon(144, lp.outgrid[y, x], self.ledcol(r, g))
-
-            button = str(x + (8 * y))
-            color = [r * 85 , g * 85, 0]
-            stage_osc.send("/griddy/{}".format(button), color)
-            print ('x', x, 'y ', y)
-
-        elif y == 8:  # if automap, noteon must be on channel 176 instead
-            midiout_lp.send_noteon(176, lp.automap[x], self.ledcol(r, g))
-
-
+            
 
     def ledcol(self,red, green):
         led = 0
@@ -385,15 +396,17 @@ def slosc_handler(*args):  # osc from sooperlooper
                 Loop.track_len(loop, loop_num, args[3])
             elif args[2] == 'loop_pos':
                 Loop.track_pos(loop, loop_num, args[3])
+            elif args[2] == 'tempo':
+                tempo = int(args[-1])
+                SL_global.tempo = tempo # update global tempo
+
+                if tempo > 10:
+                    midiout_cc.send_noteon(144, 36, int(tempo/3.75)) #bitrot midi-tempo
+        
 
             else:
                 print ('no handles on this /sloop :  ', args)
         
-    if args[2] == 'tempo':
-        tempo = int(args[-1])
-        SL_global.tempo = tempo # update global tempo
-        if tempo > 10: midiout_cc.send_noteon(144, 36, int(tempo/3.75)) #bitrot midi-tempo
-            
 
 def slosc_handler2(*args):
     if args[0] == "/slooptemp":
@@ -405,7 +418,7 @@ def jtosc_handler(*args):  # osc from jacktransporter tracking jack position
     if args[0] == "/jtrans_out":
         lp.ledout(*args[1:])
         x, y, r, g = args[1:]
-        if lp.mode == "sequence":
+        if lp.mode == "sequencer":
             for i in range(8):
                 lp.ledout(x, i, r, g) if Sequence.seq[i][x] == 0 else lp.ledout(x, i, 0, 2)
 
@@ -423,7 +436,7 @@ def stage_handler(*args):  # osc from open stage control
         vel = args[-1] * 127
 
         x = button % 8
-        y = 0 if button == 8 else int(button / 8)
+        y = 0 if button < 8 else int(button / 8)
     
         lpinput.coordinator(x, y, vel)  # button outputs identical to launchpad
 
@@ -463,10 +476,12 @@ def stage_handler(*args):  # osc from open stage control
         slclient.send("/sl/{}set".format(args[1]), ["use_common_ins", args[-1]])
 
     elif args[0][:6] == "/fader":
-        print (args)
         vel = int(args[1] * 127)
         note = int(args[0][7])
         midiout_cc.send_noteon(144, note, vel) # send fader controls to EQ
+
+    elif args[0] == "/bitbeats":
+        midiout_cc.send_noteon(144, 38, args[-1])
 
     else:
         print ('no handler for : ', args)
