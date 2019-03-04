@@ -223,7 +223,7 @@ class SL_global():
         loop.state = int(state)
         try:
            r, g = loop.state_clr[loop.state]
-           #lp.ledout(8, loop_num, r, g) # issue for openstagecontrol
+           lp.ledout(8, loop_num, r, g)
            print (loop_num, r, g)
            
         except IndexError:
@@ -255,15 +255,17 @@ class SL_global():
                 if loop.state != 2 and loop.len != 0:
                     loop.pos = pos
                     pos_8th = int(loop.pos / loop.len * 8)
-                    print (loop_num, pos_8th)
+                    if pos_8th != loop.eighth_pos:
+                        loop.eighth_pos = pos_8th                     
+                        print ("loop#", loop_num, "8th: ", pos_8th)
 
-                    if pos_8th == 0:
-                        lp.ledout(0, loop_num, 0, 1)
-                        lp.ledout(7, loop_num, 0, 0)
-                    
-                    else:
-                        lp.ledout(pos_8th, loop_num, 0, 1) 
-                        lp.ledout(pos_8th - 1, loop_num, 0, 0)
+                        if pos_8th == 0:
+                            lp.ledout(0, loop_num, 0, 1)
+                            lp.ledout(7, loop_num, 0, 0)
+                        
+                        else:
+                            lp.ledout(pos_8th, loop_num, 0, 1) 
+                            lp.ledout(pos_8th - 1, loop_num, 0, 0)
                         
                     
             except KeyError:
@@ -278,6 +280,7 @@ class Loop(SL_global):
 
         self.len = 1
         self.pos = 1
+        self.eighth_pos = 0
         self.state = 0
         self.rev = False
         self.quant = False
