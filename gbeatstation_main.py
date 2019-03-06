@@ -39,7 +39,7 @@ def callback_midi(note, time_stamp):
                 lp.mode = "instrument"
 
             elif note == 109:
-                lp.mode = "sequence"
+                lp.mode = "sequencer"
                 for key in lp.fg_seq:
                     lp.ledout(key[1], key[0], 0, lp.fg_seq[key])
             elif note == 108:
@@ -52,6 +52,7 @@ def callback_midi(note, time_stamp):
         y, x = lp.ingrid[note]  # convert to x, y to output led midi via dict
 
         lpinput.coordinator(x, y, vel)
+
 
 class Jack_Client():
     def __init__(self):
@@ -67,6 +68,7 @@ class Sequencer():
     def change_step(self, x, y, val):
         self.seq[y][x] = val
         lp.fg_seq[(y, x)] = val
+        
 
 class LPad_input():
     def __init__(self):
@@ -173,7 +175,6 @@ class LPad_input():
             jtrans_osc.send("/jtrans_in", [x, y, 0])
             lp.ledout(x, y, 0, 0)
 
-
 class OSC_Sender():
     def __init__(self, ipaddr="127.0.0.1", port=9951):
         self.osc_client = udp_client.SimpleUDPClient(ipaddr, port)
@@ -188,7 +189,7 @@ class SL_global():
         global num_loops
         num_loops += 1
         self.tempo = -1
-        self.interval = 100
+        self.interval = 10
         self.state_clr = [[0, 0],[1, 0],  # off, waitstart
                          [3, 0], [0, 0],  # recording waitstop
                          [0, 3], [2, 2],  # playing  overdub
@@ -234,7 +235,6 @@ class SL_global():
         
     def track_len(loop, loop_num, length):
             loop.len = length
-
             seconds = int(loop.len) # on record: lights == # of seconds recorded
             if loop.state == 2:
                 if seconds < 8:
@@ -249,28 +249,41 @@ class SL_global():
                     lp.ledout(x, loop_num, r, g)
 
 
-    def track_pos(loop, loop_num, pos):
+    def track_pos(loop, loop_num, pos):      
+        try:
+            loop.pos = pos
+            pos_8th = int(loop.pos / loop.len * 8)
             
-            try:
-                if loop.state != 2 and loop.len != 0:
-                    loop.pos = pos
-                    pos_8th = int(loop.pos / loop.len * 8)
-                    if pos_8th != loop.eighth_pos:
-                        loop.eighth_pos = pos_8th                     
-                        print ("loop#", loop_num, "8th: ", pos_8th)
+            if pos_8th != loop.eighth_pos:    
+                    loop.eighth_pos = pos_8th
+                    if pos_8th == 0:
+                        lp.ledout(0, 8, 0, 3)
+                        lp.ledout(7, 8, 1, 1)
 
-                        if pos_8th == 0:
-                            lp.ledout(0, loop_num, 0, 1)
+                        if lp.mode == "loop":
+                            lp.ledout(0, loop_num, 0, 3)
                             lp.ledout(7, loop_num, 0, 0)
-                        
-                        else:
-                            lp.ledout(pos_8th, loop_num, 0, 1) 
+                    else:
+                        lp.ledout(pos_8th, 8, 0, 3)
+                        lp.ledout(pos_8th - 1, 8, 1, 1)
+                        if lp.mode == "loop":
+                            lp.ledout(pos_8th, loop_num, 0, 3)
                             lp.ledout(pos_8th - 1, loop_num, 0, 0)
+
+                                  
                         
                     
-            except KeyError:
-                print ('keyerror') #update track length 
-                slclient.send("/sl/{}/get".format(loop_num), ["loop_len", "localhost:9998", "/sloop"])
+                    if loop.seqbase == True:
+                        for i in range(8):
+                            if Sequence.seq[i][pos_8th] > 0:
+                                print ('hit - midisend, i', pos_8th)
+                                midiout_inst.send_noteon(144, 36 + i, 127)
+                        
+                    
+
+        except KeyError:
+            print ('keyerror') #update track length 
+            slclient.send("/sl/{}/get".format(loop_num), ["loop_len", "localhost:9998", "/sloop"])
  
 class Loop(SL_global):
     def __init__(self, cli):
@@ -284,6 +297,7 @@ class Loop(SL_global):
         self.state = 0
         self.rev = False
         self.quant = False
+        self.seqbase = False # if this loop is timebase master for the sequencer
 
         # connect to sooperlooper
         cli.send("/sl/{}/register_auto_update".format(num_loops - 1), ["state", self.interval, "localhost:9998", "/sloop"])
@@ -344,21 +358,19 @@ class Lpad_lights():
 
     def ledout(self, x, y, r, g):
         if (x, y) in self.led_cur:
-            if self.led_cur[x, y] != (r, g):                            
+            if self.led_cur[x, y] != (r, g):
+                button = str(x + (8 * y))
+                color = [r * 85 , g * 85, 0]
                 if y < 8:  # if not an automap button, midiout on channel 144
                     midiout_lp.send_noteon(144, lp.outgrid[y, x], self.ledcol(r, g))
-                    #print ('midi vals out', lp.outgrid[y, x]) #lp.outgrid[x,y]), ((y-1) << 4) | x)
-                    button = str(x + (8 * y))
-                    color = [r * 85 , g * 85, 0]
                     stage_osc.send("/griddy/{}".format(button), color)
                     if x == 8:
                         pass
-                    
                     self.led_cur[x, y] = r, g
                     
                 elif y == 8:  # if automap, noteon must be on channel 176 instead
                     midiout_lp.send_noteon(176, lp.automap[x], self.ledcol(r, g))
-
+                    stage_osc.send("/automap/{}".format(x), color)
             
 
     def ledcol(self,red, green):
@@ -388,9 +400,12 @@ class Lpad_lights():
                     print ('automap')
 
 def slosc_handler(*args):  # osc from sooperlooper
-    if args[0] == '/sloop' and args[2] == "state":  # update state in any mode
-        Loop.track_state(looplist[args[1]], args[1], args[3])
-
+    loop = looplist[args[1]]
+    if args[2] == "loop_pos":
+        Loop.track_pos(loop, args[1], args[3])
+    if args[2] == "state":  # update state in any mode
+        Loop.track_state(loop, args[1], args[3])
+    
     elif lp.mode == "loop" or lp.mode == "loopplay":
         loop = looplist[args[1]]
         loop_num = args[1]
@@ -405,12 +420,10 @@ def slosc_handler(*args):  # osc from sooperlooper
 
                 if tempo > 10:
                     midiout_cc.send_noteon(144, 36, int(tempo/3.75)) #bitrot midi-tempo
-        
 
-            else:
-                print ('no handles on this /sloop :  ', args)
+    else:
+        print (args)
         
-
 def slosc_handler2(*args):
     if args[0] == "/slooptemp":
         tempo = int(args[-1])
@@ -498,8 +511,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     cwd = os.getcwd() #initiate python from cwd
 
-    slgui = subprocess.Popen(["slgui", "-l 8"], stdout=subprocess.PIPE)  # start sooperlooper
-
+    #without the gui, but can run slgui after the fact and will run on same engine
+    slgui = subprocess.Popen(["sooperlooper", "-l 8"], stdout=subprocess.PIPE)  # start sooperlooper
+    
     stagecontrol = subprocess.Popen(["open-stage-control","-l", cwd + "/stagecontrol.json",  # initiate stagecontrol with midi ports
     "-s", "127.0.0.1:9998", "-t", "orange", "-m", "open-stage_fades:virtual", "open-stage_keys:virtual", "-d"], stdout=subprocess.PIPE) 
 
@@ -507,7 +521,7 @@ if __name__ == "__main__":
                 "^a2j:lp-leds", "^Launchpad",
                 "^Launchpad", "^a2j:RTMIDI",
                  "^jack_trans_out", "^Hydrogen",
-                  "a2j:lp-instrument", "^ardour:midinstrument",
+                  #"a2j:lp-instrument", "^ardour:midinstrument",
                   "^jack_trans_out", "^ardour:Drums/midi",
                   "^a2j:lp-cc", "ardour:MIDI control in",
                 "-m 1"], stdout=subprocess.PIPE)
@@ -538,7 +552,7 @@ if __name__ == "__main__":
     jtrans_osc = OSC_Sender(ipaddr="127.0.0.1", port=8000)  # jacktransporter.py
     stage_osc = OSC_Sender(ipaddr="127.0.0.1", port=8080)  # open stage control
     pd_osc = OSC_Sender(ipaddr="127.0.0.1", port=9111)  # to puredata
-
+    clientele = OSC_Sender(ipaddr="127.0.0.1", port=9997)
     #instantiate loops
     #looplist = [Sloop0, Sloop1, Sloop2, Sloop3, Sloop4, Sloop5, Sloop6, Sloop7]
     looplist = [Loop(slclient) for i in range(8)]
@@ -571,6 +585,8 @@ if __name__ == "__main__":
     for i in range(3):  #
         lp.bg_switch(i)
         time.sleep(.3)
+
+    looplist[0].seqbase = True
 
     def exit_handler():
         print ("exiting")
