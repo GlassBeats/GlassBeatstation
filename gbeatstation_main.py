@@ -258,14 +258,16 @@ class SL_global():
                     loop.eighth_pos = pos_8th
                     if pos_8th == 0:
                         lp.ledout(0, 8, 0, 3)
-                        lp.ledout(7, 8, 1, 1)
+                        lp.ledout(7, 8, 0, 1)
 
                         if lp.mode == "loop":
                             lp.ledout(0, loop_num, 0, 3)
                             lp.ledout(7, loop_num, 0, 0)
+                            lp.ledout(7, 8, 0, 1)
                     else:
                         lp.ledout(pos_8th, 8, 0, 3)
-                        lp.ledout(pos_8th - 1, 8, 1, 1)
+                        lp.ledout(pos_8th - 1, 8, 0, 1)
+                        
                         if lp.mode == "loop":
                             lp.ledout(pos_8th, loop_num, 0, 3)
                             lp.ledout(pos_8th - 1, loop_num, 0, 0)
@@ -277,7 +279,7 @@ class SL_global():
                         for i in range(8):
                             if Sequence.seq[i][pos_8th] > 0:
                                 print ('hit - midisend, i', pos_8th)
-                                midiout_inst.send_noteon(144, 36 + i, 127)
+                                midiout_seq.send_noteon(144, 36 + i, 127)
                         
                     
 
@@ -546,7 +548,12 @@ if __name__ == "__main__":
     midiout_inst.open_virtual_port('lp-instrument') #"RtMidi-Instrument")
 
     midiout_cc = rtmidi2.MidiOut('lp-cc')  # controls for plugins
-    midiout_cc.open_virtual_port('lp-cc') 
+    midiout_cc.open_virtual_port('lp-cc')
+
+    midiout_seq = rtmidi2.MidiOut('lp-seq')  # sequencer output
+    midiout_seq.open_virtual_port('lp-seq')
+
+    
 
     slclient = OSC_Sender()  # connect to sooperlooper
     jtrans_osc = OSC_Sender(ipaddr="127.0.0.1", port=8000)  # jacktransporter.py
