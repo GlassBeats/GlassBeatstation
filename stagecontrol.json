@@ -93,75 +93,6 @@
           "bypass": false
         },
         {
-          "type": "multixy",
-          "top": 460,
-          "left": 880,
-          "id": "multixy_1",
-          "linkId": "",
-          "width": 400,
-          "height": 380,
-          "label": "auto",
-          "color": "auto",
-          "css": "",
-          "points": 1,
-          "pointSize": 20,
-          "snap": true,
-          "spring": false,
-          "pips": true,
-          "rangeX": {
-            "min": 0,
-            "max": 127
-          },
-          "rangeY": {
-            "min": 0,
-            "max": 127
-          },
-          "logScaleX": false,
-          "logScaleY": false,
-          "default": "",
-          "value": "",
-          "precision": 0,
-          "address": "/note",
-          "preArgs": "",
-          "target": [
-            "midi:open-stage"
-          ],
-          "bypass": false,
-          "touchAddress": "",
-          "split": false
-        },
-        {
-          "type": "matrix",
-          "top": 80,
-          "left": 680,
-          "id": "State",
-          "linkId": "",
-          "width": 70,
-          "height": 670,
-          "label": false,
-          "color": "auto",
-          "css": "",
-          "widgetType": "rgbled",
-          "matrix": [
-            1,
-            8
-          ],
-          "start": 0,
-          "spacing": 0,
-          "traversing": true,
-          "border": true,
-          "props": {
-            "label": false
-          },
-          "default": "",
-          "value": "",
-          "precision": 2,
-          "address": "/matrix_1",
-          "preArgs": "",
-          "target": "",
-          "bypass": false
-        },
-        {
           "type": "matrix",
           "top": 0,
           "left": 0,
@@ -186,8 +117,8 @@
           },
           "default": "",
           "value": "",
-          "precision": 2,
-          "address": "/matrix_1",
+          "precision": 0,
+          "address": "/automap",
           "preArgs": "",
           "target": "",
           "bypass": false
@@ -228,7 +159,7 @@
           "height": 200,
           "css": "",
           "left": 760,
-          "top": 400,
+          "top": 550,
           "id": "clone_1",
           "props": {},
           "label": "",
@@ -236,12 +167,12 @@
         },
         {
           "type": "switch",
-          "top": 80,
+          "top": 280,
           "left": 760,
-          "id": "switch_1",
+          "id": "mode",
           "linkId": "",
           "width": 110,
-          "height": 270,
+          "height": 260,
           "label": "auto",
           "color": "auto",
           "css": "",
@@ -363,7 +294,7 @@
             61
           ],
           "target": [
-            "midi:open-stage_fades"
+            "midi:open-stage_cc"
           ],
           "bypass": false,
           "touchAddress": "",
@@ -407,7 +338,7 @@
             61
           ],
           "target": [
-            "midi:open-stage"
+            "midi:open-stage_cc"
           ],
           "bypass": false,
           "touchAddress": "",
@@ -425,7 +356,7 @@
           "color": "auto",
           "css": "",
           "keys": 25,
-          "start": 48,
+          "start": 72,
           "traversing": true,
           "on": 127,
           "off": 0,
@@ -437,8 +368,193 @@
           "target": [
             "midi:open-stage_keys"
           ],
-          "bypass": false,
+          "bypass": true,
           "split": false
+        },
+        {
+          "type": "switch",
+          "top": 10,
+          "left": 680,
+          "id": "matrix_3",
+          "linkId": "",
+          "width": 190,
+          "height": 60,
+          "label": false,
+          "color": "auto",
+          "css": "",
+          "default": "",
+          "value": "",
+          "precision": 0,
+          "address": "/note",
+          "preArgs": "",
+          "target": "",
+          "bypass": false,
+          "horizontal": true,
+          "showValues": false,
+          "values": {
+            "1": 1,
+            "2": 2,
+            "4": 4
+          }
+        },
+        {
+          "type": "switch",
+          "top": 80,
+          "left": 760,
+          "id": "matrix_3",
+          "linkId": "",
+          "width": 110,
+          "height": 120,
+          "label": false,
+          "color": "auto",
+          "css": "",
+          "default": "",
+          "value": "",
+          "precision": 0,
+          "address": "/bitdiv",
+          "preArgs": "",
+          "target": "",
+          "bypass": false,
+          "horizontal": false,
+          "showValues": false,
+          "values": {
+            "1": 1,
+            "2": 2,
+            "4": 4
+          }
+        },
+        {
+          "type": "push",
+          "top": 210,
+          "left": 760,
+          "id": "bitpush",
+          "linkId": "",
+          "width": 110,
+          "height": 60,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "doubleTap": false,
+          "on": 1,
+          "off": 0,
+          "norelease": false,
+          "precision": 2,
+          "address": "/bitpush",
+          "preArgs": "",
+          "target": "",
+          "bypass": false
+        },
+        {
+          "type": "push",
+          "top": 400,
+          "left": 880,
+          "id": "Record",
+          "linkId": "",
+          "width": "auto",
+          "height": "auto",
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "doubleTap": false,
+          "on": null,
+          "off": 0,
+          "norelease": true,
+          "precision": 0,
+          "address": "/sl/0/down",
+          "preArgs": "record",
+          "target": [
+            "127.0.0.1:9951"
+          ],
+          "bypass": false
+        },
+        {
+          "type": "matrix",
+          "top": 440,
+          "left": 1000,
+          "id": "matrix_4",
+          "linkId": "",
+          "width": "auto",
+          "height": "auto",
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "widgetType": "toggle",
+          "matrix": [
+            2,
+            2
+          ],
+          "start": 0,
+          "spacing": 0,
+          "traversing": true,
+          "border": true,
+          "props": {},
+          "default": "",
+          "value": "",
+          "precision": 2,
+          "address": "/matrix_4",
+          "preArgs": "",
+          "target": "",
+          "bypass": false
+        },
+        {
+          "type": "matrix",
+          "top": 430,
+          "left": 1260,
+          "id": "Loop Syncs",
+          "linkId": "",
+          "width": 110,
+          "height": 310,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "matrix": [
+            1,
+            8
+          ],
+          "start": 0,
+          "spacing": 0,
+          "traversing": true,
+          "default": "",
+          "value": "",
+          "precision": 0,
+          "address": "/sync",
+          "preArgs": "",
+          "target": "",
+          "bypass": false,
+          "widgetType": "toggle",
+          "border": true,
+          "props": {}
+        },
+        {
+          "type": "matrix",
+          "top": 80,
+          "left": 680,
+          "id": "State1",
+          "linkId": "",
+          "width": 70,
+          "height": 670,
+          "label": false,
+          "color": "auto",
+          "css": "",
+          "widgetType": "rgbled",
+          "matrix": [
+            1,
+            8
+          ],
+          "start": 0,
+          "spacing": 0,
+          "traversing": true,
+          "border": true,
+          "props": {
+            "label": false
+          },
+          "default": "",
+          "value": "",
+          "precision": 2,
+          "address": "/rightcol",
+          "preArgs": "",
+          "target": "",
+          "bypass": false
         }
       ],
       "tabs": [],
@@ -727,6 +843,44 @@
             "midi:open-stage_keys"
           ],
           "bypass": false,
+          "split": false
+        },
+        {
+          "type": "multixy",
+          "top": 350,
+          "left": 590,
+          "id": "multixy_1",
+          "linkId": "",
+          "width": 400,
+          "height": 380,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "points": 4,
+          "pointSize": 20,
+          "snap": true,
+          "spring": false,
+          "pips": true,
+          "rangeX": {
+            "min": 0,
+            "max": 127
+          },
+          "rangeY": {
+            "min": 0,
+            "max": 127
+          },
+          "logScaleX": false,
+          "logScaleY": false,
+          "default": "",
+          "value": "",
+          "precision": 0,
+          "address": "/note",
+          "preArgs": "",
+          "target": [
+            "midi:open-stage"
+          ],
+          "bypass": false,
+          "touchAddress": "",
           "split": false
         }
       ],
