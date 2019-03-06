@@ -252,7 +252,7 @@ class SL_global():
     def track_pos(loop, loop_num, pos):      
         try:
             loop.pos = pos
-            pos_8th = int(loop.pos / loop.len * 8)
+            pos_8th = int(loop.pos / loop.len * 8) if loop.len > 0 else None
             
             if pos_8th != loop.eighth_pos:    
                     loop.eighth_pos = pos_8th
@@ -271,15 +271,15 @@ class SL_global():
                         if lp.mode == "loop":
                             lp.ledout(pos_8th, loop_num, 0, 3)
                             lp.ledout(pos_8th - 1, loop_num, 0, 0)
-
-                                  
-                        
-                    
+                                
                     if loop.seqbase == True:
                         for i in range(8):
-                            if Sequence.seq[i][pos_8th] > 0:
-                                print ('hit - midisend, i', pos_8th)
-                                midiout_seq.send_noteon(144, 36 + i, 127)
+                            print ('seqing', i, pos_8th)
+                            if pos_8th < 8:
+                                
+                                if Sequence.seq[i][pos_8th] > 0:
+                                    print ('hit - midisend, i', pos_8th)
+                                    midiout_seq.send_noteon(144, 36 + i, 127)
                         
                     
 
