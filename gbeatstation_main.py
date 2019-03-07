@@ -274,7 +274,6 @@ class SL_global():
                                 
                     if loop.seqbase == True:
                         for i in range(8):
-                            print ('seqing', i, pos_8th)
                             if pos_8th < 8:
                                 
                                 if Sequence.seq[i][pos_8th] > 0:
@@ -477,15 +476,30 @@ def stage_handler(*args):  # osc from open stage control
     elif args[0] == "/mode":  # change mode
         modelist = ["loop", "instrument", "sequencer", "loopplay"]
         lp.mode = modelist[args[-1]]
+
+        if lp.mode == "loop":
+            for i in range(64):
+                txtlist = looplist[0].cmds
+                txtlist[2] = "oneshot"
+                stage_osc.send("/textmat/" + str(i), txtlist[i % 8])
+        else:
+            for i in range(64):
+                stage_osc.send("/textmat/" + str(i), " ")
+                
         if lp.mode == "loop":
             lp.bg_switch(3)
+            print ('mode = ', lp.mode)
+
         elif lp.mode == "instrument":
             lp.bg_switch(1)
+
+        
         elif lp.mode == "sequencer":
             for key in lp.fg_seq:
                     lp.ledout(key[1], key[0], 0, lp.fg_seq[key])
 
-        print ('mode = ', lp.mode)
+        #this should be moved into a proper 'modeswitch' function'
+        
 
     elif args[0] == "/cycle":  # set cycle length for quantization
         slclient.send("/set", ["eighth_per_cycle", args[-1]])
@@ -531,7 +545,6 @@ if __name__ == "__main__":
     time.sleep(2)  # let sooperlooper engine finish starting
 
 
-
     midi_in = rtmidi2.MidiIn()  # midiinput - begin callback
     midi_in.callback = callback_midi
 
@@ -560,8 +573,6 @@ if __name__ == "__main__":
     stage_osc = OSC_Sender(ipaddr="127.0.0.1", port=8080)  # open stage control
     pd_osc = OSC_Sender(ipaddr="127.0.0.1", port=9111)  # to puredata
     clientele = OSC_Sender(ipaddr="127.0.0.1", port=9997)
-    #instantiate loops
-    #looplist = [Sloop0, Sloop1, Sloop2, Sloop3, Sloop4, Sloop5, Sloop6, Sloop7]
     looplist = [Loop(slclient) for i in range(8)]
 
     jackcli = Jack_Client()
@@ -604,6 +615,10 @@ if __name__ == "__main__":
 
 
 
+    time.sleep(.6)
+    
+    for i in range(64):
+        stage_osc.send("/textmat/" + str(i), " ")
 
     
     atexit.register(exit_handler)
