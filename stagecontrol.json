@@ -194,19 +194,19 @@
         },
         {
           "type": "matrix",
-          "top": 859.9999999999999,
-          "left": 679.9999999999999,
+          "top": 80,
+          "left": -10,
           "id": "matrix_1",
           "linkId": "",
-          "width": "auto",
-          "height": "auto",
+          "width": 670,
+          "height": 670,
           "label": false,
           "color": "auto",
-          "css": ":host {\n--glass-opacity:0;\nz-index:11;\n}\n:host, .matrix, .widget, .text {\nbackground:none;\n}",
+          "css": ":host {\n--glass-opacity:0;\nz-index:11;\npointer-events:none;\n}\n:host, .matrix, .widget, .text {\nbackground:none;\noutline-color: rgb(201, 76, 76);\n}",
           "widgetType": "text",
           "matrix": [
-            2,
-            2
+            8,
+            8
           ],
           "start": 0,
           "spacing": 0,
