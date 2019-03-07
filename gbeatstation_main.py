@@ -137,7 +137,7 @@ class LPad_input():
                 for i in range(8):  # turn off row of leds
                     lp.ledout(i, y, 0, 0)
 
-            if x == 0:
+            elif x == 0:
                 lp.ledout(x, y, lp.fg[(x, y)][0], lp.fg[(x, y)][1])
                 looplist[0].command(x, y)
             elif looplist[y].len > .1:  # problematic if loops shorter than 1
@@ -189,7 +189,7 @@ class SL_global():
         global num_loops
         num_loops += 1
         self.tempo = -1
-        self.interval = 10
+        self.interval = 5  # not sure if this is working below 10 ms
         self.state_clr = [[0, 0],[1, 0],  # off, waitstart
                          [3, 0], [0, 0],  # recording waitstop
                          [0, 3], [2, 2],  # playing  overdub
@@ -212,9 +212,15 @@ class SL_global():
         self.cmds = ["record", "overdub", "trigger", "trigger",
                       "pause", "reverse", "undo", "redo"]
 
-    def command(self, x, y):
+    def command(self, x, y, vel = -1):
         if x < 8:
             print (y, self.cmds[x])
+
+            if x == 2 and looplist[y].state != 2:
+                print ('cmding', )
+                slclient.send("/sl/{}/up".format(str(y)), "oneshot")
+
+            
             slclient.send("/sl/{}/down".format(str(y)), self.cmds[x])
 
             if self.cmds[x] == 'reverse':  # not implemented yet
@@ -615,7 +621,7 @@ if __name__ == "__main__":
 
 
 
-    time.sleep(.6)
+    time.sleep(1)
     
     for i in range(64):
         stage_osc.send("/textmat/" + str(i), " ")
