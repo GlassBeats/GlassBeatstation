@@ -545,7 +545,6 @@ if __name__ == "__main__":
     
 
     slclient = OSC_Sender()  # connect to sooperlooper
-    jtrans_osc = OSC_Sender(ipaddr="127.0.0.1", port=8000)  # jacktransporter.py
     stage_osc = OSC_Sender(ipaddr="127.0.0.1", port=8080)  # open stage control
     pd_osc = OSC_Sender(ipaddr="127.0.0.1", port=9111)  # to puredata
     clientele = OSC_Sender(ipaddr="127.0.0.1", port=9997)
@@ -555,7 +554,6 @@ if __name__ == "__main__":
     dispatcher = dispatcher.Dispatcher()
     dispatcher.map("/sloop", slosc_handler)  # sooperlooper handler
     dispatcher.map("/slooptemp", slosc_handler2)
-    dispatcher.map("/jtrans_out", jtosc_handler)  # jacktransporter.py handler
 
     #osc from openstage, default because it has many prefixes used
     dispatcher.set_default_handler(stage_handler)
