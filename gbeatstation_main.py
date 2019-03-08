@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+  #! /usr/bin/python3
 
 import rtmidi2, pythonosc, jack, time, argparse, subprocess, atexit, re, time, os
 from pythonosc import dispatcher, osc_server, osc_message_builder, udp_client
@@ -13,35 +13,32 @@ def bitrot_conv(digit):
         summ += 3 if (i + 1) % 4 == 0 else 4
     return summ
 
+def mode_switch(mode, num):
+    lp.mode = mode
+    lp.bg_switch(num)
+
+
+
 def callback_midi(note, time_stamp):
     chan, note, vel = note
     if chan == 176:
         # automap / menu buttons (top row)
-        if note == 104 and vel == 127:
-            if jackcli.c.transport_query_struct()[0] == 0:
-                jackcli.c.transport_start()
-                jackcli.status = 1
-            elif jackcli.c.transport_query_struct()[0] == 1:
-                jackcli.status = 0
-                jackcli.c.transport_stop()
-            print("start" if jackcli.status == 1 else "stop")
-        elif note == 105:
+        if note == 105 and vel == 127:
             midiout_cc.send_noteon(144, 36, 127)
 
 
-        elif vel == 127:
+        elif vel == 127:                
             if note == 111:  # mode switching
-                lp.bg_switch(3)
-                lp.mode = "loop"
-
+                mode_switch("loop", 3)
+                
             elif note == 110:
-                lp.bg_switch(1)
-                lp.mode = "instrument"
+                mode_switch("instrument", 1)
 
             elif note == 109:
                 lp.mode = "sequencer"
                 for key in lp.fg_seq:
                     lp.ledout(key[1], key[0], 0, lp.fg_seq[key])
+                    
             elif note == 108:
                 lp.mode = "loopplay"
                 lp.reset()
@@ -50,16 +47,8 @@ def callback_midi(note, time_stamp):
 
     else:  # general input for presses on the grid
         y, x = lp.ingrid[note]  # convert to x, y to output led midi via dict
-
         lpinput.coordinator(x, y, vel)
 
-
-class Jack_Client():
-    def __init__(self):
-        self.status = 0
-        self.bpm = 0
-        self.c = jack.Client('gbeatstation')
-        self.c.activate()
 
 class Sequencer():
     def __init__(self, steps):
@@ -109,12 +98,14 @@ class LPad_input():
 
     def loop(self, x, y, vel):
         '''sooperlooper controls for record, dubbing, pause, reverse, undo/redo,'''
-        if x == 2 and vel <= 64:
-            slclient.send("/sl/{}/down".format(y), "pause")
-            for i in range(5):
-                lp.ledout(x + i, y, 0, 0)
-            lp.ledout(x - 1, y, 0, 0)
-            lp.ledout(x - 2, y, 0, 0)
+        if x == 2 and vel == 64 or x == 2 and vel == 0:
+                print ('should be pausing')
+                slclient.send("/sl/{}/up".format(y), "oneshot")
+                slclient.send("/sl/{}/down".format(y), "pause")
+                for i in range(5):
+                    lp.ledout(x + i, y, 0, 0)
+                lp.ledout(x - 1, y, 0, 0)
+                lp.ledout(x - 2, y, 0, 0)
 
 
         elif x == 8:  # if side controls, quantize on & off
@@ -137,7 +128,7 @@ class LPad_input():
                 for i in range(8):  # turn off row of leds
                     lp.ledout(i, y, 0, 0)
 
-            elif x == 0:
+            if x == 0:
                 lp.ledout(x, y, lp.fg[(x, y)][0], lp.fg[(x, y)][1])
                 looplist[0].command(x, y)
             elif looplist[y].len > .1:  # problematic if loops shorter than 1
@@ -168,11 +159,9 @@ class LPad_input():
         '''sequencer values updater'''
         if Sequence.seq[y][x] == 0:
             Sequence.change_step(x, y, 1)
-            jtrans_osc.send("/jtrans_in", [x, y, 1])
             lp.ledout(x, y, 1, 2)
         elif Sequence.seq[y][x] == 1:
             Sequence.change_step(x, y, 0)
-            jtrans_osc.send("/jtrans_in", [x, y, 0])
             lp.ledout(x, y, 0, 0)
 
 class OSC_Sender():
@@ -212,15 +201,9 @@ class SL_global():
         self.cmds = ["record", "overdub", "trigger", "trigger",
                       "pause", "reverse", "undo", "redo"]
 
-    def command(self, x, y, vel = -1):
+    def command(self, x, y):
         if x < 8:
             print (y, self.cmds[x])
-
-            if x == 2 and looplist[y].state != 2:
-                print ('cmding', )
-                slclient.send("/sl/{}/up".format(str(y)), "oneshot")
-
-            
             slclient.send("/sl/{}/down".format(str(y)), self.cmds[x])
 
             if self.cmds[x] == 'reverse':  # not implemented yet
@@ -437,22 +420,8 @@ def slosc_handler2(*args):
         
         midiout_cc.send_messages(176, [(0, 1, temp)])
 
-def jtosc_handler(*args):  # osc from jacktransporter tracking jack position
-    if args[0] == "/jtrans_out":
-        lp.ledout(*args[1:])
-        x, y, r, g = args[1:]
-        if lp.mode == "sequencer":
-            for i in range(8):
-                lp.ledout(x, i, r, g) if Sequence.seq[i][x] == 0 else lp.ledout(x, i, 0, 2)
-
-
 def stage_handler(*args):  # osc from open stage control
     print (args)
-    if isinstance(args[1], str):
-        button = 'broken'
-        '''if args[1][0] == "#":  # if its a string (from matrix) find the number
-            button = re.search(r"\[([A-Za-z0-9_]+)\]", args[1])
-            button = int(button.group(1))'''
 
     if args[0][:8] == "/beatpad":  # open-stage-c matrix - emulation of launchpad
         button = int(args[0][9:])
@@ -543,9 +512,10 @@ if __name__ == "__main__":
                 "^a2j:lp-leds", "^Launchpad",
                 "^Launchpad", "^a2j:RTMIDI",
                  "^jack_trans_out", "^Hydrogen",
-                  #"a2j:lp-instrument", "^ardour:midinstrument",
+                  "^a2j:open-stage_keys", "^ardour:midinstrument",
                   "^jack_trans_out", "^ardour:Drums/midi",
                   "^a2j:lp-cc", "ardour:MIDI control in",
+                  "^a2j:lp-seq", "^ardour:Drums",               
                 "-m 1"], stdout=subprocess.PIPE)
 
     time.sleep(2)  # let sooperlooper engine finish starting
@@ -580,8 +550,6 @@ if __name__ == "__main__":
     pd_osc = OSC_Sender(ipaddr="127.0.0.1", port=9111)  # to puredata
     clientele = OSC_Sender(ipaddr="127.0.0.1", port=9997)
     looplist = [Loop(slclient) for i in range(8)]
-
-    jackcli = Jack_Client()
 
     # osc server handlers
     dispatcher = dispatcher.Dispatcher()
@@ -623,9 +591,7 @@ if __name__ == "__main__":
 
     time.sleep(1)
     
-    for i in range(64):
-        stage_osc.send("/textmat/" + str(i), " ")
-
+    mode_switch("loop", 3)
     
     atexit.register(exit_handler)
     server.serve_forever()  # blocking osc server
