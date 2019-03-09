@@ -16,7 +16,7 @@ def bitrot_conv(digit):
 def mode_switch(mode, num):
     lp.mode = mode
     lp.bg_switch(num)
-
+    
 
 
 def callback_midi(note, time_stamp):
@@ -98,14 +98,17 @@ class LPad_input():
 
     def loop(self, x, y, vel):
         '''sooperlooper controls for record, dubbing, pause, reverse, undo/redo,'''
-        if x == 2 and vel == 64 or x == 2 and vel == 0:
+        if x == 2:
+            if vel == 127:
+                slclient.send("/sl/{}/hit".format(y), "trigger")
+            elif vel == 0:
                 print ('should be pausing')
-                slclient.send("/sl/{}/up".format(y), "oneshot")
                 slclient.send("/sl/{}/down".format(y), "pause")
-                for i in range(5):
+                
+                '''for i in range(5):
                     lp.ledout(x + i, y, 0, 0)
                 lp.ledout(x - 1, y, 0, 0)
-                lp.ledout(x - 2, y, 0, 0)
+                lp.ledout(x - 2, y, 0, 0)'''
 
 
         elif x == 8:  # if side controls, quantize on & off
@@ -241,9 +244,8 @@ class SL_global():
     def track_pos(loop, loop_num, pos):      
         try:
             loop.pos = pos
-            pos_8th = int(loop.pos / loop.len * 8) if loop.len > 0 else None
-            
-            if pos_8th != loop.eighth_pos:    
+            pos_8th = int(loop.pos / loop.len * 8) if loop.len > 0 else 0 #?
+            if pos_8th != loop.eighth_pos and loop.state != 2:    
                     loop.eighth_pos = pos_8th
                     if pos_8th == 0:
                         lp.ledout(0, 8, 0, 3)
@@ -421,8 +423,6 @@ def slosc_handler2(*args):
         midiout_cc.send_messages(176, [(0, 1, temp)])
 
 def stage_handler(*args):  # osc from open stage control
-    print (args)
-
     if args[0][:8] == "/beatpad":  # open-stage-c matrix - emulation of launchpad
         button = int(args[0][9:])
         vel = args[-1] * 127
@@ -433,11 +433,8 @@ def stage_handler(*args):  # osc from open stage control
         lpinput.coordinator(x, y, vel)  # button outputs identical to launchpad
 
 
-    elif args[0][:5] == "/sync":  # quantize individual loops
-        print ('sync', args)
-        
+    elif args[0][:5] == "/sync":  # quantize individual loops        
         loopnum, val = args[0][6], args[-1]
-        
         print (loopnum, val)
         slclient.send("/sl/{}/set".format(loopnum), ["sync", args[-1]])
 
@@ -490,6 +487,25 @@ def stage_handler(*args):  # osc from open stage control
     elif args[0] == "/bitbeats":
         midiout_cc.send_noteon(144, 38, args[-1])
 
+    elif args[0][:6] == "/mutes":
+        print (args[0][:6], args[0][-1])
+        loop = int(args[0][-1])
+        print (looplist[loop].state)
+        if looplist[loop].state == 4 or 10:
+            print('sendinggggg')
+            slclient.send("/sl/{}/hit".format(args[0][-1]), "mute")
+
+    elif args[0][:4] == "/xy":
+        pt0 = args[1:4]
+        pt1 = args[4:7]
+        pt2 = args[7:10]
+        pt3 = args[10:13]
+        x1, y1 = pt0[0], pt0[1]
+        x1, y1 = int(x1 * 8/ 127), int(y1 * 8/ 127)
+        x1 = -x1 + 8
+        gridxy = x1 + (y1 * 8)
+        gridxy = -gridxy + 64
+        stage_osc.send("/xyrgb/" + str(gridxy), [80, 80, 80])
     else:
         print ('no handler for : ', args)
 
@@ -502,7 +518,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     cwd = os.getcwd() #initiate python from cwd
 
-    #without the gui, but can run slgui after the fact and will run on same engine
+    #init without the gui, but can run slgui after the fact and will run on same engine
     slgui = subprocess.Popen(["sooperlooper", "-l 8"], stdout=subprocess.PIPE)  # start sooperlooper
     
     stagecontrol = subprocess.Popen(["open-stage-control","-l", cwd + "/stagecontrol.json",  # initiate stagecontrol with midi ports
@@ -513,6 +529,7 @@ if __name__ == "__main__":
                 "^Launchpad", "^a2j:RTMIDI",
                  "^jack_trans_out", "^Hydrogen",
                   "^a2j:open-stage_keys", "^ardour:midinstrument",
+                  "^a2j:lp-instrument", "^ardour:MIDI Synth",
                   "^jack_trans_out", "^ardour:Drums/midi",
                   "^a2j:lp-cc", "ardour:MIDI control in",
                   "^a2j:lp-seq", "^ardour:Drums",               
@@ -575,6 +592,37 @@ if __name__ == "__main__":
     for i in range(3):  #
         lp.bg_switch(i)
         time.sleep(.3)
+    try:
+        client = jack.Client('showtime')
+
+    except jack.JackError:
+        sys.exit('JACK server not running?')
+
+    connections = [
+    ["sooperlooper:common_out_1", "ardour:sooperlooper/audio_in 1"],
+    ["sooperlooper:common_out_2", "ardour:sooperlooper/audio_in 2"],
+    ["jack_trans_out:hydro", "Hydrogen:Hydrogen Midi-In"],
+    ["jack_trans_out:hydro", 'a2j:Hydrogen [130] (playback): Hydrogen Midi-In'],
+    ["Hydrogen:out_L", "ardour:Drums/audio_in 1"],
+    ["Hydrogen:out_R", "ardour:Drums/audio_in 2"],
+    ["ardour:midinstrument/audio_out 1", "sooperlooper:common_in_1"],
+    ["ardour:midinstrument/audio_out 2", "sooperlooper:common_in_2"],
+    ["ardour:Mic/audio_out 2", "sooperlooper:common_in_1"],
+    ["ardour:Mic/audio_out 2", "sooperlooper:common_in_2"],
+    ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_1"],
+    ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_2"],
+    ]
+
+    for i in range(len(connections)):
+        try:
+            client.connect(*connections[i])
+            print('connecting : ', connections[i])
+        except jack.JackError:
+            print ('fail', connections[i])
+
+
+
+    
 
     looplist[0].seqbase = True
 
