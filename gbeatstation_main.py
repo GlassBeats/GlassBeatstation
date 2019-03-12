@@ -49,6 +49,10 @@ def callback_midi(note, time_stamp):
         y, x = lp.ingrid[note]  # convert to x, y to output led midi via dict
         lpinput.coordinator(x, y, vel)
 
+class Jack_Client():
+    def __init__(self):
+        self.c = jack.Client('gbeatstation')
+        self.c.activate()
 
 class Sequencer():
     def __init__(self, steps):
@@ -102,17 +106,18 @@ class LPad_input():
             if vel == 127:
                 slclient.send("/sl/{}/hit".format(y), "trigger")
             elif vel <= 64:
-                print ('should be pausing')
-                slclient.send("/sl/{}/down".format(y), "pause")
-                
-                for i in range(5):
-                    lp.ledout(x + i, y, 0, 0)
-                lp.ledout(x - 1, y, 0, 0)
-                lp.ledout(x - 2, y, 0, 0)
+                print ('pausing', self.state)
+                if self.state == 4:
+                    slclient.send("/sl/{}/down".format(y), "pause")
+                    
+                    for i in range(5):
+                        lp.ledout(x + i, y, 0, 0)
+                    lp.ledout(x - 1, y, 0, 0)
+                    lp.ledout(x - 2, y, 0, 0)
 
 
         elif x == 8:  # if side controls, quantize on & off
-            if vel == 127:
+            if vel == 127:  
                 if looplist[y].quant == 0:
                     looplist[y].quant = 1
                     lp.ledout(x, y, 0, 1)
@@ -249,12 +254,12 @@ class SL_global():
                     loop.eighth_pos = pos_8th
                     colg = loop_num * 31
                     colb = -(loop_num * 31) + 255
-                    colr = colb / 3
-                    print (colg, colb)
-                    collist = [colr, colg, colb] 
+                    colr = 70
+                    collist = [colr, colg, colb]
+                    
                     if pos_8th == 0:
                         lp.ledout(0, 8, 0, 3, rgb = collist)
-                        lp.ledout(7, 8, 0, 1)
+                        lp.ledout(7, 8, 0, 0)
 
                         if lp.mode == "loop":
                             lp.ledout(0, loop_num, 0, 3, rgb=collist)
@@ -479,8 +484,6 @@ def stage_handler(*args):  # osc from open stage control
             for key in lp.fg_seq:
                     lp.ledout(key[1], key[0], 0, lp.fg_seq[key])
 
-        
-
         #this should be moved into a proper 'modeswitch' function'
         
 
@@ -519,12 +522,16 @@ def stage_handler(*args):  # osc from open stage control
         stage_osc.send("/xyrgb/" + str(gridxy), [80, 80, 80])
 
     elif args[0][:5] == "/save":
+        md = cwd[:14]
+        print (md)
+        
         slclient.send("/save_session", [time.asctime(), "localhost:9998", "error_path"])
         for i in range(8):
-            slclient.send("/sl/{}/save_loop".format(str(i)), [time.asctime() + "+loop" + str(i), "32", "endian", "localhost:9998", "error_path"])
+            slclient.send("/sl/{}/save_loop".format(str(i)), [time.asctime() + "+loop" + str(i) + ".wav", "32", "endian", "localhost:9998", "error_path"])
 
     elif args[0][:9] == "/bittempo":
         midiout_cc.send_noteon(176, 2, args[-1])  # via carla file assigned
+        client.connect(["sooperlooper:common_out_1", "system:playback_1"])
         
     elif args[0][:7] == "/fxgrid":
         button = int(args[0][8:])
@@ -535,6 +542,65 @@ def stage_handler(*args):  # osc from open stage control
         midiout_cc.send_noteon(176, 3, y) 
         midiout_cc.send_noteon(176, 4, x)
         midiout_cc.send_noteon(176, 1, args[-1] * 127)  # via carla file assigned
+
+
+
+
+    elif args[0] == "/patch":
+        inport = inport = "sooperlooper:{}_".format(args[1])
+        
+        if args[1] == "common":
+            outport = "system:playback_"
+        elif args[1] == "Dac": outport = "Bitrot Repeat:Audio Input "
+        print (inport)    
+        if len(args) > 2:            
+            outports = []
+            for port in args[2:]:
+                if port == "dac":
+                    outports.append("system:playback_")
+                elif port == "bitrot":
+                    outports.append("Bitrot Repeat:Audio Input ")
+            # FOR TEST CASE, 2 ALREADY CONNECTED AND 1 NEEDS TO BE DISCONNECTED IMPLEMENT HERE
+            for p in outports:
+                for i in range(1,3):
+                    try:    
+                        client.connect("sooperlooper:{}_{}".format(args[1], str(i)), p + str(i))
+                    except:  # will replace this hideousness with tracking already made connections
+                          print ('already connected') #instead of brute forcing
+                    try:
+                        client.connect("sooperlooper:{}_{}".format(args[1], str(i)), p + str(i))
+                    except:
+                        print ('already connected')
+
+                
+                 
+        elif len(args) == 2:
+            outport1, outport2 = "system:playback_", "Bitrot Repeat:Audio Input "
+            for port in outport1, outport2:
+                for i in 1,2:
+                        print (inport, port)
+                        client.disconnect(inport + str(i), port + str(i))
+                        
+                            
+                    
+                        #print ('couldnt disconnect')
+                        '''    
+                    try:
+                        client.disconnect(args[-1] + str(i), "Bitrot Repeat:Audio Input " + str(i))
+                    except:
+                        print ('couldnt disconnect')'''
+
+                        '''
+                    if args[1] == 1:
+                        for i in 1,2:
+                            client.connect("sooperlooper:common_out_" + str(i), "system:playback_" + str(i))
+                            client.connect("sooperlooper:common_out_" + str(i), "Bitrot Repeat:Audio Input " + str(i))
+                    else:
+                        for i in 1,2:
+                            client.disconnect("sooperlooper:common_out_" + str(i), "system:playback_" + str(i))
+                            client.disconnect("sooperlooper:common_out_" + str(i), "Bitrot Repeat:Audio Input " + str(i))
+            '''
+
     else:
         print ('no handler for : ', args)
         
@@ -555,10 +621,11 @@ if __name__ == "__main__":
     stagecontrol = subprocess.Popen(["open-stage-control","-l", cwd + "/stagecontrol.json",  # initiate stagecontrol with midi ports
     "-s", "127.0.0.1:9998", "-t", "orange", "-m", "open-stage_cc:virtual", "open-stage_keys:virtual", "-d"], stdout=subprocess.PIPE) 
 
+    stagecontrol = subprocess.Popen(["carla", cwd + "/glass_car.carxp"], stdout=subprocess.PIPE)
+
     jackmatch = subprocess.Popen(["jack-matchmaker", "-o", "-i",  # start jack-matchmaker
                 "^a2j:lp-leds", "^Launchpad",
                 "^Launchpad", "^a2j:RTMIDI",
-                 "^jack_trans_out", "^Hydrogen",
                   "^a2j:open-stage_keys", "^ardour:midinstrument",
                   "^a2j:lp-instrument", "^ardour:MIDI Synth",
                   "^jack_trans_out", "^ardour:Drums/midi",
@@ -626,15 +693,16 @@ if __name__ == "__main__":
     for i in range(3):  #
         lp.bg_switch(i)
         time.sleep(.3)
-    try:
-        client = jack.Client('showtime')
 
+
+    try:    
+        client = jack.Client('glassbeats')
     except jack.JackError:
         sys.exit('JACK server not running?')
 
     connections = [
-    ["sooperlooper:common_out_1", "ardour:sooperlooper/audio_in 1"],
-    ["sooperlooper:common_out_2", "system:playback_1]"],
+    ["sooperlooper:common_out_1", "system:playback_1"],
+    ["sooperlooper:common_out_2", "system:playback_2"],
     #["sooperlooper:common_out_1", "ardour:sooperlooper/audio_in 1"],
     #["sooperlooper:common_out_2", "ardour:sooperlooper/audio_in 2"],
     ["jack_trans_out:hydro", "Hydrogen:Hydrogen Midi-In"],
@@ -647,8 +715,10 @@ if __name__ == "__main__":
     ["ardour:Mic/audio_out 2", "sooperlooper:common_in_2"],
     ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_1"],
     ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_2"],
-
-
+    
+    ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_2"],
+    ["lp-cc", "Bitrot Repeat:events-in"],
+    ["open-stage-cc", "Bitrot Repeat:events-in"]
      
     ]
 
@@ -670,7 +740,7 @@ if __name__ == "__main__":
         lp.reset()  # button flush
         jackmatch.terminate()
         slgui.terminate()
-        stagecontrol.terminate()
+        #stagecontrol.terminate()  #why close when it takes time to open?
 
 
 

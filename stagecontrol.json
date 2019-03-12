@@ -71,7 +71,7 @@
           "height": 670,
           "label": false,
           "color": "auto",
-          "css": "opacity:.2",
+          "css": "opacity:.1",
           "widgetType": "push",
           "matrix": [
             8,
@@ -753,7 +753,7 @@
             },
             {
               "type": "tab",
-              "id": "input 2",
+              "id": "repeater",
               "linkId": "",
               "label": "auto",
               "color": "auto",
@@ -1028,7 +1028,7 @@
                   "meter": false,
                   "compact": false,
                   "dashed": false,
-                  "snap": false,
+                  "snap": true,
                   "spring": false,
                   "doubleTap": false,
                   "range": {
@@ -1072,7 +1072,7 @@
                   "meter": false,
                   "compact": false,
                   "dashed": false,
-                  "snap": false,
+                  "snap": true,
                   "spring": false,
                   "doubleTap": false,
                   "range": {
@@ -1116,7 +1116,7 @@
                   "meter": false,
                   "compact": false,
                   "dashed": false,
-                  "snap": false,
+                  "snap": true,
                   "spring": false,
                   "doubleTap": false,
                   "range": {
@@ -1160,7 +1160,7 @@
                   "meter": false,
                   "compact": false,
                   "dashed": false,
-                  "snap": false,
+                  "snap": true,
                   "spring": false,
                   "doubleTap": false,
                   "range": {
@@ -1204,7 +1204,7 @@
                   "meter": false,
                   "compact": false,
                   "dashed": false,
-                  "snap": false,
+                  "snap": true,
                   "spring": false,
                   "doubleTap": false,
                   "range": {
@@ -1248,7 +1248,7 @@
                   "meter": false,
                   "compact": false,
                   "dashed": false,
-                  "snap": false,
+                  "snap": true,
                   "spring": false,
                   "doubleTap": false,
                   "range": {
@@ -1292,7 +1292,7 @@
                   "meter": false,
                   "compact": false,
                   "dashed": false,
-                  "snap": false,
+                  "snap": true,
                   "spring": false,
                   "doubleTap": false,
                   "range": {
@@ -1336,7 +1336,7 @@
                   "meter": false,
                   "compact": false,
                   "dashed": false,
-                  "snap": false,
+                  "snap": true,
                   "spring": false,
                   "doubleTap": false,
                   "range": {
@@ -1537,7 +1537,7 @@
     },
     {
       "type": "tab",
-      "id": "Sooperlooper",
+      "id": "Routing",
       "linkId": "",
       "label": "auto",
       "color": "auto",
@@ -1552,32 +1552,56 @@
       "variables": "@{parent.variables}",
       "widgets": [
         {
-          "type": "matrix",
-          "top": 80,
-          "left": 40,
-          "id": "rgbmatrix2",
+          "type": "patchbay",
+          "top": 30,
+          "left": 10,
+          "id": "patchbay",
           "linkId": "",
-          "width": 400,
-          "height": 400,
-          "label": false,
+          "width": 730,
+          "height": 490,
+          "label": "auto",
           "color": "auto",
-          "css": ":host {\n--glass-opacity:0;\nz-index:11;\npointer-events:none;\n}",
-          "widgetType": "rgbled",
-          "matrix": [
-            8,
-            8
+          "css": "",
+          "inputs": [
+            "common_out",
+            "loop0_out",
+            "loop1_out",
+            "loop2_out",
+            "loop3_out",
+            "loop4_out",
+            "loop5_out",
+            "loop6_out",
+            "loop7_out"
           ],
-          "start": 0,
-          "spacing": 0,
-          "traversing": true,
-          "border": true,
-          "props": {
-            "label": false
-          },
+          "outputs": [
+            "bitrot",
+            "dac"
+          ],
           "default": "",
           "value": "",
           "precision": 2,
-          "address": "/automap",
+          "address": "/patch",
+          "preArgs": "",
+          "target": "",
+          "bypass": false
+        },
+        {
+          "type": "push",
+          "top": 580,
+          "left": 200,
+          "id": "patch",
+          "linkId": "",
+          "width": "auto",
+          "height": "auto",
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "doubleTap": false,
+          "on": 1,
+          "off": 0,
+          "norelease": false,
+          "precision": 0,
+          "address": "/patch",
           "preArgs": "",
           "target": "",
           "bypass": false
