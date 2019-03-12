@@ -1,6 +1,6 @@
   #! /usr/bin/python3
 
-import rtmidi2, pythonosc, jack, time, argparse, subprocess, atexit, re, time, os
+import rtmidi2, pythonosc, jack, sys, time, argparse, subprocess, atexit, re, time, os
 from pythonosc import dispatcher, osc_server, osc_message_builder, udp_client
 
 
@@ -101,14 +101,14 @@ class LPad_input():
         if x == 2:
             if vel == 127:
                 slclient.send("/sl/{}/hit".format(y), "trigger")
-            elif vel == 0:
+            elif vel <= 64:
                 print ('should be pausing')
                 slclient.send("/sl/{}/down".format(y), "pause")
                 
-                '''for i in range(5):
+                for i in range(5):
                     lp.ledout(x + i, y, 0, 0)
                 lp.ledout(x - 1, y, 0, 0)
-                lp.ledout(x - 2, y, 0, 0)'''
+                lp.ledout(x - 2, y, 0, 0)
 
 
         elif x == 8:  # if side controls, quantize on & off
@@ -268,10 +268,11 @@ class SL_global():
                             if pos_8th < 8:
                                 
                                 if Sequence.seq[i][pos_8th] > 0:
-                                    print ('hit - midisend, i', pos_8th)
                                     midiout_seq.send_noteon(144, 36 + i, 127)
-                        
-                    
+                                    stage_osc.send("/seq_hits/{}".format(str(i)), [200,30,75])
+
+                                elif Sequence.seq[i][pos_8th - 1] == 0:
+                                            stage_osc.send("/seq_hits/{}".format(str(i)), [0,0,0])    
 
         except KeyError:
             print ('keyerror') #update track length 
@@ -410,11 +411,13 @@ def slosc_handler(*args):  # osc from sooperlooper
                 tempo = int(args[-1])
                 SL_global.tempo = tempo # update global tempo
 
-                if tempo > 10:
-                    midiout_cc.send_noteon(144, 36, int(tempo/3.75)) #bitrot midi-tempo
+                if tempo > 10: #bitrot midi-tempo
+                    midiout_cc.send_noteon(144, 36, int(tempo/3.75)) # via ardour midi learn
+                    midiout_cc.send_noteon(176, 2, int(tempo/3.75))  # via carla file assigned
+        
 
-    else:
-        print (args)
+    #else:
+     #   print (args)
         
 def slosc_handler2(*args):
     if args[0] == "/slooptemp":
@@ -426,7 +429,6 @@ def stage_handler(*args):  # osc from open stage control
     if args[0][:8] == "/beatpad":  # open-stage-c matrix - emulation of launchpad
         button = int(args[0][9:])
         vel = args[-1] * 127
-
         x = button % 8
         y = 0 if button < 8 else int(button / 8)
     
@@ -470,6 +472,8 @@ def stage_handler(*args):  # osc from open stage control
             for key in lp.fg_seq:
                     lp.ledout(key[1], key[0], 0, lp.fg_seq[key])
 
+        
+
         #this should be moved into a proper 'modeswitch' function'
         
 
@@ -506,8 +510,27 @@ def stage_handler(*args):  # osc from open stage control
         gridxy = x1 + (y1 * 8)
         gridxy = -gridxy + 64
         stage_osc.send("/xyrgb/" + str(gridxy), [80, 80, 80])
+
+    elif args[0][:5] == "/save":
+        slclient.send("/save_session", [time.asctime(), "localhost:9998", "error_path"])
+        for i in range(8):
+            slclient.send("/sl/{}/save_loop".format(str(i)), [time.asctime() + "+loop" + str(i), "32", "endian", "localhost:9998", "error_path"])
+
+    elif args[0][:9] == "/bittempo":
+        midiout_cc.send_noteon(176, 2, args[-1])  # via carla file assigned
+        
+    elif args[0][:7] == "/fxgrid":
+        button = int(args[0][8:])
+        vel = args[-1] * 127
+        x = int((button % 8) * 18)
+        y = 0 if button < 8 else int((button / 8) * 18)
+        print (x,y)
+        midiout_cc.send_noteon(176, 3, y) 
+        midiout_cc.send_noteon(176, 4, x)
+        midiout_cc.send_noteon(176, 1, args[-1] * 127)  # via carla file assigned
     else:
         print ('no handler for : ', args)
+        
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -517,14 +540,15 @@ if __name__ == "__main__":
         type=int, default=9998, help="The port to listen on")
     args = parser.parse_args()
     cwd = os.getcwd() #initiate python from cwd
+    print (cwd)
 
     #init without the gui, but can run slgui after the fact and will run on same engine
-    slgui = subprocess.Popen(["sooperlooper", "-l 8"], stdout=subprocess.PIPE)  # start sooperlooper
+    slgui = subprocess.Popen(["sooperlooper", "-l 8", "-m", cwd + "/sl_bindings.slb"], stdout=subprocess.PIPE)  # start sooperlooper
     
     stagecontrol = subprocess.Popen(["open-stage-control","-l", cwd + "/stagecontrol.json",  # initiate stagecontrol with midi ports
-    "-s", "127.0.0.1:9998", "-t", "orange", "-m", "open-stage_fades:virtual", "open-stage_keys:virtual", "-d"], stdout=subprocess.PIPE) 
+    "-s", "127.0.0.1:9998", "-t", "orange", "-m", "open-stage_cc:virtual", "open-stage_keys:virtual", "-d"], stdout=subprocess.PIPE) 
 
-    jackmatch = subprocess.Popen(["jack-matchmaker",  # start jack-matchmaker
+    jackmatch = subprocess.Popen(["jack-matchmaker", "-o", "-i",  # start jack-matchmaker
                 "^a2j:lp-leds", "^Launchpad",
                 "^Launchpad", "^a2j:RTMIDI",
                  "^jack_trans_out", "^Hydrogen",
@@ -532,7 +556,9 @@ if __name__ == "__main__":
                   "^a2j:lp-instrument", "^ardour:MIDI Synth",
                   "^jack_trans_out", "^ardour:Drums/midi",
                   "^a2j:lp-cc", "ardour:MIDI control in",
-                  "^a2j:lp-seq", "^ardour:Drums",               
+                  "^a2j:lp-seq", "^ardour:Drums",
+                  "^a2j:lp-cc", "^a2j:Bitrot",
+                "^a2j:lp-cc", "^Bitrot",
                 "-m 1"], stdout=subprocess.PIPE)
 
     time.sleep(2)  # let sooperlooper engine finish starting
@@ -562,6 +588,7 @@ if __name__ == "__main__":
     
 
     slclient = OSC_Sender()  # connect to sooperlooper
+    #.send("/load_midi_bindings", [cwd + "/sl_bindings.slb"]) #not currently working
     stage_osc = OSC_Sender(ipaddr="127.0.0.1", port=8080)  # open stage control
     pd_osc = OSC_Sender(ipaddr="127.0.0.1", port=9111)  # to puredata
     clientele = OSC_Sender(ipaddr="127.0.0.1", port=9997)
@@ -600,7 +627,9 @@ if __name__ == "__main__":
 
     connections = [
     ["sooperlooper:common_out_1", "ardour:sooperlooper/audio_in 1"],
-    ["sooperlooper:common_out_2", "ardour:sooperlooper/audio_in 2"],
+    ["sooperlooper:common_out_2", "system:playback_1]"],
+    #["sooperlooper:common_out_1", "ardour:sooperlooper/audio_in 1"],
+    #["sooperlooper:common_out_2", "ardour:sooperlooper/audio_in 2"],
     ["jack_trans_out:hydro", "Hydrogen:Hydrogen Midi-In"],
     ["jack_trans_out:hydro", 'a2j:Hydrogen [130] (playback): Hydrogen Midi-In'],
     ["Hydrogen:out_L", "ardour:Drums/audio_in 1"],
@@ -611,6 +640,9 @@ if __name__ == "__main__":
     ["ardour:Mic/audio_out 2", "sooperlooper:common_in_2"],
     ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_1"],
     ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_2"],
+
+
+     
     ]
 
     for i in range(len(connections)):
