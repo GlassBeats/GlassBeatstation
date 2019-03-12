@@ -247,26 +247,30 @@ class SL_global():
             pos_8th = int(loop.pos / loop.len * 8) if loop.len > 0 else 0 #?
             if pos_8th != loop.eighth_pos and loop.state != 2:    
                     loop.eighth_pos = pos_8th
+                    colg = loop_num * 31
+                    colb = -(loop_num * 31) + 255
+                    colr = colb / 3
+                    print (colg, colb)
+                    collist = [colr, colg, colb] 
                     if pos_8th == 0:
-                        lp.ledout(0, 8, 0, 3)
+                        lp.ledout(0, 8, 0, 3, rgb = collist)
                         lp.ledout(7, 8, 0, 1)
 
                         if lp.mode == "loop":
-                            lp.ledout(0, loop_num, 0, 3)
+                            lp.ledout(0, loop_num, 0, 3, rgb=collist)
                             lp.ledout(7, loop_num, 0, 0)
-                            lp.ledout(7, 8, 0, 1)
+                            #lp.ledout(7, 8, 0, 1)
                     else:
-                        lp.ledout(pos_8th, 8, 0, 3)
+                        lp.ledout(pos_8th, 8, 0, 3, rgb=collist)
                         lp.ledout(pos_8th - 1, 8, 0, 1)
                         
                         if lp.mode == "loop":
-                            lp.ledout(pos_8th, loop_num, 0, 3)
+                            lp.ledout(pos_8th, loop_num, 0, 3, rgb=collist)
                             lp.ledout(pos_8th - 1, loop_num, 0, 0)
                                 
                     if loop.seqbase == True:
                         for i in range(8):
                             if pos_8th < 8:
-                                
                                 if Sequence.seq[i][pos_8th] > 0:
                                     midiout_seq.send_noteon(144, 36 + i, 127)
                                     stage_osc.send("/seq_hits/{}".format(str(i)), [200,30,75])
@@ -349,11 +353,14 @@ class Lpad_lights():
     def reset(self):
             midiout_lp.send_noteon(176, 0, 0)
 
-    def ledout(self, x, y, r, g):
+    def ledout(self, x, y, r, g, rgb=None):
         if (x, y) in self.led_cur:
             if self.led_cur[x, y] != (r, g):
                 button = str(x + (8 * y))
-                color = [r * 85 , g * 85, 0]
+                if rgb: # for updated/ full color val functions 
+                    color = rgb
+                else:
+                    color = [r * 85 , g * 85, 0]
                 if y < 8:  # if not an automap button, midiout on channel 144
                     midiout_lp.send_noteon(144, lp.outgrid[y, x], self.ledcol(r, g))
                     stage_osc.send("/griddy/{}".format(button), color)
