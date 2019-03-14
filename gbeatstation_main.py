@@ -106,7 +106,6 @@ class LPad_input():
             if vel == 127:
                 slclient.send("/sl/{}/hit".format(y), "trigger")
             elif vel <= 64:
-                #print ('pausing', self.state)
                 if looplist[y].state != 14:
                     slclient.send("/sl/{}/down".format(y), "pause")
                     
@@ -250,10 +249,23 @@ class SL_global():
     def track_pos(loop, loop_num, pos):      
         try:
             loop.pos = pos
+
+            rel_pos = int(loop.pos / loop.len) if loop.len > 0 else 0
+            print (rel_pos)
+            if int(pos) % 5 == 1:
+                slclient.send("/sl/{}/get".format(loop_num), ["out_peak_meter", "localhost:9998", "/sloop".format(loop_num)])
+                
+
+
+            
             pos_8th = int(loop.pos / loop.len * 8) if loop.len > 0 else 0 #?
             if pos_8th != loop.eighth_pos and loop.state != 2:    
                     loop.eighth_pos = pos_8th
+                                        
+
                     clr_pos = loop.color
+
+                    
                     
                     if pos_8th == 0:
                         lp.ledout(0, 8, 0, 3, rgb = clr_pos)
@@ -298,12 +310,12 @@ class Loop(SL_global):
         self.rev = False
         self.quant = False
         self.seqbase = False # if this loop is timebase master for the sequencer
-        self.color = [random.randint(0,255) for i in range(3)]
+        self.color = [random.randint(125,255) for i in range(3)] #randomize loop colors
 
         # connect to sooperlooper
         cli.send("/sl/{}/register_auto_update".format(num_loops - 1), ["state", self.interval, "localhost:9998", "/sloop"])
         cli.send("/sl/{}/register_auto_update".format(num_loops - 1), ["loop_len", self.interval, "localhost:9998", "/sloop"])
-        cli.send("/sl/{}/register_auto_update".format(num_loops - 1), ["loop_pos", self.interval, "localhost:9998", "/sloop"])
+        cli.send("/sl/{}/register_auto_update".format(num_loops - 1), ["loop_pos", self.interval, "localhost:9998","/sloop"])
 
 class Lpad_lights():
     def __init__(self):
@@ -356,6 +368,10 @@ class Lpad_lights():
 
     def reset(self):
             midiout_lp.send_noteon(176, 0, 0)
+            for i in range(64):
+                stage_osc.send("/textmat/" + str(i), " ")
+                stage_osc.send("/griddy/" + str(i), [0, 0, 0])
+                
 
     def ledout(self, x, y, r, g, rgb=None):
         if (x, y) in self.led_cur:
@@ -405,6 +421,9 @@ class Lpad_lights():
 
 def slosc_handler(*args):  # osc from sooperlooper
     loop = looplist[args[1]]
+    if args[2] == "out_peak_meter":
+        stage_osc.send("/peakmtr/" + str(args[1]), args[-1])
+        print (("/peakmtr/" + str(args[1]), args[-1]))
     if args[2] == "loop_pos":
         Loop.track_pos(loop, args[1], args[3])
     if args[2] == "state":  # update state in any mode
@@ -584,10 +603,24 @@ def stage_handler(*args):  # osc from open stage control
         print (SL_global.loopclrsel)
         SL_global.loopclrsel = args[-1]
         print (SL_global.loopclrsel)
-        
+
+         
     else:
         print ('no handler for : ', args)
-        
+    '''
+  input_latency :: range 0 -> ...
+  output_latency :: range 0 -> ...
+  trigger_latency :: range 0 -> ...
+  autoset_latency  :: 0 = off, not 0 = on
+
+  cycle_len :: in seconds
+  free_time :: in seconds
+  total_time :: in seconds
+  rate_output 
+  in_peak_meter  :: absolute float sample value 0.0 -> 1.0 (or higher)
+  out_peak_meter  :: absolute float sample value 0.0 -> 1.0 (or higher)
+  is_soloed       :: 1 if soloed, 0 if not'''
+              
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -600,12 +633,11 @@ if __name__ == "__main__":
     print (cwd)
 
     #init without the gui, but can run slgui after the fact and will run on same engine
+    stagecontrol = subprocess.Popen(["carla", cwd + "/glass_car.carxp", "-n"], stdout=subprocess.PIPE) #  "-n" to run headless
     slgui = subprocess.Popen(["sooperlooper", "-l 8", "-m", cwd + "/sl_bindings.slb"], stdout=subprocess.PIPE)  # start sooperlooper
     
     stagecontrol = subprocess.Popen(["open-stage-control","-l", cwd + "/stagecontrol.json",  # initiate stagecontrol with midi ports
     "-s", "127.0.0.1:9998", "-t", "orange", "-m", "open-stage_cc:virtual", "open-stage_keys:virtual", "-d"], stdout=subprocess.PIPE) 
-
-    stagecontrol = subprocess.Popen(["carla", cwd + "/glass_car.carxp"], stdout=subprocess.PIPE)
 
     jackmatch = subprocess.Popen(["jack-matchmaker", # start jack-matchmaker
                 "^a2j:lp-leds", "^Launchpad",
@@ -719,11 +751,9 @@ if __name__ == "__main__":
         except jack.JackError:
             print ('fail', connections[i])
 
-
-
-    
-
     looplist[0].seqbase = True
+    
+  
 
     def exit_handler():
         print ("exiting")
@@ -734,7 +764,8 @@ if __name__ == "__main__":
 
 
 
-    time.sleep(1)
+    time.sleep(1.5)
+    lp.reset()
     
     mode_switch("loop", 3)
     
