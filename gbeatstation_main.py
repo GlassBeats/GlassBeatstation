@@ -1,6 +1,6 @@
   #! /usr/bin/python3
 
-import rtmidi2, pythonosc, jack, sys, time, argparse, subprocess, atexit, re, time, os
+import rtmidi2, pythonosc, jack, sys, time, argparse, subprocess, atexit, re, time, os, random
 from pythonosc import dispatcher, osc_server, osc_message_builder, udp_client
 
 
@@ -179,9 +179,10 @@ class OSC_Sender():
     def send(self, addr, arg):
         self.osc_client.send_message(addr, arg)
 
-num_loops = 0
+num_loops = 0    # change this - should not be a global var!!
 
 class SL_global():
+    loopclrsel = 0
     def __init__(self):
         global num_loops
         num_loops += 1
@@ -252,25 +253,22 @@ class SL_global():
             pos_8th = int(loop.pos / loop.len * 8) if loop.len > 0 else 0 #?
             if pos_8th != loop.eighth_pos and loop.state != 2:    
                     loop.eighth_pos = pos_8th
-                    colg = loop_num * 31
-                    colb = -(loop_num * 31) + 255
-                    colr = 70
-                    collist = [colr, colg, colb]
+                    clr_pos = loop.color
                     
                     if pos_8th == 0:
-                        lp.ledout(0, 8, 0, 3, rgb = collist)
-                        lp.ledout(7, 8, 0, 0)
+                        lp.ledout(0, 8, 0, 3, rgb = clr_pos)
+                        lp.ledout(7, 8, 0, 1) # this can't be set to 0 bc automap on led needs update
 
                         if lp.mode == "loop":
-                            lp.ledout(0, loop_num, 0, 3, rgb=collist)
+                            lp.ledout(0, loop_num, 0, 3, rgb=clr_pos)
                             lp.ledout(7, loop_num, 0, 0)
                             #lp.ledout(7, 8, 0, 1)
                     else:
-                        lp.ledout(pos_8th, 8, 0, 3, rgb=collist)
+                        lp.ledout(pos_8th, 8, 0, 3, rgb=clr_pos)
                         lp.ledout(pos_8th - 1, 8, 0, 1)
                         
                         if lp.mode == "loop":
-                            lp.ledout(pos_8th, loop_num, 0, 3, rgb=collist)
+                            lp.ledout(pos_8th, loop_num, 0, 3, rgb=clr_pos)
                             lp.ledout(pos_8th - 1, loop_num, 0, 0)
                                 
                     if loop.seqbase == True:
@@ -300,6 +298,7 @@ class Loop(SL_global):
         self.rev = False
         self.quant = False
         self.seqbase = False # if this loop is timebase master for the sequencer
+        self.color = [random.randint(0,255) for i in range(3)]
 
         # connect to sooperlooper
         cli.send("/sl/{}/register_auto_update".format(num_loops - 1), ["state", self.interval, "localhost:9998", "/sloop"])
@@ -543,9 +542,6 @@ def stage_handler(*args):  # osc from open stage control
         midiout_cc.send_noteon(176, 4, x)
         midiout_cc.send_noteon(176, 1, args[-1] * 127)  # via carla file assigned
 
-
-
-
     elif args[0] == "/patch":
         inport = inport = "sooperlooper:{}_".format(args[1])
         
@@ -571,8 +567,6 @@ def stage_handler(*args):  # osc from open stage control
                         client.connect("sooperlooper:{}_{}".format(args[1], str(i)), p + str(i))
                     except:
                         print ('already connected')
-
-                
                  
         elif len(args) == 2:
             outport1, outport2 = "system:playback_", "Bitrot Repeat:Audio Input "
@@ -580,27 +574,17 @@ def stage_handler(*args):  # osc from open stage control
                 for i in 1,2:
                         print (inport, port)
                         client.disconnect(inport + str(i), port + str(i))
-                        
-                            
-                    
-                        #print ('couldnt disconnect')
-                        '''    
-                    try:
-                        client.disconnect(args[-1] + str(i), "Bitrot Repeat:Audio Input " + str(i))
-                    except:
-                        print ('couldnt disconnect')'''
 
-                        '''
-                    if args[1] == 1:
-                        for i in 1,2:
-                            client.connect("sooperlooper:common_out_" + str(i), "system:playback_" + str(i))
-                            client.connect("sooperlooper:common_out_" + str(i), "Bitrot Repeat:Audio Input " + str(i))
-                    else:
-                        for i in 1,2:
-                            client.disconnect("sooperlooper:common_out_" + str(i), "system:playback_" + str(i))
-                            client.disconnect("sooperlooper:common_out_" + str(i), "Bitrot Repeat:Audio Input " + str(i))
-            '''
+    elif args[0] == "/loop_rgb":
+        print (looplist[SL_global.loopclrsel].color)
+        looplist[SL_global.loopclrsel].color = args[1:]
 
+
+    elif args[0] == "/loopclrsel":
+        print (SL_global.loopclrsel)
+        SL_global.loopclrsel = args[-1]
+        print (SL_global.loopclrsel)
+        
     else:
         print ('no handler for : ', args)
         
@@ -718,8 +702,8 @@ if __name__ == "__main__":
     
     ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_2"],
     ["lp-cc", "Bitrot Repeat:events-in"],
-    ["open-stage-cc", "Bitrot Repeat:events-in"]
-     
+    ["open-stage-cc", "Bitrot Repeat:events-in"],
+    ["open-stage-cc", "sooperlooper"],
     ]
 
     for i in range(len(connections)):
