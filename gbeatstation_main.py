@@ -106,8 +106,8 @@ class LPad_input():
             if vel == 127:
                 slclient.send("/sl/{}/hit".format(y), "trigger")
             elif vel <= 64:
-                print ('pausing', self.state)
-                if self.state == 4:
+                #print ('pausing', self.state)
+                if looplist[y].state != 14:
                     slclient.send("/sl/{}/down".format(y), "pause")
                     
                     for i in range(5):
@@ -522,8 +522,8 @@ def stage_handler(*args):  # osc from open stage control
 
     elif args[0][:5] == "/save":
         md = cwd[:14]
-        print (md)
-        
+        nwd
+        #os.mkdir(  # change save dir
         slclient.send("/save_session", [time.asctime(), "localhost:9998", "error_path"])
         for i in range(8):
             slclient.send("/sl/{}/save_loop".format(str(i)), [time.asctime() + "+loop" + str(i) + ".wav", "32", "endian", "localhost:9998", "error_path"])
@@ -607,7 +607,7 @@ if __name__ == "__main__":
 
     stagecontrol = subprocess.Popen(["carla", cwd + "/glass_car.carxp"], stdout=subprocess.PIPE)
 
-    jackmatch = subprocess.Popen(["jack-matchmaker", "-o", "-i",  # start jack-matchmaker
+    jackmatch = subprocess.Popen(["jack-matchmaker", # start jack-matchmaker
                 "^a2j:lp-leds", "^Launchpad",
                 "^Launchpad", "^a2j:RTMIDI",
                   "^a2j:open-stage_keys", "^ardour:midinstrument",
@@ -617,6 +617,13 @@ if __name__ == "__main__":
                   "^a2j:lp-seq", "^ardour:Drums",
                   "^a2j:lp-cc", "^a2j:Bitrot",
                 "^a2j:lp-cc", "^Bitrot",
+                "^a2j:open-stage_cc", "^a2j:sooper", #working?
+                "^a2j:open-stage_cc", "^a2j:Bitrot ",
+                "alsa_in:capture_1", "sooperlooper:common_in_1",
+                "alsa_in:capture_2", "sooperlooper:common_in_2",
+                "zynaddsubfx:out_1", "sooperlooper:common_in_1",
+                "zynaddsubfx:out_2", "sooperlooper:common_in_2",
+                "^a2j:lp-instrument", "zynaddsubfx:midi_input",
                 "-m 1"], stdout=subprocess.PIPE)
 
     time.sleep(2)  # let sooperlooper engine finish starting
@@ -703,7 +710,6 @@ if __name__ == "__main__":
     ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_2"],
     ["lp-cc", "Bitrot Repeat:events-in"],
     ["open-stage-cc", "Bitrot Repeat:events-in"],
-    ["open-stage-cc", "sooperlooper"],
     ]
 
     for i in range(len(connections)):
