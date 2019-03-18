@@ -1,4 +1,4 @@
-  #! /usr/bin/python3
+#! /usr/bin/python3
 
 import rtmidi2, pythonosc, jack, sys, time, argparse, subprocess, atexit, re, time, os, random
 from pythonosc import dispatcher, osc_server, osc_message_builder, udp_client
@@ -15,6 +15,7 @@ def bitrot_conv(digit):
 
 def mode_switch(mode, num):
     lp.mode = mode
+    lp.reset()
     lp.bg_switch(num)
     
 
@@ -47,7 +48,10 @@ def callback_midi(note, time_stamp):
 
     else:  # general input for presses on the grid
         y, x = lp.ingrid[note]  # convert to x, y to output led midi via dict
+        #print ('midiin orig', x, y)
+        #y = -y + 7
         lpinput.coordinator(x, y, vel)
+
 
 class Jack_Client():
     def __init__(self):
@@ -226,8 +230,7 @@ class SL_global():
            
         except IndexError:
             print ("index issue")
-        
-    
+            
         stage_osc.send("/loopstate/{}".format(loop_num), looplist[0].loop_state_rgb[looplist[0].statenames[loop.state]])
         
     def track_len(loop, loop_num, length):
@@ -244,28 +247,17 @@ class SL_global():
                     x = -1
                 if x >= 0:
                     lp.ledout(x, loop_num, r, g)
+            pass
 
 
     def track_pos(loop, loop_num, pos):      
         try:
             loop.pos = pos
-
-            rel_pos = int(loop.pos / loop.len) if loop.len > 0 else 0
-            print (rel_pos)
-            if int(pos) % 5 == 1:
-                slclient.send("/sl/{}/get".format(loop_num), ["out_peak_meter", "localhost:9998", "/sloop".format(loop_num)])
-                
-
-
-            
+            #rel_pos = int(loop.pos / loop.len) if loop.len > 0 else 0
             pos_8th = int(loop.pos / loop.len * 8) if loop.len > 0 else 0 #?
             if pos_8th != loop.eighth_pos and loop.state != 2:    
                     loop.eighth_pos = pos_8th
-                                        
-
                     clr_pos = loop.color
-
-                    
                     
                     if pos_8th == 0:
                         lp.ledout(0, 8, 0, 3, rgb = clr_pos)
@@ -274,7 +266,6 @@ class SL_global():
                         if lp.mode == "loop":
                             lp.ledout(0, loop_num, 0, 3, rgb=clr_pos)
                             lp.ledout(7, loop_num, 0, 0)
-                            #lp.ledout(7, 8, 0, 1)
                     else:
                         lp.ledout(pos_8th, 8, 0, 3, rgb=clr_pos)
                         lp.ledout(pos_8th - 1, 8, 0, 1)
@@ -371,6 +362,8 @@ class Lpad_lights():
             for i in range(64):
                 stage_osc.send("/textmat/" + str(i), " ")
                 stage_osc.send("/griddy/" + str(i), [0, 0, 0])
+                if i < 8: stage_osc.send("/automap_text/" + str(i), " ")
+                
                 
 
     def ledout(self, x, y, r, g, rgb=None):
@@ -383,6 +376,8 @@ class Lpad_lights():
                     color = [r * 85 , g * 85, 0]
                 if y < 8:  # if not an automap button, midiout on channel 144
                     midiout_lp.send_noteon(144, lp.outgrid[y, x], self.ledcol(r, g))
+                    #print ('orig', lp.outgrid[y, x], "revert", )#lp.outgrid[-(y + 8))
+                    #midiout_lp.send_noteon(144, ( (y-1) << 4) | x, self.ledcol(r, g))
                     stage_osc.send("/griddy/{}".format(button), color)
                     if x == 8:
                         pass
@@ -541,7 +536,7 @@ def stage_handler(*args):  # osc from open stage control
 
     elif args[0][:5] == "/save":
         md = cwd[:14]
-        nwd
+        #nwd
         #os.mkdir(  # change save dir
         slclient.send("/save_session", [time.asctime(), "localhost:9998", "error_path"])
         for i in range(8):
@@ -629,15 +624,18 @@ if __name__ == "__main__":
     parser.add_argument("--port",
         type=int, default=9998, help="The port to listen on")
     args = parser.parse_args()
-    cwd = os.getcwd() #initiate python from cwd
+    cwd =  "/home/acepath/dev/glassbeats/glass_beatstation" #os.getcwd() #initiate python from cwd
     print (cwd)
 
     #init without the gui, but can run slgui after the fact and will run on same engine
-    stagecontrol = subprocess.Popen(["carla", cwd + "/glass_car.carxp", "-n"], stdout=subprocess.PIPE) #  "-n" to run headless
+    carla = subprocess.Popen(["carla", cwd + "/glass_car.carxp", "-n"], stdout=subprocess.PIPE) #  "-n" to run headless
+
     slgui = subprocess.Popen(["sooperlooper", "-l 8", "-m", cwd + "/sl_bindings.slb"], stdout=subprocess.PIPE)  # start sooperlooper
     
     stagecontrol = subprocess.Popen(["open-stage-control","-l", cwd + "/stagecontrol.json",  # initiate stagecontrol with midi ports
     "-s", "127.0.0.1:9998", "-t", "orange", "-m", "open-stage_cc:virtual", "open-stage_keys:virtual", "-d"], stdout=subprocess.PIPE) 
+
+    #pd = subprocess.Popen(["puredata", "-jack", "-inchannels", "8", "midi_2_o-s-c.pd"])
 
     jackmatch = subprocess.Popen(["jack-matchmaker", # start jack-matchmaker
                 "^a2j:lp-leds", "^Launchpad",
@@ -647,10 +645,9 @@ if __name__ == "__main__":
                   "^jack_trans_out", "^ardour:Drums/midi",
                   "^a2j:lp-cc", "ardour:MIDI control in",
                   "^a2j:lp-seq", "^ardour:Drums",
-                  "^a2j:lp-cc", "^a2j:Bitrot",
-                "^a2j:lp-cc", "^Bitrot",
-                "^a2j:open-stage_cc", "^a2j:sooper", #working?
-                "^a2j:open-stage_cc", "^a2j:Bitrot ",
+                "^a2j:open-stage_cc", "^Bitrot",
+                "^a2j:lp-cc", "^Bitrot",                                  
+                "^a2j:open-stage_cc", "^a2j:sooper", #working?               
                 "alsa_in:capture_1", "sooperlooper:common_in_1",
                 "alsa_in:capture_2", "sooperlooper:common_in_2",
                 "zynaddsubfx:out_1", "sooperlooper:common_in_1",
@@ -724,12 +721,11 @@ if __name__ == "__main__":
         sys.exit('JACK server not running?')
 
     connections = [
-    ["sooperlooper:common_out_1", "system:playback_1"],
-    ["sooperlooper:common_out_2", "system:playback_2"],
+    ["sooperlooper:common_out_1", "Bitrot Repeat:Audio Input 1"],
+    ["sooperlooper:common_out_2", "Bitrot Repeat:Audio Input 2"],
     #["sooperlooper:common_out_1", "ardour:sooperlooper/audio_in 1"],
     #["sooperlooper:common_out_2", "ardour:sooperlooper/audio_in 2"],
-    ["jack_trans_out:hydro", "Hydrogen:Hydrogen Midi-In"],
-    ["jack_trans_out:hydro", 'a2j:Hydrogen [130] (playback): Hydrogen Midi-In'],
+    ["lp-seq", "Hydrogen:Hydrogen Midi-In"],
     ["Hydrogen:out_L", "ardour:Drums/audio_in 1"],
     ["Hydrogen:out_R", "ardour:Drums/audio_in 2"],
     ["ardour:midinstrument/audio_out 1", "sooperlooper:common_in_1"],
@@ -738,11 +734,15 @@ if __name__ == "__main__":
     ["ardour:Mic/audio_out 2", "sooperlooper:common_in_2"],
     ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_1"],
     ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_2"],
-    
-    ["ardour:Guitar/audio_out 2", "sooperlooper:common_in_2"],
     ["lp-cc", "Bitrot Repeat:events-in"],
     ["open-stage-cc", "Bitrot Repeat:events-in"],
     ]
+
+
+    for i in range(8):
+        for s in range(1,3):
+            connections.append(["sooperlooper:loop{}_out_{}".format(str(i),str(s)), "pure_data_0:input" + str(i)])
+    
 
     for i in range(len(connections)):
         try:
@@ -760,6 +760,7 @@ if __name__ == "__main__":
         lp.reset()  # button flush
         jackmatch.terminate()
         slgui.terminate()
+        carla.terminate()
         #stagecontrol.terminate()  #why close when it takes time to open?
 
 
