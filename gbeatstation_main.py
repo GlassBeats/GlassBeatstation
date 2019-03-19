@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 
-import rtmidi2, pythonosc, jack, sys, time, argparse, subprocess, atexit, re, time, os, random
+import rtmidi2, pythonosc, jack, sys, time, argparse, subprocess, atexit, re, time, os, random, colorsys
 from pythonosc import dispatcher, osc_server, osc_message_builder, udp_client
 
 
@@ -112,12 +112,6 @@ class LPad_input():
             elif vel <= 64:
                 if looplist[y].state != 14:
                     slclient.send("/sl/{}/down".format(y), "pause")
-                    
-                    for i in range(5):
-                        lp.ledout(x + i, y, 0, 0)
-                    lp.ledout(x - 1, y, 0, 0)
-                    lp.ledout(x - 2, y, 0, 0)
-
 
         elif x == 8:  # if side controls, quantize on & off
             if vel == 127:  
@@ -253,11 +247,11 @@ class SL_global():
     def track_pos(loop, loop_num, pos):      
         try:
             loop.pos = pos
-            #rel_pos = int(loop.pos / loop.len) if loop.len > 0 else 0
             pos_8th = int(loop.pos / loop.len * 8) if loop.len > 0 else 0 #?
             if pos_8th != loop.eighth_pos and loop.state != 2:    
                     loop.eighth_pos = pos_8th
                     clr_pos = loop.color
+                    clr_posoff = [int(c / 3) for c in clr_pos] 
                     
                     if pos_8th == 0:
                         lp.ledout(0, 8, 0, 3, rgb = clr_pos)
@@ -265,14 +259,14 @@ class SL_global():
 
                         if lp.mode == "loop":
                             lp.ledout(0, loop_num, 0, 3, rgb=clr_pos)
-                            lp.ledout(7, loop_num, 0, 0)
+                            lp.ledout(7, loop_num, 0, 0, rgb=clr_posoff)
                     else:
                         lp.ledout(pos_8th, 8, 0, 3, rgb=clr_pos)
                         lp.ledout(pos_8th - 1, 8, 0, 1)
                         
                         if lp.mode == "loop":
                             lp.ledout(pos_8th, loop_num, 0, 3, rgb=clr_pos)
-                            lp.ledout(pos_8th - 1, loop_num, 0, 0)
+                            lp.ledout(pos_8th - 1, loop_num, 0, 0, rgb=clr_posoff)
                                 
                     if loop.seqbase == True:
                         for i in range(8):
@@ -761,7 +755,7 @@ if __name__ == "__main__":
         jackmatch.terminate()
         slgui.terminate()
         carla.terminate()
-        #stagecontrol.terminate()  #why close when it takes time to open?
+        stagecontrol.terminate()
 
 
 
