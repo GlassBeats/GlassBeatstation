@@ -295,7 +295,7 @@ class Loop(SL_global):
         self.rev = False
         self.quant = False
         self.seqbase = False # if this loop is timebase master for the sequencer
-        self.color = [random.randint(125,255) for i in range(3)] #randomize loop colors
+        self.color = [random.randint(145,255) for i in range(3)] #randomize loop colors
 
         # connect to sooperlooper
         cli.send("/sl/{}/register_auto_update".format(num_loops - 1), ["state", self.interval, "localhost:9998", "/sloop"])
@@ -444,6 +444,13 @@ def slosc_handler2(*args):
         
         midiout_cc.send_messages(176, [(0, 1, temp)])
 
+class Stagery():
+    def __init__ (self):
+        self.x1,self.y1, self.p1 = 0, 0, 0
+        
+
+
+
 def stage_handler(*args):  # osc from open stage control
     if args[0][:8] == "/beatpad":  # open-stage-c matrix - emulation of launchpad
         button = int(args[0][9:])
@@ -513,20 +520,32 @@ def stage_handler(*args):  # osc from open stage control
         loop = int(args[0][-1])
         print (looplist[loop].state)
         if looplist[loop].state == 4 or 10:
-            print('sendinggggg')
             slclient.send("/sl/{}/hit".format(args[0][-1]), "mute")
 
     elif args[0][:4] == "/xy":
+        #if x != 0 and y != 0:
         pt0 = args[1:4]
         pt1 = args[4:7]
         pt2 = args[7:10]
         pt3 = args[10:13]
         x1, y1 = pt0[0], pt0[1]
-        x1, y1 = int(x1 * 8/ 127), int(y1 * 8/ 127)
-        x1 = -x1 + 8
-        gridxy = x1 + (y1 * 8)
-        gridxy = -gridxy + 64
-        stage_osc.send("/xyrgb/" + str(gridxy), [80, 80, 80])
+        #x1, y1 = int(x1 * 8/ 127), int(y1 * 8/ 127)
+        #x1 = -x1 + 8
+        #gridxy = x1 + (y1 * 8)
+        #gridxy = -gridxy + 64
+        #stage_osc.send("/xyrgb/" + str(gridxy), [80, 80, 80])
+        
+        if x1 != Stagery.x1 and y1 != Stagery.y1 and args[-1] != Stagery.p1:
+            midiout_cc.send_noteon(176, 3, y1) 
+            midiout_cc.send_noteon(176, 4, x1)
+            Stagery.x1, Stagery.y1 = x1, y1
+            if args[-1] != Stagery.p1:
+                midiout_cc.send_noteon(176, 1, args[-1])
+                Stagery.p1 = args[-1]
+
+            print (x1, y1, args[-1])
+
+            
 
     elif args[0][:5] == "/save":
         md = cwd[:14]
@@ -703,6 +722,7 @@ if __name__ == "__main__":
     lpinput = LPad_input()  # initialize input class
 
     Sequence = Sequencer(8)
+    Stagery = Stagery()
 
     for i in range(3):  #
         lp.bg_switch(i)
