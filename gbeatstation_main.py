@@ -504,8 +504,11 @@ def stage_handler(*args):  # osc from open stage control
     elif args[0] == "/cycle":  # set cycle length for quantization
         slclient.send("/set", ["eighth_per_cycle", args[-1]])
 
-    elif args[0] == "/common_ins":  # use common ins (per each loop)
-        slclient.send("/sl/{}set".format(args[1]), ["use_common_ins", args[-1]])
+    elif args[0][:11] == "/common_ins":  # use common ins (per each loop)
+        slclient.send("/sl/{}/set".format(args[0][-1]), ["use_common_ins", args[-1]])
+
+    elif args[0][:12] == "/common_outs":  # use common pits (per each loop)
+        slclient.send("/sl/{}/set".format(args[0][-1]), ["use_common_outs", args[-1]])
 
     elif args[0][:6] == "/fader":
         vel = int(args[1] * 127)
@@ -529,28 +532,30 @@ def stage_handler(*args):  # osc from open stage control
         pt2 = args[7:10]
         pt3 = args[10:13]
         x1, y1 = pt0[0], pt0[1]
-        #x1, y1 = int(x1 * 8/ 127), int(y1 * 8/ 127)
-        #x1 = -x1 + 8
-        #gridxy = x1 + (y1 * 8)
-        #gridxy = -gridxy + 64
-        #stage_osc.send("/xyrgb/" + str(gridxy), [80, 80, 80])
         
-        if x1 != Stagery.x1 and y1 != Stagery.y1 and args[-1] != Stagery.p1:
+        if x1 != Stagery.x1 and y1 != Stagery.y1 and x1 + y1 != 0:
             midiout_cc.send_noteon(176, 3, y1) 
             midiout_cc.send_noteon(176, 4, x1)
             Stagery.x1, Stagery.y1 = x1, y1
-            if args[-1] != Stagery.p1:
-                midiout_cc.send_noteon(176, 1, args[-1])
-                Stagery.p1 = args[-1]
 
-            print (x1, y1, args[-1])
-
+            gridx1, gridy1 = int(x1 * 8/ 127), int(y1 * 8/ 127)
+            gridx1 = -gridx1 + 8
+            gridxy = x1 + (y1 * 8)
+            gridxy = -gridxy + 64
+            stage_osc.send("/xyrgb/" + str(gridxy), [80, 80, 80])
             
-
+            if Stagery.p1 != 127:
+                midiout_cc.send_noteon(176, 1, 127)
+                Stagery.p1 = 127
+            print (x1, y1, Stagery.p1 )
+            
+        elif x1 and y1 == 0:
+            Stagery.p1 = 0
+            midiout_cc.send_noteon(176, 1, 0)
+        
     elif args[0][:5] == "/save":
         md = cwd[:14]
-        #nwd
-        #os.mkdir(  # change save dir
+        #os.mkdir(  # todo: change save dir
         slclient.send("/save_session", [time.asctime(), "localhost:9998", "error_path"])
         for i in range(8):
             slclient.send("/sl/{}/save_loop".format(str(i)), [time.asctime() + "+loop" + str(i) + ".wav", "32", "endian", "localhost:9998", "error_path"])
