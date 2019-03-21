@@ -617,15 +617,21 @@ def stage_handler(*args):  # osc from open stage control
         SL_global.loopclrsel = args[-1]
         print (SL_global.loopclrsel)
 
+    elif args[0][:8] == "/automap":
+        button = int(args[0][-1])
+        if args[1] > 0:
+            for i in range (8):
+                SL_global.command(looplist[i], button, i) # should replace looplist[i]
+
          
     else:
-        print ('no handler for : ', args)
+        print ('no handler for stage: ', args)
     '''
   input_latency :: range 0 -> ...
   output_latency :: range 0 -> ...
   trigger_latency :: range 0 -> ...
   autoset_latency  :: 0 = off, not 0 = on
-
+s
   cycle_len :: in seconds
   free_time :: in seconds
   total_time :: in seconds
