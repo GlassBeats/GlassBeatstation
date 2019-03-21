@@ -211,10 +211,10 @@ class SL_global():
 
     def command(self, x, y):
         if x < 8:
-            print (y, self.cmds[x])
-            slclient.send("/sl/{}/down".format(str(y)), self.cmds[x])
+            print (y, SL_global.cmds[x])
+            slclient.send("/sl/{}/down".format(str(y)), SL_global.cmds[x])
 
-            if self.cmds[x] == 'reverse':  # not implemented yet
+            if SL_global.cmds[x] == 'reverse':  # not implemented yet
                 looplist[y].rev = not looplist[y].rev  # switch True & False
 
     def track_state(loop, loop_num,  state):
@@ -484,7 +484,7 @@ def stage_handler(*args):  # osc from open stage control
 
         if lp.mode == "loop":
             for i in range(64):
-                txtlist = looplist[0].cmds
+                txtlist = SL_global.cmds
                 txtlist[2] = "oneshot"
                 stage_osc.send("/textmat/" + str(i), txtlist[i % 8])
         else:
