@@ -180,6 +180,8 @@ num_loops = 0    # change this - should not be a global var!!
 
 class SL_global():
     loopclrsel = 0
+    cmds = ["record", "overdub", "trigger", "trigger",
+                      "pause", "reverse", "undo", "redo"]
     def __init__(self):
         global num_loops
         num_loops += 1
@@ -407,6 +409,9 @@ class Lpad_lights():
                     lp.ledout(buttons[0], buttons[1], newbg[buttons][0], newbg[buttons][1])
                 except KeyError:
                     print ('automap')
+
+        for i in range(8):
+            stage_osc.send("/automap_text/" + str(i), SL_global.cmds[i])
 
 def slosc_handler(*args):  # osc from sooperlooper
     loop = looplist[args[1]]
