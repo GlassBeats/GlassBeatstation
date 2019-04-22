@@ -116,8 +116,8 @@ class Gridmaster():
 
     def ledout(self, x, y, color, var=None, stage=True, temp=False):
         if x > 8 or y > 8 or x < 0 or y < 0:
-            raise Exception('out of range', x, y)
-
+            #raise Exception('out of range', x, y)
+            print ('---key error---', x, y)
         if self.pgrid[x,y]["current"] != color or temp==True: # dont repeat needlessly
             if temp==False: self.pgrid[x,y]["current"] = color
             

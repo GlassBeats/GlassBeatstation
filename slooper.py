@@ -113,18 +113,22 @@ class Slmaster():
                     if Grid.mode == "loop":
                         Grid.ledout(pos_8th, y, Grid.pgrid[pos_8th,y]["loop"][True])
                         Grid.ledout(pos_8th - 1, y, Grid.pgrid[pos_8th - 1,y]["loop"][False])
-                  
+
     def sloschandler(self, *args):
         if args[2] == 'tempo':
             print ('tempo', args[2])
             self.tempo = args[2]
+
             
         else:
             invloop = args[1]
             loop_num = invloop
             loopobj = self.loops[loop_num]
             param, value = args[2], args[3] # args[1:]
-            self.funcs[param](loopobj, value) # these could be more in parallel?
+            if int(value) == 20:
+                print ('xxxxxx', param, value)
+            else:
+                self.funcs[param](loopobj, value) # these could be more in parallel?
                 
 class Sloop(Slmaster):
     def __init__(self, grid, oscclient):

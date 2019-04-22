@@ -173,8 +173,9 @@ if __name__ == "__main__":
     for y in range(4):  # add oneshot buttons
         x = 3
         clr = Slmast.loops[y].color
-        Grid.alter_pressfunc(x, y, True, func=sl_loopmode_cmd, args=[2,y, True])
-        Grid.alter_pressfunc(x, y, False, func=sl_loopmode_cmd, args=[2,y, False], color=clr)
+        yinv = -y + 7 #loops switched upside down
+        Grid.alter_pressfunc(x, y, True, func=sl_loopmode_cmd, args=[2,yinv, True])
+        Grid.alter_pressfunc(x, y, False, func=sl_loopmode_cmd, args=[2,yinv, False], color=clr)
         
 
 
