@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE CARLA-PROJECT>
+<CARLA-PROJECT VERSION='2.0'>
+ <EngineSettings>
+  <ForceStereo>false</ForceStereo>
+  <PreferPluginBridges>false</PreferPluginBridges>
+  <PreferUiBridges>true</PreferUiBridges>
+  <UIsAlwaysOnTop>false</UIsAlwaysOnTop>
+  <MaxParameters>200</MaxParameters>
+  <UIBridgesTimeout>4000</UIBridgesTimeout>
+ </EngineSettings>
+
+ <Transport>
+  <BeatsPerMinute>0</BeatsPerMinute>
+ </Transport>
+
+ <!-- Bitrot Repeat -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>Bitrot Repeat</Name>
+   <URI>http://grejppi.github.io/plugins/bitrot/repeat</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>10</ControlChannel>
+   <Options>0x0</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Active</Name>
+    <Symbol>active</Symbol>
+    <MidiCC>1</MidiCC>
+    <MidiChannel>1</MidiChannel>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>BPM</Name>
+    <Symbol>bpm</Symbol>
+    <MidiCC>2</MidiCC>
+    <MidiChannel>1</MidiChannel>
+    <Value>77</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>Beats</Name>
+    <Symbol>beats</Symbol>
+    <MidiCC>3</MidiCC>
+    <MidiChannel>1</MidiChannel>
+    <Value>2</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>Division</Name>
+    <Symbol>division</Symbol>
+    <MidiCC>4</MidiCC>
+    <MidiChannel>1</MidiChannel>
+    <Value>14</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>Retrigger</Name>
+    <Symbol>retrigger</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>5</Index>
+    <Name>Attack</Name>
+    <Symbol>attack</Symbol>
+    <Value>0.492063492536545</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>Hold</Name>
+    <Symbol>hold</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>Release</Name>
+    <Symbol>release</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>8</Index>
+    <Name>Varispeed</Name>
+    <Symbol>varispeed</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>Speed</Name>
+    <Symbol>speed</Symbol>
+    <Value>1</Value>
+   </Parameter>
+  </Data>
+ </Plugin>
+
+ <ExternalPatchbay>
+  <Connection>
+   <Source>system:capture_1</Source>
+   <Target>PulseAudio JACK Source:front-left</Target>
+  </Connection>
+  <Connection>
+   <Source>system:capture_1</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>system:capture_2</Source>
+   <Target>PulseAudio JACK Source:front-right</Target>
+  </Connection>
+  <Connection>
+   <Source>PulseAudio JACK Sink:front-left</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>PulseAudio JACK Sink:front-right</Source>
+   <Target>system:playback_2</Target>
+  </Connection>
+  <Connection>
+   <Source>Bitrot Repeat:Audio Output 1</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>Bitrot Repeat:Audio Output 2</Source>
+   <Target>system:playback_2</Target>
+  </Connection>
+ </ExternalPatchbay>
+</CARLA-PROJECT>
