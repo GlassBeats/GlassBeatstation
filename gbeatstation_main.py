@@ -71,7 +71,11 @@ def sl_loopmode_cmd(x, y, vel):
     lp = Slmast.loops[y]
     if x == 2:
         if vel == True:
-            slclient.send("/sl/{}/down".format(str(y)), "oneshot")
+            if Slmast.loops[y].sync == False:
+                slclient.send("/sl/{}/set".format(y), ["sync", True])
+                Slmast.loops[y].sync = True
+
+            slclient.send("/sl/{}/set".format(str(y)), "sync")
             #Grid.ledrow(1, 90)
             
         elif vel == False:# 'oneshot' release is a pause

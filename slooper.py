@@ -102,7 +102,7 @@ class Slmaster():
                     Grid.ledout(7, 8, [0,0,0])
 
                     if Grid.mode == "loop":
-                        Grid.ledout(0, y, Grid.pgrid[pos_8th,y]["loop"][True])
+                        Grid.ledout(0, y, Grid.pgrid[0,y]["loop"][True])
                         Grid.ledout(7, y, Grid.pgrid[7,y]["loop"][False])
 
                 else:
@@ -135,8 +135,8 @@ class Sloop(Slmaster):
         '''individual sooperlooper tracking states, position'''
         self.loop_num = Slmaster.loop_num
         print ('initializing loop #{}'.format(self.loop_num))
-        self.pos = 1
-        self.pos_eighth = 0
+        self.pos = -1
+        self.pos_eighth = -2
         self.len = -1
         self.state = 0
         self.sync = False
