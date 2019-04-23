@@ -4,6 +4,7 @@ class Gridmaster():
         self.mk2_out = mk2_out
         self.mode = "rand"
         self.modelst = ["loop", "instr", "lplay", "rand"]
+
         self.pgrid = {} #primarygrid for mode states of buttons, NOT for loopstates
         clroff, clron = [0,0,0], [63,63,63]
         for x in range(9):
@@ -15,8 +16,12 @@ class Gridmaster():
                                    "current":[0,0,0],}
         del self.pgrid[8,8]
 
-        self.pgrid_pressed = {}
+        self.pressed = {}
         self.reset()
+
+        self.swap = None
+        self.addaction = {"function":None, "args":None}
+
 
         fgrid= {}
         self.fgrid = fgrid
@@ -58,26 +63,11 @@ class Gridmaster():
 
         if color:
             self.pgrid[x,y]["rand"][vel] = color
-        
-        '''print (isinstance(func, list))
-        multifunc =isinstance(func, list)
-        if multifunc == True: #if multiple functions
-            print ('multifunc', multifunc)
-            for f in range(len(func)):
-                print ('f', f, )'''
+
+        print (self.fgrid[x,y][mode])
         self.fgrid[x,y][mode][0][vel] = func
         self.fgrid[x,y][mode][1][vel] = args
-##        else:
-##             self.fgrid[x,y][mode][0][vel] = func
-##                self.fgrid[x,y][mode][1][vel] = args
-
-
-        #if color:
-        #    self.pgrid[x,y]["rand"][False] = color
-
-
-        #for xy in self.fgrid:
-        #    print ('altered', self.fgrid[x,y][self.mode])
+        print ('altered', self.fgrid[x,y][mode])
 
             
 

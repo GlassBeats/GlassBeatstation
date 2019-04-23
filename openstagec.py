@@ -88,9 +88,8 @@ class OpenStageControl():
             if args[-1] == 1:
                 md = os.getcwd()[:14]
                 slsesstime = time.asctime()
-                print (type(slsesstime))
                 os.mkdir(slsesstime)
-                self.Slmast.sl_osc_cmd("/save_session", [slsesstime + "/" + slsesstime, "localhost:9998", "error_path"])
+                self.Slmast.sl_osc_cmd("/save_session", [slsesstime + "/" + slsesstime + ".slsess", "localhost:9998", "error_path"])
                 for i in range(8):
                    self.Slmast.sl_osc_cmd("/sl/{}/save_loop".format(str(i)), [slsesstime + "/" + slsesstime + "+loop" + str(i) + ".wav", "32", "endian", "localhost:9998", "error_path"])
 
@@ -126,7 +125,21 @@ class OpenStageControl():
             send("/rgb_pulse", [255, 255, 255])
             time.sleep(1)
             send("/pulse", 1)
-            
+
+        elif args[0] == "/swap":
+            if args[-1] == 0:
+                Grid.swap = None
+                print ('swapoff')
+            elif args[-1] == 1:
+                Grid.swap = "add"
+                print('add')
+            elif args[-1] == 2:
+                Grid.swap = "implement"
+                print('implement')
+
+        else:
+            print ('no handler for ', args)
+
 
 
         

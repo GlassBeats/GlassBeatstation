@@ -20,60 +20,81 @@ def callback_midi(note, time_stamp):
     coordinate(x,y, vel)
 
 def coordinate(x, y, vel):
-    if y < 8 and x < 8 and vel == True: #pulse when pressed
-        var = ["pulse", 119]
-    else:  var = None
+    if Grid.swap != None:
+        if vel == True:
+            if Grid.swap == "add": #swapping button functions dynamically
+                Grid.addaction["function"] = Grid.fgrid[x, y][Grid.mode][0][vel]
+                Grid.addaction["args"] = Grid.fgrid[x, y][Grid.mode][1][vel]
+                print ('addict', Grid.addaction)
+            elif Grid.swap == "implement":
+                print ('implementing')
+                print (x, y, Grid.addaction["function"], Grid.addaction["args"])
+                Grid.alter_pressfunc(x, y, vel, func = Grid.addaction["function"], args=Grid.addaction["args"], color=[0,0,63])
+                #print ('randy', Grid.fgrid[x,y]["rand"])
 
-    
-    
-    if x == 8:
-        print (Grid.mode)
-        if Grid.mode == "loop":
-            loopsync = Slmast.loops[y].sync
-            syncclr = [50,20,20] if loopsync == True else [0,0,63] #kina backwards
-            if vel == True:
-                Grid.ledout(8, y, syncclr, temp=True)
-                Slmast.loops[y].sync = not Slmast.loops[y].sync
-                Slmast.sl_osc_cmd("/sl/{}/set".format(str(-y + 7)), ["sync", int(Slmast.loops[y].sync)])
-            elif vel == False:
-                Grid.ledout(8, y, Grid.pgrid[x,y]["current"], temp=True)
-            
-        elif Grid.mode == "instr":
-            if vel == 1:
-                sl_loopmode_cmd(0, y, vel)
-            else:
-                sl_loopmode_cmd(4, y, True)
-            
 
-    elif y == 8:
-        if vel == 1:
-            if x < 4:
-                if x == 3:
-                    Grid.switchmode(Grid.modelst[x], loopstuff=Slmast)
-                else:
-                    Grid.switchmode(Grid.modelst[x])
 
     else:
-        if Grid.mode == "loop":
-            sl_loopmode_cmd(x, y, vel)
-        elif Grid.mode == "instr":
-            var = None
-            midinote = x + (y * 8) + 12
-            print (midinote)
-            glass_instr.send_noteon(144, midinote, vel * 127)
-        elif Grid.mode == "rand":
-            Grid.gridpress(x, y, vel)
-        Grid.ledout(x,y, Grid.pgrid[x,y][Grid.mode][vel], var)
+
+        if y < 8 and x < 8 and vel == True: #pulse when pressed
+            var = ["pulse", 119]
+        else:  var = None
+
+        if (x,y) not in Grid.pressed:
+            Grid.pressed[x, y] = True
+        elif (x,y) in Grid.pressed:
+            del Grid.pressed[x,y]
+
+        if x == 8:
+            print (Grid.mode)
+            if Grid.mode == "loop":
+                loopsync = Slmast.loops[y].sync
+                syncclr = [50,20,20] if loopsync == True else [0,0,63] #kina backwards
+                if vel == True:
+                    Grid.ledout(8, y, syncclr, temp=True)
+                    Slmast.loops[y].sync = not Slmast.loops[y].sync
+                    Slmast.sl_osc_cmd("/sl/{}/set".format(str(-y + 7)), ["sync", int(Slmast.loops[y].sync)])
+                elif vel == False:
+                    Grid.ledout(8, y, Grid.pgrid[x,y]["current"], temp=True)
+
+            elif Grid.mode == "instr":
+                if vel == 1:
+                    sl_loopmode_cmd(0, y, vel)
+                else:
+                    sl_loopmode_cmd(4, y, True)
+
+
+        elif y == 8:
+            if vel == 1:
+                if x < 4:
+                    if x == 3:
+                        Grid.switchmode(Grid.modelst[x], loopstuff=Slmast)
+                    else:
+                        Grid.switchmode(Grid.modelst[x])
+
+        else:
+            if Grid.mode == "loop":
+                sl_loopmode_cmd(x, y, vel)
+            elif Grid.mode == "instr":
+                var = None
+                midinote = x + (y * 8) + 12
+                print (midinote)
+                glass_instr.send_noteon(144, midinote, vel * 127)
+            elif Grid.mode == "rand":
+                Grid.gridpress(x, y, vel)
+            Grid.ledout(x,y, Grid.pgrid[x,y][Grid.mode][vel], var)
 
 
 def sl_loopmode_cmd(x, y, vel):
     y = -y + 7
     lp = Slmast.loops[y]
 
-    #if x == 1 or x == 2:
-    #    for i in range(7):  # change colors of row to clear old loop pos
-    #        if i +1 != x:
-    #            Grid.ledout(i + 1, y, Grid.pgrid[x,y][Grid.mode][False])
+    if x == 1 or x == 2:
+        if vel == 1:
+            for i in range(7):  # change colors of row to clear old loop pos
+                if i +1 != x:
+                    y = -y + 7
+                    Grid.ledout(i + 1, y, Grid.pgrid[x,y][Grid.mode][False])
     if x == 2:
         if vel == True:
             if Slmast.loops[y].sync == False:
