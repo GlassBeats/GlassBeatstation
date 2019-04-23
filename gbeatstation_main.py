@@ -69,13 +69,18 @@ def coordinate(x, y, vel):
 def sl_loopmode_cmd(x, y, vel):
     y = -y + 7
     lp = Slmast.loops[y]
+
+    #if x == 1 or x == 2:
+    #    for i in range(7):  # change colors of row to clear old loop pos
+    #        if i +1 != x:
+    #            Grid.ledout(i + 1, y, Grid.pgrid[x,y][Grid.mode][False])
     if x == 2:
         if vel == True:
             if Slmast.loops[y].sync == False:
                 slclient.send("/sl/{}/set".format(y), ["sync", True])
                 Slmast.loops[y].sync = True
 
-            slclient.send("/sl/{}/set".format(str(y)), "sync")
+            slclient.send("/sl/{}/down".format(str(y)), "oneshot")
             #Grid.ledrow(1, 90)
             
         elif vel == False:# 'oneshot' release is a pause
@@ -92,7 +97,7 @@ def loop_pause(y):  # aka mute pause for the weird states
     slclient.send("/sl/{}/down".format(str(y)), "pause")
     #reset loop_pos to start
     for i in range(8):
-                Grid.ledout(i, y, Grid.pgrid[i,y][Grid.mode][False])
+                pass#Grid.ledout(i, y, Grid.pgrid[i,y][Grid.mode][False])
                 '''pos_8th = lp.pos_eighth
                 if i == pos_8th:
                     #valcol =  True #Grid.pgrid[i,y][Grid.mode][True]
@@ -220,7 +225,10 @@ if __name__ == "__main__":
         print ('exiting')
         Grid.reset()
 
-    #slclient.send("/ping", ["localhost:9998", "/sloop"])
+    slclient.send("/ping", ["localhost:9998", "/sloop"])
+    for i in range(8):
+        slclient.send("/sl/{}/get".format(i), ["loop_len", "localhost:9998", "/sloop"])
+
     atexit.register(exit_handler)
     server.serve_forever()  # blocking osc server=
     
