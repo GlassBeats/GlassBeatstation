@@ -8,11 +8,14 @@ jmatchmkr = jackmatchmaker.JackMatchmaker([
         ["^a2j:open-stage_cc", "^sooperloop"],
 
         ["zynaddsubfx:out_1", "sooperlooper:common_in_1"],
-        ["zynaddsubfx:out_2", "sooperlooper:common_in_2"],                
+        ["zynaddsubfx:out_2", "sooperlooper:common_in_2"],
+
+        ["sooperlooper:common_out_1", "Bitrot Repeat:Audio Input 1"],
+        ["sooperlooper:common_out_2", "Bitrot Repeat:Audio Input 2"],
 
         ["^a2j:glass_instr","^zynaddsubfx:midi_input"],
-        ["sooperlooper:common_out_1", "Bitrot:Audio Input 1"],
-        ["sooperlooper:common_out_2", "Bitrot:Audio Input 2"],
+
+
         
         ["^a2j:glass_cc", "^sooperlooper"],
         ["^a2j:glass_cc", "^Bitrot"],

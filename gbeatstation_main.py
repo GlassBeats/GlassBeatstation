@@ -89,12 +89,13 @@ def sl_loopmode_cmd(x, y, vel):
     y = -y + 7
     lp = Slmast.loops[y]
 
-    if x == 1 or x == 2:
-        if vel == 1:
-            for i in range(7):  # change colors of row to clear old loop pos
-                if i +1 != x:
-                    y = -y + 7
-                    Grid.ledout(i + 1, y, Grid.pgrid[x,y][Grid.mode][False])
+    if x == 1 or x == 2 :
+        if Grid.mode == "loop":
+            if vel == 1:
+                for i in range(7):  # change colors of row to clear old loop pos
+                    if i +1 != x:
+                        y = -y + 7
+                        Grid.ledout(i + 1, y, Grid.pgrid[x,y][Grid.mode][False])
     if x == 2:
         if vel == True:
             if Slmast.loops[y].sync == False:
