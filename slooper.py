@@ -11,9 +11,9 @@ class Slmaster():
         self.tempo = -1
         self.seqmaster = 0 #which loop is timebase master for the sequencer
         self.states = OrderedDict([("Off", [0,0,0]),
-                                ("WaitStart", [0,0,0]), #pulsings??
+                                ("WaitStart", [40,0,63]), #pulsings??
                                 ("Recording", [63,0,0]),
-                                 ("WaitStop", [0,0,0]), #pulse
+                                 ("WaitStop", [63,0,40]), #pulse
                                  ("Playing", [0,63,0]), #4
                                 ("Overdubbing", [40,40,0]),
                                  ("Multiplying", [63,63,0]),

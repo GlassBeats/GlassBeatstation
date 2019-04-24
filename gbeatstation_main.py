@@ -46,7 +46,6 @@ def coordinate(x, y, vel):
             del Grid.pressed[x,y]
 
         if x == 8:
-            print (Grid.mode)
             if Grid.mode == "loop":
                 loopsync = Slmast.loops[y].sync
                 syncclr = [50,20,20] if loopsync == True else [0,0,63] #kina backwards
@@ -58,10 +57,14 @@ def coordinate(x, y, vel):
                     Grid.ledout(8, y, Grid.pgrid[x,y]["current"], temp=True)
 
             elif Grid.mode == "instr":
-                if vel == 1:
+                if vel == True:
                     sl_loopmode_cmd(0, y, vel)
-                else:
-                    sl_loopmode_cmd(4, y, True)
+
+                elif vel == False:
+                    if Slmast.loops[y].sync == True:
+                        sl_loopmode_cmd(0, y, vel)
+                    else:
+                        sl_loopmode_cmd(4, y, True)
 
 
         elif y == 8:
