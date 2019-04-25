@@ -182,16 +182,18 @@ if __name__ == "__main__":
     Slmast = Slmaster(Grid, slclient)                        
     OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc)
 
-    for x in range(8):   # setup 'rand' mode functionality
-        y = 7 # loop 0  
-        clr = Slmast.loops[0].color #invert  y , flip 7 and 0
-        Grid.alter_pressfunc(x, y, True, func=sl_loopmode_cmd, args=[x, y, 1])        
-        if x == 2:
-            Grid.alter_pressfunc(x, y, False, func=sl_loopmode_cmd, args=[x, y, 0])
-        Grid.pgrid[x,y]['rand'][False] = clr
-        #else:  # could probably reduce this redundancy and get ri["^a2j:glass_cc", "^Bitrot"],d of if/else
-            #Grid.alter_pressfunc(i, y, False)
-            #??
+
+    for y in range(4):
+        clr = Slmast.loops[y].color # this is confusing..
+        y = -y + 7 #invert  y
+        for x in range(8):   # setup 'rand' mode functionalityy
+            Grid.alter_pressfunc(x, y, True, func=sl_loopmode_cmd, args=[x, y, 1], color=clr)
+            if x == 2:
+                Grid.alter_pressfunc(x, y, False, func=sl_loopmode_cmd, args=[x, y, 0], color=clr)
+            Grid.pgrid[x,y]['rand'][False] = clr
+            #else:  # could probably reduce this redundancy and get ri["^a2j:glass_cc", "^Bitrot"],d of if/else
+                #Grid.alter_pressfunc(i, y, False)
+                #??
 
     for x in range(4):
         y = 8
@@ -204,6 +206,7 @@ if __name__ == "__main__":
                 Grid.alter_pressfunc(x + 4, y, i, func=glass_drum.send_noteon, args =[144, note, i * 127], color = [30,20,15])
             #Grid.alter_pressfunc(x + 4, 0, False, func=glass_instr.send_noteon, args =[144, note, 0], color = [30,20,15])
 
+
     for y in range(4):  # add oneshot buttons
         x = 3
         clr = Slmast.loops[y].color
@@ -212,14 +215,6 @@ if __name__ == "__main__":
         Grid.alter_pressfunc(x, y, False, func=sl_loopmode_cmd, args=[2,yinv, False], color=clr)
         
 
-
-    for x in range(4):
-        y = 8
-        #topright of automap
-        function = Grid.switchmode
-        button = x + 4
-        Grid.buttonchange(button, y, True, func=function, arg=Grid.modelst[x])
-        
     cc_clr = [15,5,15]
     cc_valratio = 30
 

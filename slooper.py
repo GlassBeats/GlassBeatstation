@@ -24,7 +24,7 @@ class Slmaster():
                                   ("Scratching", [0,0,40]), 
                                    ("OneShot", [0,63,63]),
                                     ("Subsitute", [30,30,30]),
-                                     ("Paused", [0,3,0])])#blink
+                                     ("Paused", [0,5,20])])#blink
                                   
         self.stateslst = list(self.states.items())
 

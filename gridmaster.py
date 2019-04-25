@@ -161,13 +161,12 @@ class Gridmaster():
         if mode not in self.modelst: raise TypeError( mode ," is not a valid mode")
         else:
             print ('switching to', mode, "mode")
-            self.reset()
+            #self.reset()
             self.mode = mode
             for i in self.pgrid:
                 x, y = i
                 if x < 8 and y < 8:
                     self.ledout(x, y, self.pgrid[i][mode][False])
-
                     if mode == "loop":
                         if loopstuff:
 

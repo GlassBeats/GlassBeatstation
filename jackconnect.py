@@ -1,4 +1,4 @@
-import jack
+import jack, sys
 
 class JackConnections():
     def __init__(self):
@@ -10,18 +10,38 @@ class JackConnections():
 
         self.client.activate()
 
+        self.inports = ["Bitrot Repeat:Audio Input ",
+                         "system:playback_",
+                         "sooperlooper:common_in_",
+                         ]
+
+        self.outports= ["Bitrot Repeat:Audio Output ",
+                        "sooperlooper:common_out_",
+                        ]
 
         connections = [
         ["sooperlooper:common_out_1", "Bitrot Repeat:Audio Input 1"],
         ["sooperlooper:common_out_2", "Bitrot Repeat:Audio Input 2"],
-        #["lp-seq", "Hydrogen:Hydrogen Midi-In"],
+
         ["Hydrogen:out_L", "system:playback_1"],
-        ["Hydrogen:out_R", "system:playback_2"], 
+        ["Hydrogen:out_R", "system:playback_2"],
         ]
 
         self.connecting(connections)
 
         
+    def connect(self, inport, outport, stereo=True):
+        j = self.client
+
+        for i in range(1,3):
+            cur_con = j.get_all_connections(inport)
+
+            j.connect(inport,outport)
+
+
+
+
+
 
     def connecting(self, connections):
         print (connections)
