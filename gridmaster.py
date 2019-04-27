@@ -4,6 +4,9 @@ class Gridmaster():
         self.mk2_out = mk2_out
         self.mode = "rand"
         self.modelst = ["loop", "instr", "lplay", "rand"]
+        self.cmds = ["record", "overdub", "oneshot", "trigger",
+                      "pause", "reverse", "undo", "redo"]
+
 
         self.pgrid = {} #primarygrid for mode states of buttons, NOT for loopstates
         clroff, clron = [0,0,0], [63,63,63]
@@ -161,16 +164,20 @@ class Gridmaster():
         if mode not in self.modelst: raise TypeError( mode ," is not a valid mode")
         else:
             print ('switching to', mode, "mode")
-            #self.reset()
             self.mode = mode
             for i in self.pgrid:
                 x, y = i
                 if x < 8 and y < 8:
                     self.ledout(x, y, self.pgrid[i][mode][False])
                     if mode == "loop":
-                        if loopstuff:
-
-                            self.stage_osc.send("/textmat/" + self.xy_to_stage(x,y), loopstuff.stateslst[x])
+                        self.stage_osc.send("/textmat/" + self.xy_to_stage(x,y), self.cmds[x])
+                    elif mode == "rand":
+                        if y > 3:
+                            self.stage_osc.send("/textmat/" + self.xy_to_stage(x, y), self.cmds[x])
+                        else:
+                            self.stage_osc.send("/textmat/" + self.xy_to_stage(x, y), " ")
+                    else:
+                        self.stage_osc.send("/textmat/" + self.xy_to_stage(x, y), " ")
 
     def ledclmn(self, y, colorcode): #left to right 0 - 8
         self.mk2_out.send_sysex(0, 32, 41, 2, 24, 12, colorcode)        

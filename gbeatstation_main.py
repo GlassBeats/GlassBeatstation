@@ -67,13 +67,10 @@ def coordinate(x, y, vel):
                         sl_loopmode_cmd(4, y, True)
 
 
-        elif y == 8:
+        elif y == 8:  # automap row
             if vel == 1:
                 if x < 4:
-                    if x == 3:
-                        Grid.switchmode(Grid.modelst[x], loopstuff=Slmast)
-                    else:
-                        Grid.switchmode(Grid.modelst[x])
+                    Grid.switchmode(Grid.modelst[x])
 
         else:
             if Grid.mode == "loop":
@@ -215,17 +212,16 @@ if __name__ == "__main__":
         Grid.alter_pressfunc(x, y, False, func=sl_loopmode_cmd, args=[2,yinv, False], color=clr)
         
 
-    cc_clr = [15,5,15]
-    cc_valratio = 30
+    cc_clr = [0,0,13]
 
-    
     for i in range(4):
-        
-        Grid.alter_pressfunc(0, i, True,  func=glass_cc.send_noteon, args=[176, 1, 127])
-        Grid.alter_pressfunc(0, i, False, func=glass_cc.send_noteon, args=[176, 1, 0]) #, color = [63, 55, 63])
-        Grid.alter_pressfunc(0, i, True,  func=[glass_cc.send_noteon, glass_cc.send_noteon],
+        invi = -i + 3
+        Grid.alter_pressfunc(0, invi, True,  func=glass_cc.send_noteon, args=[176, 1, 127])
+        Grid.alter_pressfunc(0, invi, False, func=glass_cc.send_noteon, args=[176, 1, 0]) #, color = [63, 55, 63])
+        Grid.alter_pressfunc(0, invi, True,  func=[glass_cc.send_noteon, glass_cc.send_noteon],
                                           args=[[176, 1, 127], [176, 3, i * 31]]) #estimated good cc note values
-        Grid.alter_pressfunc(0, i, False, func=glass_cc.send_noteon, args=[176, 1, 0], color = [10 + c * i for c in cc_clr])
+        Grid.alter_pressfunc(0, i, False, func=glass_cc.send_noteon, args=[176, 1, 0],
+                             color = [30 + c * i for c in cc_clr])
 
     
                           
