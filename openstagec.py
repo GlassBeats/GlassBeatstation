@@ -137,6 +137,18 @@ class OpenStageControl():
                 Grid.swap = "implement"
                 print('implement')
 
+        elif args[0] == "/monitor":
+            self.glass_cc.send_noteon(175,11, args[-1])
+        elif args[0] == "/main_out":
+            self.glass_cc.send_noteon(175,10, args[-1])
+        elif args[0] == "/input_gain":
+            self.glass_cc.send_noteon(175, 12, args[-1])
+
+        elif args[0][:5] == "/gain":
+            print (args[0][5], args)
+            self.glass_cc.send_noteon(175, int(args[0][5]), args[-1])
+
+
         else:
             print ('no handler for ', args)
 
