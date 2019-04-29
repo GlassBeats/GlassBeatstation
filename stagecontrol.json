@@ -356,7 +356,8 @@
                   "address": "/save",
                   "preArgs": "",
                   "target": "",
-                  "bypass": false
+                  "bypass": false,
+                  "value": ""
                 },
                 {
                   "type": "rgb",
@@ -524,7 +525,8 @@
                   "target": [
                     "127.0.0.1:9951"
                   ],
-                  "bypass": false
+                  "bypass": false,
+                  "value": ""
                 },
                 {
                   "type": "push",
@@ -545,7 +547,8 @@
                   "address": "/beatpad/0",
                   "preArgs": "record",
                   "target": "",
-                  "bypass": false
+                  "bypass": false,
+                  "value": ""
                 },
                 {
                   "type": "push",
@@ -568,7 +571,8 @@
                   "target": [
                     "127.0.0.1:9951"
                   ],
-                  "bypass": false
+                  "bypass": false,
+                  "value": ""
                 },
                 {
                   "type": "push",
@@ -591,7 +595,8 @@
                   "target": [
                     "127.0.0.1:9951"
                   ],
-                  "bypass": false
+                  "bypass": false,
+                  "value": ""
                 },
                 {
                   "type": "push",
@@ -614,7 +619,8 @@
                   "target": [
                     "127.0.0.1:9951"
                   ],
-                  "bypass": false
+                  "bypass": false,
+                  "value": ""
                 },
                 {
                   "type": "dropdown",
@@ -664,7 +670,8 @@
                   "address": "/pushypulse",
                   "preArgs": "",
                   "target": "",
-                  "bypass": false
+                  "bypass": false,
+                  "value": ""
                 },
                 {
                   "type": "rgbled",
@@ -841,7 +848,8 @@
                   ],
                   "bypass": false,
                   "doubleTap": false,
-                  "norelease": false
+                  "norelease": false,
+                  "value": ""
                 },
                 {
                   "type": "fader",
@@ -1605,6 +1613,50 @@
           "value": "",
           "precision": 0,
           "address": "/swap",
+          "preArgs": "",
+          "target": "",
+          "bypass": false
+        },
+        {
+          "type": "push",
+          "top": 370,
+          "left": 810,
+          "id": "add",
+          "linkId": "",
+          "width": 40,
+          "height": 50,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "doubleTap": false,
+          "on": 1,
+          "off": 0,
+          "norelease": false,
+          "value": "",
+          "precision": 2,
+          "address": "/push_2",
+          "preArgs": "",
+          "target": "",
+          "bypass": false
+        },
+        {
+          "type": "push",
+          "top": 420,
+          "left": 810,
+          "id": "imp",
+          "linkId": "",
+          "width": 40,
+          "height": 50,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "doubleTap": false,
+          "on": 1,
+          "off": 0,
+          "norelease": false,
+          "value": "",
+          "precision": 2,
+          "address": "/push_2",
           "preArgs": "",
           "target": "",
           "bypass": false
