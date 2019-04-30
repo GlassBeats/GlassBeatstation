@@ -63,28 +63,30 @@ class Slmaster():
 
         print ('*' * 20, length)
         if loopobj.len != length:
-            
             loopobj.len = length
             seconds = int(length)
-            if int(loopobj.state) == 2: #change state val to "recording"
-                if seconds < 8:
-                    x = seconds
-                    clr = [63,0,0]
-                    code = 72
-                elif seconds < 16:
-                    x = seconds - 8
-                    clr = [40,0,0]
-                    code = 106
-                elif  seconds >= 16:
-                    x = seconds - 16
-                    clr = [10,0,0]
-                    code = 6
-                else:
-                    x = seconds % 8
-                    
-                if seconds >= 0:
-                    self.Grid.ledout(x, loopobj.loop_num, clr, var=["pulse", code])
-                
+            y = loopobj.loop_num
+            if self.Grid.mode == "instr": pass
+            else:
+                if int(loopobj.state) == 2:
+                    if seconds < 8:
+                        x = seconds
+                        clr = [63,0,0]
+                        code = 72
+                    elif seconds < 16:
+                        x = seconds - 8
+                        clr = [40,0,0]
+                        code = 106
+                    elif  seconds >= 16:
+                        x = seconds - 16
+                        clr = [10,0,0]
+                        code = 6
+                    else:
+                        x = seconds % 8
+
+                    if seconds >= 0:
+                        self.Grid.ledout(x, loopobj.loop_num, clr, var=["pulse", code])
+
     def track_pos(self, loopobj, pos):
         lp = loopobj
         lp.pos = pos
@@ -96,17 +98,17 @@ class Slmaster():
         Grid = self.Grid
         if pos_8th != lp.pos_eighth:
             if pos_8th > 8:
-                oscclient.send("/sl/{}/get".format(str(y)), ["loop_len", "localhost:9998", "/sloop"])
+                self.slclient.send("/sl/{}/get".format(str(y)), ["loop_len", "localhost:9998", "/sloop"])
 
             lp.pos_eighth = pos_8th
 
             if lp.state in [4,5,6,10,12]: #if in one of the playing states
-                
+
                 if pos_8th == 0:  # reconfigure to display oneshots ^^ 12d
                     Grid.ledout(0, 8, lp.color)
                     Grid.ledout(7, 8, [0,0,0])
 
-                    if Grid.mode == "loop":
+                    if Grid.mode == "loop" or  Grid.mode == "rand" and y > 3:
                         Grid.ledout(0, y, Grid.pgrid[0,y]["loop"][True])
                         Grid.ledout(7, y, Grid.pgrid[7,y]["loop"][False])
 
@@ -115,7 +117,7 @@ class Slmaster():
                     Grid.ledout(pos_8th - 1, 8, [0,0,0])
 
 
-                    if Grid.mode == "loop":
+                    if Grid.mode == "loop" or  Grid.mode == "rand" and y > 3:
                         Grid.ledout(pos_8th, y, Grid.pgrid[pos_8th,y]["loop"][True])
                         Grid.ledout(pos_8th - 1, y, Grid.pgrid[pos_8th - 1,y]["loop"][False])
 
@@ -152,8 +154,8 @@ class Sloop(Slmaster):
         #self.quant = False
         self.color = [random.randint(25,63) for i in range(3)] #randomize loop colors
         for x in range(8):
-            grid.pgrid[x, self.loop_num]["loop"][True] = [63, 63, 63] #self.color
-            grid.pgrid[x, self.loop_num]["loop"][False] = self.color #[0,0,0]#[63, 63, 63]#[int(c / 1.5) for c in self.color]
+            grid.pgrid[x, self.loop_num]["loop"][True] = self.color
+            grid.pgrid[x, self.loop_num]["loop"][False] = [0,0,0]#self.color
         # avoid ifelse, prevent 'x/ 0'
         intrvl = Slmaster.interval
         # connect to sooperlooper, autoreg updates for state, length, and position

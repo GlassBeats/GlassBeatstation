@@ -186,8 +186,8 @@ if __name__ == "__main__":
         for x in range(8):   # setup 'rand' mode functionalityy
             Grid.alter_pressfunc(x, y, True, func=sl_loopmode_cmd, args=[x, y, 1], color=clr)
             if x == 2:
-                Grid.alter_pressfunc(x, y, False, func=sl_loopmode_cmd, args=[x, y, 0], color=clr)
-            Grid.pgrid[x,y]['rand'][False] = clr
+                Grid.alter_pressfunc(x, y, False, func=sl_loopmode_cmd, args=[x, y, 0])
+            Grid.pgrid[x,y]['rand'][True] = clr
             #else:  # could probably reduce this redundancy and get ri["^a2j:glass_cc", "^Bitrot"],d of if/else
                 #Grid.alter_pressfunc(i, y, False)
                 #??
