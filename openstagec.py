@@ -145,7 +145,6 @@ class OpenStageControl():
             self.glass_cc.send_noteon(175, 12, args[-1])
 
         elif args[0][:5] == "/gain":
-            print (args[0][5], args)
             self.glass_cc.send_noteon(175, int(args[0][5]), args[-1])
 
 

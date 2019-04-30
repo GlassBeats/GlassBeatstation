@@ -707,7 +707,7 @@
                   "logScale": false,
                   "unit": "",
                   "origin": "auto",
-                  "default": 0,
+                  "default": 127,
                   "value": "",
                   "precision": 0,
                   "address": "/input_gain",
