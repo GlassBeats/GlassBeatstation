@@ -71,8 +71,12 @@ def coordinate(x, y, vel):
             if vel == 1:
                 if x < 4:
                     Grid.switchmode(Grid.modelst[x])
+                elif x == 4:
+                    for y in range(8): # consider directionality
+                        if Slmast.loops[y].state != 14:
+                            loop_pause(y)
 
-        else:
+        else: # 8x8 grid
             if Grid.mode == "loop":
                 sl_loopmode_cmd(x, y, vel)
             elif Grid.mode == "instr":
@@ -115,12 +119,13 @@ def sl_loopmode_cmd(x, y, vel):
 
 
 def loop_pause(y):  # aka mute pause for the weird states
-    slclient.send("/sl/{}/down".format(str(y)), "mute")
-    slclient.send("/sl/{}/down".format(str(y)), "pause")
-    #reset loop_pos to start
-    for i in range(8):
-                pass#Grid.ledout(i, y, Grid.pgrid[i,y][Grid.mode][False])
-                '''pos_8th = lp.pos_eighth
+    if Slmast.loops[y].state != 14:
+        slclient.send("/sl/{}/down".format(str(y)), "mute")
+        slclient.send("/sl/{}/down".format(str(y)), "pause")
+        #reset loop_pos to start
+        for i in range(8):
+                    pass#Grid.ledout(i, y, Grid.pgrid[i,y][Grid.mode][False])
+                    '''pos_8th = lp.pos_eighth
                 if i == pos_8th:
                     #valcol =  True #Grid.pgrid[i,y][Grid.mode][True]
                     print('i', i, y, pos_8th)

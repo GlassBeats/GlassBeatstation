@@ -47,7 +47,6 @@ class Slmaster():
     def track_state(self, loopobj, state):
         if loopobj.state != state:
             loopobj.state = int(state)
-            print ('hhhhh', loopobj.state)
             print (self.stateslst[loopobj.state])
             clr = (self.stateslst[loopobj.state][1])
             self.Grid.ledout(8, loopobj.loop_num, clr)
@@ -60,8 +59,6 @@ class Slmaster():
             
 
     def track_len(self, loopobj, length):
-
-        print ('*' * 20, length)
         if loopobj.len != length:
             loopobj.len = length
             seconds = int(length)
@@ -135,10 +132,9 @@ class Slmaster():
             loop_num = invloop
             loopobj = self.loops[loop_num]
             param, value = args[2], args[3] # args[1:]
-            if int(value) == 20:
-                print ('xxxxxx', param, value)
-            else:
-                self.funcs[param](loopobj, value) # these could be more in parallel?
+            if param != "loop_len" and value > 14:
+                raise  ValueError('something needs a reset :', param, value)
+            self.funcs[param](loopobj, value) # these could be more in parallel?
                 
 class Sloop(Slmaster):
     def __init__(self, grid, oscclient):

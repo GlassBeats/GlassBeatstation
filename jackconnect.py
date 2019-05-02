@@ -10,6 +10,8 @@ class JackConnections():
 
         self.client.activate()
 
+        self.curr_connex = {}
+
         self.inports = ["Bitrot Repeat:Audio Input ",
                          "system:playback_",
                          "sooperlooper:common_in_",
@@ -34,7 +36,7 @@ class JackConnections():
         j = self.client
 
         for i in range(1,3):
-            cur_con = j.get_all_connections(inport)
+            #self.cur_connex = j.get_all_connections(inport)
 
             j.connect(inport,outport)
 
