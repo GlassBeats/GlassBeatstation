@@ -126,16 +126,11 @@ class OpenStageControl():
             time.sleep(1)
             send("/pulse", 1)
 
-        elif args[0] == "/swap":
-            if args[-1] == 0:
-                Grid.swap = None
-                print ('swapoff')
-            elif args[-1] == 1:
-                Grid.swap = "add"
-                print('add')
-            elif args[-1] == 2:
-                Grid.swap = "implement"
-                print('implement')
+        elif args[0] == "/swapadd":
+            Grid.swap = "add" if args[-1] else None
+        elif args[0] == "/swapimp":
+            Grid.swap = "implement" if args[-1] else None
+
 
         elif args[0] == "/monitor":
             self.glass_cc.send_noteon(175,11, args[-1])
