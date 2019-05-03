@@ -1605,6 +1605,68 @@
           "preArgs": "",
           "target": "",
           "bypass": false
+        },
+        {
+          "type": "matrix",
+          "top": 110,
+          "left": 690,
+          "id": "textmat1",
+          "linkId": "",
+          "width": 80,
+          "height": 670,
+          "label": false,
+          "color": "auto",
+          "css": ":host {\n--glass-opacity:0;\nz-index:11;\npointer-events:none;\n}\n:host, .matrix, .widget, .text {\nbackground:none;\n\n}\n:host, .matrix, .widget, .text, .element {\n\ttext-shadow:\n\t\t-.5px -.5px 0 #000,\n\t\t.5px -.5px 0 #000,\n\t\t-.5px .5px 0 #000,\n\t\t.5px .5px 0 #000;\n}\n",
+          "widgetType": "text",
+          "matrix": [
+            1,
+            8
+          ],
+          "start": 0,
+          "spacing": 0,
+          "traversing": true,
+          "border": true,
+          "props": {
+            "label": false
+          },
+          "default": "",
+          "value": "",
+          "precision": 2,
+          "address": "/column_text",
+          "preArgs": "",
+          "target": "",
+          "bypass": false
+        },
+        {
+          "type": "matrix",
+          "top": 30,
+          "left": 10,
+          "id": "textmat2",
+          "linkId": "",
+          "width": 670,
+          "height": 70,
+          "label": false,
+          "color": "auto",
+          "css": ":host {\n--glass-opacity:0;\nz-index:11;\npointer-events:none;\n}\n:host, .matrix, .widget, .text {\nbackground:none;\n\n}\n:host, .matrix, .widget, .text, .element {\n\ttext-shadow:\n\t\t-.5px -.5px 0 #000,\n\t\t.5px -.5px 0 #000,\n\t\t-.5px .5px 0 #000,\n\t\t.5px .5px 0 #000;\n}\n",
+          "widgetType": "text",
+          "matrix": [
+            8,
+            1
+          ],
+          "start": 0,
+          "spacing": 0,
+          "traversing": true,
+          "border": true,
+          "props": {
+            "label": false
+          },
+          "default": "",
+          "value": "",
+          "precision": 2,
+          "address": "/automap_text",
+          "preArgs": "",
+          "target": "",
+          "bypass": false
         }
       ],
       "tabs": [],

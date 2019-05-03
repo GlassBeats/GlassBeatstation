@@ -206,3 +206,5 @@ class Gridmaster():
                 self.stage_osc.send("/griddy/" + str(i), [0, 0, 0])
                 if i < 8:
                     self.stage_osc.send("/automap_text/" + str(i), " ")
+                    self.stage_osc.send("/column_text/" + str(i), " ")
+

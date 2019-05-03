@@ -135,11 +135,7 @@ def loop_pause(y):  # aka mute pause for the weird states
                     #valcol = False #Grid.pgrid[i,y][Grid.mode][True]
                     Grid.ledout(i, y, Grid.pgrid[i,y][Grid.mode][False])'''
 
-#def send_cc(note,vel, chan=):
- #   glass_cc.send_noteon(144, note, vel)
-    
-    
-                        
+#
             
 class OSC_Sender():
     def __init__(self, ipaddr="127.0.0.1", port=9951):
@@ -233,7 +229,11 @@ if __name__ == "__main__":
         Grid.alter_pressfunc(0, i, False, func=glass_cc.send_noteon, args=[176, 1, 0],
                              color = [30 + c * i for c in cc_clr])
 
-    
+    toprow = ['loop', 'instr', 'clr', 'custom', 'pause', ' ', ' ', ' ']
+    for y in range(8):
+        OStageC.send('/column_text/' + str(y), str(y))
+        OStageC.send('/automap_text/' + str(y), toprow[y])
+
                           
 # osc server handlers
     dispatcher = dispatcher.Dispatcher()
