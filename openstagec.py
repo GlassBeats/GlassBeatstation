@@ -1,4 +1,4 @@
-import time, os
+import time, os, re
 
 class OpenStageControl():
     def __init__(self, Grid, coord, Slobj, stage_osc_cli, midicc):
@@ -86,12 +86,14 @@ class OpenStageControl():
 
         elif args[0][:5] == "/save": #into directory labelled as the exact time
             if args[-1] == 1:
-                md = os.getcwd()[:14]
-                slsesstime = time.asctime()
-                os.mkdir(slsesstime)
-                self.Slmast.sl_osc_cmd("/save_session", [slsesstime + "/" + slsesstime + ".slsess", "localhost:9998", "error_path"])
+                seshtime= time.asctime()
+                os.mkdir('sessions') if os.path.exists('sessions') == False else None
+                os.mkdir('sessions/' + seshtime)
+                print ('saving session to disk : sessions/', seshtime)
+                print (os.path.exists('sessions'))
+                self.Slmast.sl_osc_cmd("/save_session", ["sessions/" + seshtime + '/' + seshtime + ".slsess", "localhost:9998", "error_path"])
                 for i in range(8):
-                   self.Slmast.sl_osc_cmd("/sl/{}/save_loop".format(str(i)), [slsesstime + "/" + slsesstime + "+loop" + str(i) + ".wav", "32", "endian", "localhost:9998", "error_path"])
+                   self.Slmast.sl_osc_cmd("/sl/{}/save_loop".format(str(i)), ["sessions/" + seshtime + '/' + seshtime + "+loop" + str(i) + ".wav", "32", "endian", "localhost:9998", "error_path"])
 
 
         elif args[0][:9] == "/bittempo":
