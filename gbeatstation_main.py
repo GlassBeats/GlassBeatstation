@@ -25,11 +25,13 @@ def coordinate(x, y, vel):
             if Grid.swap == "add": #swapping button functions dynamically
                 Grid.addaction["function"] = Grid.fgrid[x, y][Grid.mode][0][vel]
                 Grid.addaction["args"] = Grid.fgrid[x, y][Grid.mode][1][vel]
+                Grid.addaction["color"] = Grid.pgrid[x, y][Grid.mode][vel]
                 print ('addict', Grid.addaction)
             elif Grid.swap == "implement":
                 print ('implementing')
                 print (x, y, Grid.addaction["function"], Grid.addaction["args"])
-                Grid.alter_pressfunc(x, y, vel, func = Grid.addaction["function"], args=Grid.addaction["args"], color=[0,0,63])
+                Grid.alter_pressfunc(x, y, vel, func = Grid.addaction["function"], args=Grid.addaction["args"],
+                                     color=Grid.addaction["color"])
                 #print ('randy', Grid.fgrid[x,y]["rand"])
 
 

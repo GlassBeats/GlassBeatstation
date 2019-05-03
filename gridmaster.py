@@ -23,7 +23,7 @@ class Gridmaster():
         self.reset()
 
         self.swap = None
-        self.addaction = {"function":None, "args":None}
+        self.addaction = {"function":None, "args":None, "color":None}
 
 
         fgrid= {}
@@ -57,15 +57,16 @@ class Gridmaster():
                 
 
     def buttonclrchange(self, x, y, vel, clr):
-        print(x ,y, vel,'changing color from', self.pgrid["rand"][x,y][vel], "to ", clr)    
-        self.pgrid["rand"][x,y][vel] = clr
+        print(x ,y, vel,'changing color from', self.pgrid[x,y]["rand"][vel], "to ", clr)
+        self.pgrid[x,y]["rand"][vel] = clr
         
     def alter_pressfunc(self, x, y, vel, mode="rand", func=None, args=None, color=None):
         if func == None or args == None:
             raise Exception('no function or argument passed')
 
         if color:
-            self.pgrid[x,y]["rand"][vel] = color
+            #self.pgrid[x,y]["rand"][vel] = color
+            self.buttonclrchange(x, y, vel, color)
 
         print (self.fgrid[x,y][mode])
         self.fgrid[x,y][mode][0][vel] = func
@@ -83,20 +84,15 @@ class Gridmaster():
     def gridpress(self, x, y, vel):
         print (self.pgrid[x,y][self.mode][vel])
         self.ledout(x, y, self.pgrid[x,y][self.mode][vel])
-        #for func in self.fgrid[x,y][self.mode][0][vel]:
 
-       # print ('gridpress', x, y, self.fgrid[x,y][self.mode][0][vel])
         func = self.fgrid[x,y][self.mode][0][vel]
-        print ('1', self.fgrid[x,y][self.mode][0][vel], self.fgrid[x,y][self.mode][1][vel])
+        #print (self.fgrid[x,y][self.mode][0][vel], self.fgrid[x,y][self.mode][1][vel])
         args = self.fgrid[x,y][self.mode][1][vel]
-        #if vel == True:
-        #       print ('func', func, args)
 
         if func != None:
             if isinstance(func,list) == True:
                 for f in range(len(func)):
-                    print ('ffffff',f, func[f], *args[f])
-                    print ('*'*30, '\n', '2'*3, func, 'args', args)
+                    print (func[f], *args[f])
                     func[f](*args[f])
             else:
                 func(*args)

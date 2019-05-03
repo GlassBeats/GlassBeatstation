@@ -25,8 +25,8 @@ class JackConnections():
         ["sooperlooper:common_out_1", "Bitrot Repeat:Audio Input 1"],
         ["sooperlooper:common_out_2", "Bitrot Repeat:Audio Input 2"],
 
-        ["Hydrogen:out_L", "system:playback_1"],
-        ["Hydrogen:out_R", "system:playback_2"],
+        #["Hydrogen:out_L", "system:playback_1"],
+        #["Hydrogen:out_R", "system:playback_2"],
         ]
 
         self.connecting(connections)
