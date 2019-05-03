@@ -59,6 +59,7 @@ class Gridmaster():
     def buttonclrchange(self, x, y, vel, clr):
         print(x ,y, vel,'changing color from', self.pgrid[x,y]["rand"][vel], "to ", clr)
         self.pgrid[x,y]["rand"][vel] = clr
+        self.ledout(x,y, clr)
         
     def alter_pressfunc(self, x, y, vel, mode="rand", func=None, args=None, color=None):
         if func == None or args == None:

@@ -31,7 +31,8 @@ def coordinate(x, y, vel):
                 print ('implementing')
                 print (x, y, Grid.addaction["function"], Grid.addaction["args"])
                 Grid.alter_pressfunc(x, y, vel, func = Grid.addaction["function"], args=Grid.addaction["args"],
-                                     color=Grid.addaction["color"])
+                                     color= [63, 63, 63])#Grid.addaction["color"])
+                Grid.buttonclrchange(x, y, False, Grid.addaction["color"])
                 #print ('randy', Grid.fgrid[x,y]["rand"])
 
 
