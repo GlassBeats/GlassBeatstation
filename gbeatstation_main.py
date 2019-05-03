@@ -127,7 +127,7 @@ def loop_pause(y):  # aka mute pause for the weird states
         slclient.send("/sl/{}/down".format(str(y)), "pause")
         #reset loop_pos to start
         for i in range(8):
-                    pass#Grid.ledout(i, y, Grid.pgrid[i,y][Grid.mode][False])
+                    pass
                     '''pos_8th = lp.pos_eighth
                 if i == pos_8th:
                     #valcol =  True #Grid.pgrid[i,y][Grid.mode][True]
@@ -175,13 +175,14 @@ if __name__ == "__main__":
     glass_seq = rtmidi2.MidiOut("glass_sequencer") # midi output
     glass_seq.open_virtual_port("glass_sequencer")
 
+    jack = jackconnect.JackConnections()
       
     slclient = OSC_Sender(ipaddr="127.0.0.1", port=9951)
     stage_osc = OSC_Sender(ipaddr="127.0.0.1", port=8080)
     
     Grid = gridmaster.Gridmaster(stage_osc, Mk2_out)
     Slmast = Slmaster(Grid, slclient)                        
-    OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc)
+    OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc, jack)
 
 
     for y in range(4):
@@ -247,8 +248,6 @@ if __name__ == "__main__":
     for mde in Grid.modelst:
         Grid.switchmode(mde)
         time.sleep(.25)
-
-    jack = jackconnect.JackConnections()
       
     def exit_handler():
         print ('exiting')

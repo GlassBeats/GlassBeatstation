@@ -94,6 +94,7 @@ class Slmaster():
         y = lp.loop_num            
         Grid = self.Grid
         if pos_8th != lp.pos_eighth:
+            print (pos_8th, lp.pos_eighth)
             if pos_8th > 8:
                 self.slclient.send("/sl/{}/get".format(str(y)), ["loop_len", "localhost:9998", "/sloop"])
 
@@ -116,7 +117,7 @@ class Slmaster():
 
                     if Grid.mode == "loop" or  Grid.mode == "rand" and y > 3:
                         Grid.ledout(pos_8th, y, Grid.pgrid[pos_8th,y]["loop"][True])
-                        Grid.ledout(pos_8th - 1, y, Grid.pgrid[pos_8th - 1,y]["loop"][False])
+                        Grid.ledout(pos_8th - 1, y, Grid.pgrid[pos_8th - 1, y]["loop"][False])
 
 
     def sloschandler(self, *args):
@@ -151,8 +152,7 @@ class Sloop(Slmaster):
         self.color = [random.randint(25,63) for i in range(3)] #randomize loop colors
         for x in range(8):
             grid.pgrid[x, self.loop_num]["loop"][True] = self.color
-            grid.pgrid[x, self.loop_num]["loop"][False] = [0,0,0]#self.color
-        # avoid ifelse, prevent 'x/ 0'
+            grid.pgrid[x, self.loop_num]["loop"][False] = [0,0,0]#self.colors
         intrvl = Slmaster.interval
         # connect to sooperlooper, autoreg updates for state, length, and position
         oscclient.send("/sl/{}/register_auto_update".format(self.loop_num), ["state", intrvl, "localhost:9998", "/sloop"])

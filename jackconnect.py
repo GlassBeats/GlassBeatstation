@@ -35,10 +35,19 @@ class JackConnections():
     def connect(self, inport, outport, stereo=True):
         j = self.client
 
-        for i in range(1,3):
-            #self.cur_connex = j.get_all_connections(inport)
+        for item in j.get_all_connections(inport):
+            print (item.name)
 
-            j.connect(inport,outport)
+        current_outs = [o.name for o in j.get_all_connections(inport)]
+
+        if outport not in current_outs:
+            try:
+                j.connect(inport, outport)
+                print ('connecting', inport, outport)
+            except jack.JackError:
+                print('fail', inport, outport)
+        else:
+            print ('already connected', inport, outport)
 
 
 
@@ -56,6 +65,6 @@ class JackConnections():
                 self.client.connect(*connections[i])
                 print ('-' * 50)
                 print('connecting : ', connections[i])
-                
+
             except jack.JackError:
                 print ('fail', connections[i])

@@ -1,7 +1,8 @@
 import time, os, re
 
 class OpenStageControl():
-    def __init__(self, Grid, coord, Slobj, stage_osc_cli, midicc):
+    def __init__(self, Grid, coord, Slobj, stage_osc_cli, midicc, jack):
+        self.jack = jack
         self.Grid = Grid
         self.Slmast = Slobj
         self.stage_osc = stage_osc_cli
@@ -12,7 +13,6 @@ class OpenStageControl():
         self.x0, self.y0, self.p0 = 0, 0, 0
         
     def stage_handler(self, *args):
-        #print ('stage', args)
         Grid = self.Grid
         send = self.send
         if args[0][:8] == "/beatpad":  # open-stage-c matrix - emulation of launchpad
@@ -68,10 +68,10 @@ class OpenStageControl():
             vel = int(args[1] * 127)
             note = int(args[0][7])
             #note = -note + 7
-            glass_cc.send_noteon(144, note, vel) # send fader controls to EQ
+            self.glass_cc.send_noteon(144, note, vel) # send fader controls to EQ
 
         elif args[0] == "/bitbeats":
-            glass_cc.send_noteon(144, 38, args[-1])
+            self.glass_cc.send_noteon(144, 38, args[-1])
 
         elif args[0][:6] == "/mutes":
             print (args[0][:6], args[0][-1])
@@ -80,9 +80,6 @@ class OpenStageControl():
             print ('loop', loop)
             #if self.Slmast.loops[loop].state == 4:
             self.Slmast.sl_osc_cmd("/sl/{}/hit".format(str(loop)), "mute")
-
-
-
 
         elif args[0][:5] == "/save": #into directory labelled as the exact time
             if args[-1] == 1:
@@ -106,7 +103,6 @@ class OpenStageControl():
             pt2 = args[7:10]
             pt3 = args[10:13]
             x0, y0 = pt0[0], pt0[1]
-            #print (args)
 
             if x0 + y0 == 0:
                 self.p0 = 0
@@ -144,14 +140,11 @@ class OpenStageControl():
         elif args[0][:5] == "/gain":
             self.glass_cc.send_noteon(175, int(args[0][5]), args[-1])
 
+        elif args[0] == '/test':
+            #print (self.Slmast.loops[0].pos_eighth)
+            if args[-1] == True:
+                self.jack.connect('sooperlooper:common_out_1', 'Bitrot Repeat:Audio Input 1')
+
 
         else:
             print ('no handler for ', args)
-
-
-
-        
-            
-    
-    
-        
