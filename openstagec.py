@@ -143,7 +143,7 @@ class OpenStageControl():
         elif args[0] == '/test':
             #print (self.Slmast.loops[0].pos_eighth)
             if args[-1] == True:
-                self.jack.connect('sooperlooper:common_out_1', 'Bitrot Repeat:Audio Input 1')
+                self.jack.routyconnect('sooperlooper:common_out_1', 'Bitrot Repeat:Audio Input 2')
 
 
         else:
