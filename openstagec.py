@@ -11,7 +11,12 @@ class OpenStageControl():
         self.glass_cc = midicc
 
         self.x0, self.y0, self.p0 = 0, 0, 0
-        
+
+        self.portnames = {'fx out':"Bitrot Repeat:Audio Input ",
+
+                          'common_out':'sooperlooper:common_out_',
+                          'dac':'system:playback_'}
+
     def stage_handler(self, *args):
         Grid = self.Grid
         send = self.send
@@ -129,7 +134,6 @@ class OpenStageControl():
         elif args[0] == "/swapimp":
             Grid.swap = "implement" if args[-1] else None
 
-
         elif args[0] == "/monitor":
             self.glass_cc.send_noteon(175,11, args[-1])
         elif args[0] == "/main_out":
@@ -144,6 +148,22 @@ class OpenStageControl():
             #print (self.Slmast.loops[0].pos_eighth)
             if args[-1] == True:
                 self.jack.routyconnect('sooperlooper:common_out_1', 'Bitrot Repeat:Audio Input 2')
+
+
+        elif args[0] == '/patch':
+            inport = self.portnames[args[1]]
+            outports = [self.portnames[i] for i in args[2:]]
+            print (inport, outports)
+
+            if outports == []:
+                for channel in range(1, 3):  # stereo channels
+                    self.jack.routyconnect(inport + str(channel), None)
+
+            else:
+                for port in outports:
+                    for channel in range(1,3): #stereo channels
+                        self.jack.routyconnect(inport + str(channel), port + str(channel))
+
 
 
         else:

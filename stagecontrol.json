@@ -1636,7 +1636,7 @@
             "loop7_out"
           ],
           "outputs": [
-            "bitrot",
+            "fx out",
             "dac"
           ],
           "default": "",
@@ -1704,29 +1704,6 @@
           "widgetType": "toggle",
           "border": true,
           "props": {}
-        },
-        {
-          "type": "keyboard",
-          "top": 610,
-          "left": 650,
-          "id": "keyboard_3",
-          "linkId": "",
-          "width": "auto",
-          "height": "auto",
-          "label": "auto",
-          "color": "auto",
-          "css": "",
-          "keys": 25,
-          "start": 48,
-          "traversing": true,
-          "on": 1,
-          "off": 0,
-          "precision": 2,
-          "address": "/keyboard_3",
-          "preArgs": "",
-          "target": "",
-          "bypass": false,
-          "split": false
         }
       ],
       "tabs": [],
