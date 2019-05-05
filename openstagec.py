@@ -153,8 +153,10 @@ class OpenStageControl():
         elif args[0] == '/patch':
             inport = self.portnames[args[1]]
             outports = [self.portnames[i] for i in args[2:]]
-            print (inport, outports)
-
+            print ('patching', inport, outports)
+            print('patching', inport, outports)
+            print('patching', inport, outports)
+            print('patching', inport, outports)
             if outports == []:
                 for channel in range(1, 3):  # stereo channels
                     self.jack.routyconnect(inport + str(channel), None)

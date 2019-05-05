@@ -52,38 +52,44 @@ class JackConnections():
 
     def routyconnect(self, inport, outports, stereo=True):
         j = self.client
-        print ('IO::: ', inport, outports)
+
 
         print ('*** current connections ***')
-        for item in j.get_all_connections(inport):
-            print (item.name)
-        print('***')
         current_outs = [o.name for o in j.get_all_connections(inport)]
-        print (current_outs)
+
+        print('***')
+        print('going to connect ', inport, 'to ', outports)
+        print ('should be different from', inport, 'to ', current_outs)
 
         if outports == None:
             for o in current_outs:
                 print ('disconnect all')
                 j.disconnect(inport, o)
         else:
+            if isinstance(outports, list) == False:
+                outports = [outports]
+
             for out in current_outs:
-                if out not in outports:
+                print ('out', out)
+                print ('outports', outports)
+                if out not in outports and out != outports:
                     j.disconnect(inport, out)
                     print('disconnecting', inport, out)
-
             for outs in outports:
-                print ('outttssssss')
                 if outs not in current_outs:
                     try:
-                        j.connect(inport, outports)
-                        print ('connecting', inport, outports)
+                        j.connect(inport, outs)
+                        print('connecting', inport, outports)
                     except jack.JackError:
-                        print('fail', inport, outports)
+                        print('failed to connect', inport, outports)
+
+        print ('-' * 80)
+
+
+
+                            #print('fail', inport, outports)
                 #else:
                     #print ('already connected', inport, outports)
-
-
-
 
 
     def connecting(self, connections):
