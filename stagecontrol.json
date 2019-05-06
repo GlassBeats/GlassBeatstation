@@ -1615,12 +1615,12 @@
       "widgets": [
         {
           "type": "patchbay",
-          "top": 80,
-          "left": 410,
+          "top": 10,
+          "left": 180,
           "id": "patchbay -  remember must disconnect all from an outport before reconnecting",
           "linkId": "",
-          "width": 730,
-          "height": 490,
+          "width": 860,
+          "height": 700,
           "label": "auto",
           "color": "auto",
           "css": "",
@@ -1636,8 +1636,17 @@
             "loop7_out"
           ],
           "outputs": [
+            "dac",
             "fx out",
-            "dac"
+            "common_in",
+            "loop0_in",
+            "loop1_in",
+            "loop2_in",
+            "loop3_in",
+            "loop4_in",
+            "loop5_in",
+            "loop6_in",
+            "loop7_in"
           ],
           "default": "",
           "value": "",
@@ -1668,7 +1677,7 @@
           "default": "",
           "value": "",
           "precision": 0,
-          "address": "/common_ins",
+          "address": "/common_outs",
           "preArgs": "",
           "target": "",
           "bypass": false,

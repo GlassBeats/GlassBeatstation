@@ -12,11 +12,14 @@ class OpenStageControl():
 
         self.x0, self.y0, self.p0 = 0, 0, 0
 
-        self.portnames = {'fx out':"Bitrot Repeat:Audio Input ",
+        self.portnames = {'fx in':"Bitrot Repeat:Audio Input ",
+                          'fx out': "Bitrot Repeat:Audio Output ",
                           'common_out':'sooperlooper:common_out_',
+                          'common_in': 'sooperlooper:common_in_',
                           'dac':'system:playback_'}
         for p in range(8):
             self.portnames['loop{}_out'.format(str(p))] = "sooperlooper:loop{}_out_".format(str(p))
+            self.portnames['loop{}_in'.format(str(p))] = "sooperlooper:loop{}_in_".format(str(p))
 
     def stage_handler(self, *args):
         Grid = self.Grid
@@ -30,21 +33,19 @@ class OpenStageControl():
         
             self.coord(x, y, vel)  # button outputs identical to launchpad
 
-        elif args[0][:14] == '/automap_push/': # switch this to be for mk2 inputs too!! currently misplaced
+        elif args[0][:14] == '/automap_push/':
                 button = int(args[0][14:])
                 vel = args[-1]
                 print('automap', vel)
                 self.coord(button, 8, vel)
 
-        elif args[0][:13] == '/column_push/': # switch this to be for mk2 inputs too!! currently misplaced
+        elif args[0][:13] == '/column_push/':
                 invbutton = int(args[0][13:])
                 button = -invbutton + 7
                 vel = args[-1]
                 print('column', vel)
                 self.coord(8, button, vel)
 
-
-                
 
         elif args[0][:5] == "/sync":  # quantize individual loops        
             loopnum, val = args[0][6], args[-1]
