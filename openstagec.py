@@ -13,9 +13,10 @@ class OpenStageControl():
         self.x0, self.y0, self.p0 = 0, 0, 0
 
         self.portnames = {'fx out':"Bitrot Repeat:Audio Input ",
-
                           'common_out':'sooperlooper:common_out_',
                           'dac':'system:playback_'}
+        for p in range(8):
+            self.portnames['loop{}_out'.format(str(p))] = "sooperlooper:loop{}_out_".format(str(p))
 
     def stage_handler(self, *args):
         Grid = self.Grid
@@ -152,8 +153,12 @@ class OpenStageControl():
 
 
         elif args[0] == '/patch':
-            inport = self.portnames[args[1]]
-            outports = [self.portnames[i] for i in args[2:]]
+            inport = self.portnames[args[1]] if args[1] in self.portnames else args[1]
+            outports = []
+            for p in args[2:]:
+                port = self.portnames[p] if p in self.portnames else p
+                outports.append(port)
+                x = [self.portnames[i] for i in args[2:]]
             print ('patching', inport, outports)
             for channel in range(1, 3):
                 chan = str(channel)
