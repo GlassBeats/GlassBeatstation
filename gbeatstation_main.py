@@ -77,6 +77,7 @@ def coordinate(x, y, vel):
                             loop_pause(y)
 
         else: # 8x8 grid
+            Grid.ledout(x, y, Grid.pgrid[x, y][Grid.mode][vel], var)
             if Grid.mode == "loop":
                 sl_loopmode_cmd(x, y, vel)
             elif Grid.mode == "instr":
@@ -86,20 +87,21 @@ def coordinate(x, y, vel):
                 glass_instr.send_noteon(144, midinote, vel * 127)
             elif Grid.mode == "rand":
                 Grid.gridpress(x, y, vel)
-            Grid.ledout(x,y, Grid.pgrid[x,y][Grid.mode][vel], var)
+
 
 
 def sl_loopmode_cmd(x, y, vel):
+    yinv = y
     y = -y + 7
     lp = Slmast.loops[y]
 
-    if x == 1 or x == 2 :
+    '''if x == 1 or x == 2 :
         if Grid.mode == "loop":
             if vel == 1:
                 for i in range(7):  # change colors of row to clear old loop pos
                     if i +1 != x:
                         y = -y + 7
-                        Grid.ledout(i + 1, y, Grid.pgrid[x,y][Grid.mode][False])
+                        Grid.ledout(i + 1, y, Grid.pgrid[x,y][Grid.mode][False])'''
     if x == 2:
         if vel == True:
             if Slmast.loops[y].sync == False:
@@ -113,6 +115,7 @@ def sl_loopmode_cmd(x, y, vel):
             if lp.state != 14:
                 loop_pause(y)
                 #Grid.ledrow(1, 0)
+        Grid.ledout(0, yinv, Grid.pgrid[0, yinv][Grid.mode][vel])
 
     elif vel == True:
         slclient.send("/sl/{}/down".format(str(y)), Slmast.cmds[x])            
