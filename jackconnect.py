@@ -56,19 +56,15 @@ class JackConnections():
 
         print ('*** current connections ***')
         current_outs = [o.name for o in j.get_all_connections(inport)]
-
         print('***')
-        print('going to connect ', inport, 'to ', outports)
-        print ('should be different from', inport, 'to ', current_outs)
+        print('going to connect ', inport, '-->', outports)
+        print ('should be different from current', inport, '-->', current_outs)
 
-        if outports == None:
+        if outports == []:
             for o in current_outs:
                 print ('disconnect all')
                 j.disconnect(inport, o)
         else:
-            if isinstance(outports, list) == False:
-                outports = [outports]
-
             for out in current_outs:
                 print ('out', out)
                 print ('outports', outports)
@@ -83,7 +79,7 @@ class JackConnections():
                     except jack.JackError:
                         print('failed to connect', inport, outports)
 
-        print ('-' * 80)
+            print ('-' * 80)
 
 
 

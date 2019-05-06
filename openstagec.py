@@ -147,6 +147,7 @@ class OpenStageControl():
         elif args[0] == '/test':
             #print (self.Slmast.loops[0].pos_eighth)
             if args[-1] == True:
+
                 self.jack.routyconnect('sooperlooper:common_out_1', 'Bitrot Repeat:Audio Input 2')
 
 
@@ -154,19 +155,10 @@ class OpenStageControl():
             inport = self.portnames[args[1]]
             outports = [self.portnames[i] for i in args[2:]]
             print ('patching', inport, outports)
-            print('patching', inport, outports)
-            print('patching', inport, outports)
-            print('patching', inport, outports)
-            if outports == []:
-                for channel in range(1, 3):  # stereo channels
-                    self.jack.routyconnect(inport + str(channel), None)
-
-            else:
-                for port in outports:
-                    for channel in range(1,3): #stereo channels
-                        self.jack.routyconnect(inport + str(channel), port + str(channel))
-
-
+            for channel in range(1, 3):
+                chan = str(channel)
+                outport = [p + chan for p in outports]
+                self.jack.routyconnect(inport + str(channel), outport)
 
         else:
             print ('no handler for ', args)
