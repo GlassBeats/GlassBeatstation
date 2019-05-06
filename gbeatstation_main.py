@@ -33,9 +33,6 @@ def coordinate(x, y, vel):
                 Grid.alter_pressfunc(x, y, vel, func = Grid.addaction["function"], args=Grid.addaction["args"],
                                      color= [63, 63, 63])#Grid.addaction["color"])
                 Grid.buttonclrchange(x, y, False, Grid.addaction["color"])
-                #print ('randy', Grid.fgrid[x,y]["rand"])
-
-
 
     else:
 
@@ -125,20 +122,8 @@ def loop_pause(y):  # aka mute pause for the weird states
     if Slmast.loops[y].state != 14:
         slclient.send("/sl/{}/down".format(str(y)), "mute")
         slclient.send("/sl/{}/down".format(str(y)), "pause")
-        #reset loop_pos to start
-        for i in range(8):
-                    pass
-                    '''pos_8th = lp.pos_eighth
-                if i == pos_8th:
-                    #valcol =  True #Grid.pgrid[i,y][Grid.mode][True]
-                    print('i', i, y, pos_8th)
-                    Grid.ledout(i, y, [0,0,0])
-                    #Grid.ledout(i, y, Grid.pgrid[i,y][Grid.mode][True])
-                else:
-                    #valcol = False #Grid.pgrid[i,y][Grid.mode][True]
-                    Grid.ledout(i, y, Grid.pgrid[i,y][Grid.mode][False])'''
+        #reset loop_pos to start?
 
-#
             
 class OSC_Sender():
     def __init__(self, ipaddr="127.0.0.1", port=9951):

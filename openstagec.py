@@ -64,11 +64,13 @@ class OpenStageControl():
 
         elif args[0][:11] == "/common_ins":  # use common ins (per each loop)
             loop = args[0][-1]
-            loop = -loop + 7
+            #loop = str(-int(loop) + 7)
             self.Slmast.sl_osc_cmd("/sl/{}/set".format(loop), ["use_common_ins", args[-1]])
 
-        elif args[0][:12] == "/common_outs":  # use common pits (per each loop)
+        elif args[0][:12] == "/common_outs":  # use common outs (per each loop)
             self.Slmast.sl_osc_cmd("/sl/{}/set".format(args[0][-1]), ["use_common_outs", args[-1]])
+            print ('common outs')
+            self.Slmast.sl_osc_cmd("/sl/{}/get".format(args[0][-1]), "use_common_outs")
 
         elif args[0][:6] == "/fader":
             vel = int(args[1] * 127)
