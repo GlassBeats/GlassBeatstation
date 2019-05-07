@@ -16,7 +16,10 @@ class OpenStageControl():
                           'fx out': "Bitrot Repeat:Audio Output ",
                           'common_out':'sooperlooper:common_out_',
                           'common_in': 'sooperlooper:common_in_',
-                          'dac':'system:playback_'}
+                          'dac':'system:playback_',
+                          'vocoder in':'Tal-Vocoder-II:Audio Input ',
+                          'vocoder out':'Tal-Vocoder-II:Audio Output ',
+                          }
         for p in range(8):
             self.portnames['loop{}_out'.format(str(p))] = "sooperlooper:loop{}_out_".format(str(p))
             self.portnames['loop{}_in'.format(str(p))] = "sooperlooper:loop{}_in_".format(str(p))

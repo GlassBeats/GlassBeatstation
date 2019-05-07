@@ -56,7 +56,7 @@ def coordinate(x, y, vel):
                 elif vel == False:
                     Grid.ledout(8, y, Grid.pgrid[x,y]["current"], temp=True)
 
-            elif Grid.mode == "instr":
+            elif Grid.mode in ["instr", "rand"] :
                 if vel == True:
                     sl_loopmode_cmd(0, y, vel)
 
@@ -244,6 +244,7 @@ if __name__ == "__main__":
     slclient.send("/ping", ["localhost:9998", "/sloop"])
     for i in range(8):
         slclient.send("/sl/{}/get".format(i), ["loop_len", "localhost:9998", "/sloop"])
+
 
     atexit.register(exit_handler)
     server.serve_forever()  # blocking osc server=

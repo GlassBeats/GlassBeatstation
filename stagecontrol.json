@@ -1617,7 +1617,7 @@
           "type": "patchbay",
           "top": 10,
           "left": 180,
-          "id": "patchbay -  remember must disconnect all from an outport before reconnecting",
+          "id": "patchbay - audio connections",
           "linkId": "",
           "width": 860,
           "height": 700,
@@ -1633,11 +1633,11 @@
             "loop4_out",
             "loop5_out",
             "loop6_out",
-            "loop7_out"
+            "loop7_out",
+            "fx out",
+            "vocoder out"
           ],
           "outputs": [
-            "dac",
-            "fx out",
             "common_in",
             "loop0_in",
             "loop1_in",
@@ -1646,7 +1646,10 @@
             "loop4_in",
             "loop5_in",
             "loop6_in",
-            "loop7_in"
+            "loop7_in",
+            "dac",
+            "fx in",
+            "vocoder in"
           ],
           "default": "",
           "value": "",

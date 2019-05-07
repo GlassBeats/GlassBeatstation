@@ -64,6 +64,7 @@ class Slmaster():
             seconds = int(length)
             y = loopobj.loop_num
             if self.Grid.mode == "instr": pass
+            elif self.Grid.mode == "rand": pass
             else:
                 if int(loopobj.state) == 2:
                     if seconds < 8:
