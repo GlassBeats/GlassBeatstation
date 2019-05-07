@@ -48,7 +48,7 @@ def coordinate(x, y, vel):
         if x == 8:
             if Grid.mode == "loop":
                 loopsync = Slmast.loops[y].sync
-                syncclr = [50,20,20] if loopsync == True else [0,0,63] #kina backwards
+                syncclr = [0, 0, 0] if loopsync == True else [0,0,63]
                 if vel == True:
                     Grid.ledout(8, y, syncclr, temp=True)
                     Slmast.loops[y].sync = not Slmast.loops[y].sync

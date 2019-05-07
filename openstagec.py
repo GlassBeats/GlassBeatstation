@@ -102,7 +102,8 @@ class OpenStageControl():
                 print (os.path.exists('sessions'))
                 self.Slmast.sl_osc_cmd("/save_session", ["sessions/" + seshtime + '/' + seshtime + ".slsess", "localhost:9998", "error_path"])
                 for i in range(8):
-                   self.Slmast.sl_osc_cmd("/sl/{}/save_loop".format(str(i)), ["sessions/" + seshtime + '/' + seshtime + "+loop" + str(i) + ".wav", "32", "endian", "localhost:9998", "error_path"])
+                    if self.Slmast.loops[i].state == 0: pass
+                    else:self.Slmast.sl_osc_cmd("/sl/{}/save_loop".format(str(i)), ["sessions/" + seshtime + '/' + seshtime + "+loop" + str(i) + ".wav", "32", "endian", "localhost:9998", "error_path"])
 
 
         elif args[0][:9] == "/bittempo":
