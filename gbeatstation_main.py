@@ -56,7 +56,7 @@ def coordinate(x, y, vel):
                 elif vel == False:
                     Grid.ledout(8, y, Grid.pgrid[x,y]["current"], temp=True)
 
-            elif Grid.mode in ["instr", "rand"] :
+            elif Grid.mode in ["instr", "rand"]:
                 if vel == True:
                     sl_loopmode_cmd(0, y, vel)
 

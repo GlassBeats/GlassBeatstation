@@ -9,7 +9,7 @@ sl = subprocess.Popen(["sooperlooper", "-l 8", "-m", cwd + "/sl_bindings.slb"], 
 
 jackmatch = subprocess.Popen(["python3", cwd + "/sub_jackmatch.py"], stdout=subprocess.PIPE) 
 
-carla = subprocess.Popen(["carla", cwd + "/glass_car.carxp", "-n"], stdout=subprocess.PIPE) #  "-n" to run headless
+carla = subprocess.Popen(["carla", cwd + "/glass_car.carxp"]) #, "-n"], stdout=subprocess.PIPE) #  "-n" to run headless
 
 
 def exit_handler():

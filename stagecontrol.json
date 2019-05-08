@@ -196,7 +196,7 @@
                 {
                   "type": "switch",
                   "top": 90,
-                  "left": 100,
+                  "left": 200,
                   "id": "quantize",
                   "linkId": "",
                   "width": 100,
@@ -223,7 +223,7 @@
                 {
                   "type": "dropdown",
                   "top": 10,
-                  "left": 100,
+                  "left": 200,
                   "id": "dropdown_1",
                   "linkId": "",
                   "width": 100,
@@ -255,7 +255,7 @@
                 {
                   "type": "switch",
                   "top": 10,
-                  "left": 210,
+                  "left": 310,
                   "id": "cycle",
                   "linkId": "",
                   "width": 100,
@@ -313,7 +313,7 @@
                 {
                   "type": "push",
                   "top": 10,
-                  "left": 730,
+                  "left": 830,
                   "id": "save",
                   "linkId": "",
                   "width": "auto",
@@ -335,7 +335,7 @@
                 {
                   "type": "rgb",
                   "top": 400,
-                  "left": 350,
+                  "left": 450,
                   "id": "loop colors",
                   "linkId": "",
                   "width": "auto",
@@ -363,7 +363,7 @@
                 {
                   "type": "dropdown",
                   "top": 330,
-                  "left": 450,
+                  "left": 550,
                   "id": "loop color",
                   "linkId": "",
                   "width": "auto",
@@ -392,7 +392,7 @@
                 {
                   "type": "fader",
                   "top": 330,
-                  "left": 100,
+                  "left": 200,
                   "id": "main out",
                   "linkId": "",
                   "width": 80,
@@ -431,7 +431,7 @@
                 {
                   "type": "fader",
                   "top": 330,
-                  "left": 180,
+                  "left": 280,
                   "id": "monitor in",
                   "linkId": "",
                   "width": 80,
@@ -470,7 +470,7 @@
                 {
                   "type": "push",
                   "top": 380,
-                  "left": 570,
+                  "left": 670,
                   "id": "Record",
                   "linkId": "",
                   "width": 70,
@@ -494,7 +494,7 @@
                 {
                   "type": "push",
                   "top": 40,
-                  "left": 570,
+                  "left": 670,
                   "id": "Record",
                   "linkId": "",
                   "width": 70,
@@ -516,7 +516,7 @@
                 {
                   "type": "push",
                   "top": 120,
-                  "left": 570,
+                  "left": 670,
                   "id": "Record",
                   "linkId": "",
                   "width": 70,
@@ -540,7 +540,7 @@
                 {
                   "type": "push",
                   "top": 210,
-                  "left": 570,
+                  "left": 670,
                   "id": "Record",
                   "linkId": "",
                   "width": 70,
@@ -564,7 +564,7 @@
                 {
                   "type": "push",
                   "top": 290,
-                  "left": 570,
+                  "left": 670,
                   "id": "Record",
                   "linkId": "",
                   "width": 70,
@@ -588,7 +588,7 @@
                 {
                   "type": "dropdown",
                   "top": 170,
-                  "left": 390,
+                  "left": 490,
                   "id": "seq master",
                   "linkId": "",
                   "width": "auto",
@@ -617,7 +617,7 @@
                 {
                   "type": "rgbled",
                   "top": 40,
-                  "left": 450,
+                  "left": 550,
                   "id": "rgbled_2",
                   "linkId": "",
                   "width": "auto",
@@ -632,7 +632,7 @@
                 {
                   "type": "fader",
                   "top": 330,
-                  "left": 260,
+                  "left": 360,
                   "id": "input gain",
                   "linkId": "",
                   "width": 80,
@@ -671,7 +671,7 @@
                 {
                   "type": "push",
                   "top": 220,
-                  "left": 320,
+                  "left": 420,
                   "id": "add",
                   "linkId": "",
                   "width": 40,
@@ -693,7 +693,7 @@
                 {
                   "type": "push",
                   "top": 270,
-                  "left": 320,
+                  "left": 420,
                   "id": "imp",
                   "linkId": "",
                   "width": 40,
@@ -711,6 +711,35 @@
                   "preArgs": "",
                   "target": "",
                   "bypass": false
+                },
+                {
+                  "type": "matrix",
+                  "top": 0,
+                  "left": 100,
+                  "id": "play sync",
+                  "linkId": "",
+                  "width": 80,
+                  "height": 660,
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "matrix": [
+                    1,
+                    8
+                  ],
+                  "start": 0,
+                  "spacing": 0,
+                  "traversing": true,
+                  "default": "",
+                  "value": "",
+                  "precision": 0,
+                  "address": "/psync",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false,
+                  "widgetType": "push",
+                  "border": true,
+                  "props": {}
                 }
               ],
               "tabs": [],
@@ -1677,7 +1706,7 @@
           "start": 0,
           "spacing": 0,
           "traversing": true,
-          "default": "",
+          "default": 1,
           "value": "",
           "precision": 0,
           "address": "/common_outs",
@@ -1706,7 +1735,7 @@
           "start": 0,
           "spacing": 0,
           "traversing": true,
-          "default": "",
+          "default": 1,
           "value": "",
           "precision": 0,
           "address": "/common_ins",

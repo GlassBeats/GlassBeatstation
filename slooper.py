@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 class Slmaster():
     loop_num = 0
-    interval = 5
+    interval = 10
     def __init__(self, Grid, oscclient):
         self.slclient = oscclient
         self.Grid = Grid

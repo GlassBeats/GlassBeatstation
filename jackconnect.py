@@ -57,8 +57,9 @@ class JackConnections():
         print ('*** current connections ***')
         current_outs = [o.name for o in j.get_all_connections(inport)]
         print('***')
+        print('currently', inport, '-->', current_outs)
         print('going to connect ', inport, '-->', outports)
-        print ('should be different from current', inport, '-->', current_outs)
+
 
         if outports == []:
             for o in current_outs:

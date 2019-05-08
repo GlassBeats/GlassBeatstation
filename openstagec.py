@@ -172,5 +172,11 @@ class OpenStageControl():
                 outport = [p + chan for p in outports]
                 self.jack.routyconnect(inport + str(channel), outport)
 
+        elif args[0][:6] == '/psync':
+            loop_num = args[0][7]
+            print (loop_num, args[-1])
+            self.Slmast.sl_osc_cmd("/sl/{}/set".format(loop_num), ['playback_sync', args[-1]])
+
+
         else:
             print ('no handler for ', args)
