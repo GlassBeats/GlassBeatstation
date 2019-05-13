@@ -1,4 +1,11 @@
 15 cc 0  set wet 0  0 1  gain 0 127
+15 cc 1  set wet 1  0 1  gain 0 127
+15 cc 2  set wet 2  0 1  gain 0 127
+15 cc 3  set wet 3  0 1  gain 0 127
+15 cc 4  set wet 4  0 1  gain 0 127
+15 cc 5  set wet 5  0 1  gain 0 127
+15 cc 6  set wet 6  0 1  gain 0 127
+15 cc 7  set wet 7  0 1  gain 0 127
 15 cc 10  set wet -2  0 1  gain 0 127
 15 cc 11  set dry -2  0 1  gain 0 127
 15 cc 12  set input_gain -2  0 1  gain 0 127

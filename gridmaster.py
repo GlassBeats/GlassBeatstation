@@ -6,9 +6,10 @@ class Gridmaster():
         self.modelst = ["loop", "instr", "lplay", "rand"]
         self.cmds = ["record", "overdub", "oneshot", "trigger",
                       "pause", "reverse", "undo", "redo"]
+        self.bitrot = False
 
 
-        self.pgrid = {} #primarygrid for mode states of buttons, NOT for loopstates
+        self.pgrid = {} #primarygrid for mode states of buttons
         clroff, clron = [0,0,0], [63,63,63]
         for x in range(9):
             for y in range (9):
@@ -47,7 +48,7 @@ class Gridmaster():
 
                 ionclr = [0, 50, 50]
                 
-                if note % 12 == 0:  #INSTRUMENT MODE 
+                if note % 12 == 0:  #INSTRUMENT MODE
                     self.pgrid[x,y]["instr"][False] = [0,63,63]
                 elif note % 12 in [5,7]:
                     self.pgrid[x,y]["instr"][False] = [5, 14,40]
@@ -66,7 +67,6 @@ class Gridmaster():
             raise Exception('no function or argument passed')
 
         if color:
-            #self.pgrid[x,y]["rand"][vel] = color
             self.buttonclrchange(x, y, vel, color)
 
         print (self.fgrid[x,y][mode])
@@ -87,7 +87,6 @@ class Gridmaster():
         self.ledout(x, y, self.pgrid[x,y][self.mode][vel])
 
         func = self.fgrid[x,y][self.mode][0][vel]
-        #print (self.fgrid[x,y][self.mode][0][vel], self.fgrid[x,y][self.mode][1][vel])
         args = self.fgrid[x,y][self.mode][1][vel]
 
         if func != None:
@@ -100,21 +99,19 @@ class Gridmaster():
         
         else:
             print ('this button is unassigned to any function')
-            #func(self.fgrid[func][self.mode][1])
-        #for range(len(funcs)) or range(len(fgrid[self.mode][x,y][0][vel]))
-
 
     def ledout(self, x, y, color, var=None, stage=True, temp=False):
         if x > 8 or y > 8 or x < 0 or y < 0:
-            #raise Exception('out of range', x, y)
             print ('---key error---', x, y)
-        if self.pgrid[x,y]["current"] != color or temp==True: # dont repeat needlessly
+        if self.pgrid[x,y]["current"] != color or temp==True: # dont repeat
             if temp==False: self.pgrid[x,y]["current"] = color
             
             self.mk2_led(x, y, color, style=var)
             
             if stage == True:
                 self.stage_grid(x, y, color)
+        else:
+            print  ('repeated le')
 
 
 

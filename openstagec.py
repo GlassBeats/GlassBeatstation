@@ -51,7 +51,7 @@ class OpenStageControl():
 
 
         elif args[0][:5] == "/sync":  # quantize individual loops        
-            loopnum, val = args[0][6], args[-1]
+            loopnum, val = int(args[0][6]), int(args[-1])
             self.Slmast.loops[loopnum].sync = val
             self.Slmast.sl_osc_cmd("/sl/{}/set".format(loopnum), ["sync", val])
 
