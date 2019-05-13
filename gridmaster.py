@@ -92,11 +92,15 @@ class Gridmaster():
         if func != None:
             if isinstance(func,list) == True:
                 for f in range(len(func)):
-                    print (func[f], *args[f])
-                    func[f](*args[f])
+
+                    if isinstance(args[f], list) == True:
+                        print (func[f], args[f])
+                        func[f](*args[f])
+                    else:
+                        func[f](args[f])
             else:
                 func(*args)
-        
+
         else:
             print ('this button is unassigned to any function')
 
@@ -111,7 +115,7 @@ class Gridmaster():
             if stage == True:
                 self.stage_grid(x, y, color)
         else:
-            print  ('repeated le')
+            print  ('repeated led')
 
 
 
@@ -201,4 +205,8 @@ class Gridmaster():
                 if i < 8:
                     self.stage_osc.send("/automap_text/" + str(i), " ")
                     self.stage_osc.send("/column_text/" + str(i), " ")
+
+    def bitrotchange(self, newval):
+        print ('bitrot is ', newval)
+        self.bitrot = newval
 

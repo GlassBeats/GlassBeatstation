@@ -95,15 +95,14 @@ class Slmaster():
         y = lp.loop_num            
         Grid = self.Grid
         if pos_8th != lp.pos_eighth:
-            print (pos_8th, lp.pos_eighth)
-            if pos_8th > 8:
+            if pos_8th > 8:  # if out of range, make sure length is updated
                 self.slclient.send("/sl/{}/get".format(str(y)), ["loop_len", "localhost:9998", "/sloop"])
 
             lp.pos_eighth = pos_8th
 
             if lp.state in [4,5,6,10,12]: #if in one of the playing states
 
-                if pos_8th == 0:  # reconfigure to display oneshots ^^ 12d
+                if pos_8th == 0:
                     Grid.ledout(0, 8, lp.color)
                     Grid.ledout(7, 8, [0,0,0])
 

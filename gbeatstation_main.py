@@ -214,14 +214,12 @@ if __name__ == "__main__":
 
     for i in range(4):
         invi = -i + 3
-        Grid.alter_pressfunc(0, invi, True,  func=glass_cc.send_noteon, args=[176, 1, 127])
-        Grid.alter_pressfunc(0, invi, False, func=glass_cc.send_noteon, args=[176, 1, 0]) #, color = [63, 55, 63])
-        Grid.alter_pressfunc(0, invi, True,  func=[glass_cc.send_noteon, glass_cc.send_noteon],
-                                          args=[[176, 1, 127], [176, 3, i * 31]]) #estimated good cc note values
-        Grid.alter_pressfunc(0, i, False, func=glass_cc.send_noteon, args=[176, 1, 0],
+        Grid.alter_pressfunc(0, invi, True,  func=[glass_cc.send_noteon, glass_cc.send_noteon, Grid.bitrotchange],
+                                          args=[[176, 1, 127], [176, 3, i * 31], True]) #estimated good cc note values
+        Grid.alter_pressfunc(0, i, False, func=[glass_cc.send_noteon, Grid.bitrotchange], args=[[176, 1, 0], False],
                              color = [30 + c * i for c in cc_clr])
 
-    toprow = ['loop', 'instr', 'clr', 'custom', 'pause', ' ', ' ', ' ']
+    toprow = ['loop', 'instr', 'clr', 'custom', 'pause', ' ', ' ', ' ']  #automap controls labels
     for y in range(8):
         OStageC.send('/column_text/' + str(y), str(y))
         OStageC.send('/automap_text/' + str(y), toprow[y])
