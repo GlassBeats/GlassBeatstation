@@ -22,6 +22,10 @@ jmatchmkr = jackmatchmaker.JackMatchmaker([
         ["^a2j:glass_instr","^zynaddsubfx:midi_input"],
 
 
+        ['^a2j:Pure Data', # [132] (capture): Pure Data Midi-Out 1',
+         '^a2j:Hydrogen'], # [131] (playback): Hydrogen Midi-In'],
+
+
         
         ["^a2j:glass_cc", "^sooperlooper"],
         ["^a2j:glass_cc", "^Bitrot"],

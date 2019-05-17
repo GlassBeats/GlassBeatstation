@@ -1,6 +1,7 @@
 class Gridmaster():
-    def __init__(self, stage_osc, mk2_out):
+    def __init__(self, stage_osc, mk2_out, glass_cc):
         self.stage_osc = stage_osc
+        self.glass_cc = glass_cc
         self.mk2_out = mk2_out
         self.mode = "rand"
         self.modelst = ["loop", "instr", "lplay", "rand"]
@@ -94,11 +95,12 @@ class Gridmaster():
                 for f in range(len(func)):
 
                     if isinstance(args[f], list) == True:
-                        print (func[f], args[f])
+                        #print (func[f], args[f])
                         func[f](*args[f])
                     else:
-                        func[f](args[f])
+                        func[f](*args[f])
             else:
+
                 func(*args)
 
         else:
@@ -206,7 +208,18 @@ class Gridmaster():
                     self.stage_osc.send("/automap_text/" + str(i), " ")
                     self.stage_osc.send("/column_text/" + str(i), " ")
 
-    def bitrotchange(self, newval):
-        print ('bitrot is ', newval)
-        self.bitrot = newval
+    def bitrotchange(self, active, val):
+        print ('activity', active, val, '\n', '*'*30, self.pressed)
+        bitrots = {(0,0),(0,1),(0,2),(0,3)}
+        
+        if any(b in bitrots for b in self.pressed):
+            print ('allready press-ed')
 
+        if active == False:
+            self.glass_cc.send_noteon(176, 1, 0)
+
+        if active == 1 and self.bitrot != True: #if not already on
+            self.glass_cc.send_noteon(176, 3, val)
+            self.glass_cc.send_noteon(176, 1, 127)
+
+        self.bitrot = active #turned on

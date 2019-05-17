@@ -33,7 +33,7 @@
     <Symbol>active</Symbol>
     <MidiCC>1</MidiCC>
     <MidiChannel>1</MidiChannel>
-    <Value>1</Value>
+    <Value>0</Value>
    </Parameter>
 
    <Parameter>
@@ -380,6 +380,368 @@
   </Data>
  </Plugin>
 
+ <!-- C* Eq10X2 - 10-band equalizer -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>C* Eq10X2 - 10-band equalizer</Name>
+   <URI>http://moddevices.com/plugins/caps/Eq10X2</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x0</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>31 Hz</Name>
+    <Symbol>band31hz</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>63 Hz</Name>
+    <Symbol>band63hz</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>125 Hz</Name>
+    <Symbol>band125hz</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>250 Hz</Name>
+    <Symbol>band250hz</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>500 Hz</Name>
+    <Symbol>band500hz</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>5</Index>
+    <Name>1 kHz</Name>
+    <Symbol>band1khz</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>2 kHz</Name>
+    <Symbol>band2khz</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>4 kHz</Name>
+    <Symbol>band4khz</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>8</Index>
+    <Name>8 kHz</Name>
+    <Symbol>band8khz</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>16 kHz</Name>
+    <Symbol>band16khz</Symbol>
+    <Value>0</Value>
+   </Parameter>
+  </Data>
+ </Plugin>
+
+ <!-- x42-eq - Parametric Equalizer Stereo -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>x42-eq - Parametric Equalizer Stereo</Name>
+   <URI>http://gareus.org/oss/lv2/fil4#stereo</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <DryWet>0</DryWet>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x0</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Enable</Name>
+    <Symbol>enable</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>Gain</Name>
+    <Symbol>gain</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>Reset Peak Hold</Name>
+    <Symbol>peakreset</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>Highpass</Name>
+    <Symbol>HighPass</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>5</Index>
+    <Name>Highpass Frequency</Name>
+    <Symbol>HPfreq</Symbol>
+    <Value>1000</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>HighPass Resonance</Name>
+    <Symbol>HPQ</Symbol>
+    <Value>0.698993027210236</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>Lowpass</Name>
+    <Symbol>LowPass</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>8</Index>
+    <Name>Lowpass Frequency</Name>
+    <Symbol>LPfreq</Symbol>
+    <Value>20000</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>LowPass Resonance</Name>
+    <Symbol>LPQ</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>10</Index>
+    <Name>Lowshelf</Name>
+    <Symbol>LSsec</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>11</Index>
+    <Name>Lowshelf Frequency</Name>
+    <Symbol>LSfreq</Symbol>
+    <Value>25</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>12</Index>
+    <Name>Lowshelf Bandwidth</Name>
+    <Symbol>LSq</Symbol>
+    <Value>0.0625</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>13</Index>
+    <Name>Lowshelf Gain</Name>
+    <Symbol>LSgain</Symbol>
+    <Value>-18</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>14</Index>
+    <Name>Section 1</Name>
+    <Symbol>sec1</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>15</Index>
+    <Name>Frequency 1</Name>
+    <Symbol>freq1</Symbol>
+    <Value>223.652496337891</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>16</Index>
+    <Name>Bandwidth 1</Name>
+    <Symbol>q1</Symbol>
+    <Value>0.601512014865875</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>17</Index>
+    <Name>Gain 1</Name>
+    <Symbol>gain1</Symbol>
+    <Value>-0.199999004602432</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>18</Index>
+    <Name>Section 2</Name>
+    <Symbol>sec2</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>19</Index>
+    <Name>Frequency 2</Name>
+    <Symbol>freq2</Symbol>
+    <Value>397.000030517578</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>20</Index>
+    <Name>Bandwidth 2</Name>
+    <Symbol>q2</Symbol>
+    <Value>0.601512014865875</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>21</Index>
+    <Name>Gain 2</Name>
+    <Symbol>gain2</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>22</Index>
+    <Name>Section 3</Name>
+    <Symbol>sec3</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>23</Index>
+    <Name>Frequency 3</Name>
+    <Symbol>freq3</Symbol>
+    <Value>1250.00012207031</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>24</Index>
+    <Name>Bandwidth 3</Name>
+    <Symbol>q3</Symbol>
+    <Value>0.601512014865875</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>25</Index>
+    <Name>Gain 3</Name>
+    <Symbol>gain3</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>26</Index>
+    <Name>Section 4</Name>
+    <Symbol>sec4</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>27</Index>
+    <Name>Frequency 4</Name>
+    <Symbol>freq4</Symbol>
+    <Value>2430.15966796875</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>28</Index>
+    <Name>Bandwidth 4</Name>
+    <Symbol>q4</Symbol>
+    <Value>0.601512014865875</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>29</Index>
+    <Name>Gain 4</Name>
+    <Symbol>gain4</Symbol>
+    <Value>0.600000023841858</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>30</Index>
+    <Name>Highshelf</Name>
+    <Symbol>HSsec</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>31</Index>
+    <Name>Highshelf Frequency</Name>
+    <Symbol>HSfreq</Symbol>
+    <Value>7999.99951171875</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>32</Index>
+    <Name>Highshelf Bandwidth</Name>
+    <Symbol>HSq</Symbol>
+    <Value>1.01395905017853</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>33</Index>
+    <Name>Highshelf Gain</Name>
+    <Symbol>HSgain</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Float</Type>
+    <Key>http://gareus.org/oss/lv2/fil4#dbscale</Key>
+    <Value>AADwQQ==</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Float</Type>
+    <Key>http://gareus.org/oss/lv2/fil4#fftgain</Key>
+    <Value>AAAAAA==</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Float</Type>
+    <Key>http://gareus.org/oss/lv2/fil4#uiscale</Key>
+    <Value>AACAPw==</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Int</Type>
+    <Key>http://gareus.org/oss/lv2/fil4#fftmode</Key>
+    <Value>ARIAAA==</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Int</Type>
+    <Key>http://gareus.org/oss/lv2/fil4#fftchannel</Key>
+    <Value>/////w==</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
  <ExternalPatchbay>
   <Connection>
    <Source>system:capture_1</Source>
@@ -390,10 +752,18 @@
    <Target>system:playback_1</Target>
   </Connection>
   <Connection>
+   <Source>system:capture_1</Source>
+   <Target>pure_data_0:input0</Target>
+  </Connection>
+  <Connection>
    <Source>system:capture_2</Source>
    <Target>PulseAudio JACK Source:front-right</Target>
   </Connection>
   <Connection>
+   <Source>system:capture_2</Source>
+   <Target>pure_data_0:input1</Target>
+  </Connection>
+  <Connection>
    <Source>PulseAudio JACK Sink:front-left</Source>
    <Target>system:playback_1</Target>
   </Connection>
@@ -408,26 +778,6 @@
   <Connection>
    <Source>PulseAudio JACK Sink:front-right</Source>
    <Target>system:playback_1</Target>
-  </Connection>
-  <Connection>
-   <Source>a2j:glass_instrument [133] (capture): glass_instrument</Source>
-   <Target>zynaddsubfx:midi_input</Target>
-  </Connection>
-  <Connection>
-   <Source>a2j:glass_drum [134] (capture): glass_drum</Source>
-   <Target>system:midi_playback_15</Target>
-  </Connection>
-  <Connection>
-   <Source>a2j:glass_cc [135] (capture): glass_cc</Source>
-   <Target>system:midi_playback_14</Target>
-  </Connection>
-  <Connection>
-   <Source>a2j:glass_cc [135] (capture): glass_cc</Source>
-   <Target>Bitrot Repeat:events-in</Target>
-  </Connection>
-  <Connection>
-   <Source>a2j:glass_cc [135] (capture): glass_cc</Source>
-   <Target>Bitrot Repeat-01:events-in</Target>
   </Connection>
   <Connection>
    <Source>sooperlooper:common_out_1</Source>
@@ -438,6 +788,26 @@
    <Target>Bitrot Repeat:Audio Input 2</Target>
   </Connection>
   <Connection>
+   <Source>Hydrogen:out_L</Source>
+   <Target>sooperlooper:common_in_1</Target>
+  </Connection>
+  <Connection>
+   <Source>Hydrogen:out_R</Source>
+   <Target>sooperlooper:common_in_2</Target>
+  </Connection>
+  <Connection>
+   <Source>a2j:Pure Data [132] (capture): Pure Data Midi-Out 1</Source>
+   <Target>a2j:Hydrogen [131] (playback): Hydrogen Midi-In</Target>
+  </Connection>
+  <Connection>
+   <Source>pure_data_0:output0</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>pure_data_0:output1</Source>
+   <Target>system:playback_2</Target>
+  </Connection>
+  <Connection>
    <Source>Bitrot Repeat:Audio Output 1</Source>
    <Target>system:playback_1</Target>
   </Connection>
@@ -446,19 +816,27 @@
    <Target>system:playback_2</Target>
   </Connection>
   <Connection>
+   <Source>a2j:glass_instrument [136] (capture): glass_instrument</Source>
+   <Target>zynaddsubfx:midi_input</Target>
+  </Connection>
+  <Connection>
+   <Source>a2j:glass_drum [137] (capture): glass_drum</Source>
+   <Target>system:midi_playback_6</Target>
+  </Connection>
+  <Connection>
+   <Source>a2j:glass_cc [138] (capture): glass_cc</Source>
+   <Target>system:midi_playback_17</Target>
+  </Connection>
+  <Connection>
+   <Source>a2j:glass_cc [138] (capture): glass_cc</Source>
+   <Target>Bitrot Repeat:events-in</Target>
+  </Connection>
+  <Connection>
    <Source>zynaddsubfx:out_1</Source>
    <Target>sooperlooper:common_in_1</Target>
   </Connection>
   <Connection>
    <Source>zynaddsubfx:out_2</Source>
-   <Target>sooperlooper:common_in_2</Target>
-  </Connection>
-  <Connection>
-   <Source>Hydrogen:out_L</Source>
-   <Target>sooperlooper:common_in_1</Target>
-  </Connection>
-  <Connection>
-   <Source>Hydrogen:out_R</Source>
    <Target>sooperlooper:common_in_2</Target>
   </Connection>
  </ExternalPatchbay>

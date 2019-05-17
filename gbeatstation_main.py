@@ -168,7 +168,7 @@ if __name__ == "__main__":
     slclient = OSC_Sender(ipaddr="127.0.0.1", port=9951)
     stage_osc = OSC_Sender(ipaddr="127.0.0.1", port=8080)
     
-    Grid = gridmaster.Gridmaster(stage_osc, Mk2_out)
+    Grid = gridmaster.Gridmaster(stage_osc, Mk2_out, glass_cc)
     Slmast = Slmaster(Grid, slclient)                        
     OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc, jack)
 
@@ -214,10 +214,21 @@ if __name__ == "__main__":
 
     for i in range(4):
         invi = -i + 3
-        Grid.alter_pressfunc(0, invi, True,  func=[glass_cc.send_noteon, glass_cc.send_noteon, Grid.bitrotchange],
-                                          args=[[176, 1, 127], [176, 3, i * 31], True]) #estimated good cc note values
-        Grid.alter_pressfunc(0, i, False, func=[glass_cc.send_noteon, Grid.bitrotchange], args=[[176, 1, 0], False],
-                             color = [30 + c * i for c in cc_clr])
+
+        Grid.alter_pressfunc(0, invi, True, func=[Grid.bitrotchange],
+                             args=[[True, i * 31], None], color = [63, 63, 63])  # estimated good cc note values
+        Grid.alter_pressfunc(0, i, False, func=[Grid.bitrotchange], args=[[False, 0],None],
+                             color=[30 + c * i for c in cc_clr])
+
+
+
+
+
+
+        '''Grid.alter_pressfunc(0, invi, True,  func=[glass_cc.send_noteon, Grid.bitrotchange],
+                                          args=[[176, 3, i * 31], True]) #estimated good cc note values
+        Grid.alter_pressfunc(0, i, False, func=[Grid.bitrotchange], args=[False, [176, 1, 0]],
+                             color = [30 + c * i for c in cc_clr])'''
 
     toprow = ['loop', 'instr', 'clr', 'custom', 'pause', ' ', ' ', ' ']  #automap controls labels
     for y in range(8):

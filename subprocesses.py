@@ -11,12 +11,15 @@ jackmatch = subprocess.Popen(["python3", cwd + "/sub_jackmatch.py"], stdout=subp
 
 carla = subprocess.Popen(["carla", cwd + "/glass_car.carxp"]) #, "-n"], stdout=subprocess.PIPE) #  "-n" to run headless
 
+pd = subprocess.Popen(["pd", "-alsamidi", "-midioutdev", "1", "wiipedal.pd"]) 
+
 
 def exit_handler():
     print ("exiting")
     jackmatch.terminate()
     sl.terminate()
-    #carla.terminate()
+    carla.terminate()
+    pd.terminate()
     stagecontrol.terminate()
 
 atexit.register(exit_handler)
