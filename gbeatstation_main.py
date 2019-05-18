@@ -46,17 +46,21 @@ def coordinate(x, y, vel):
             del Grid.pressed[x,y]
 
         if x == 8:
-            if Grid.mode == "loop":
+            if Grid.mode in ["loop", 'rand']:
                 loopsync = Slmast.loops[y].sync
                 syncclr = [0, 0, 0] if loopsync == True else [0,0,63]
                 if vel == True:
                     Grid.ledout(8, y, syncclr, temp=True)
                     Slmast.loops[y].sync = not Slmast.loops[y].sync
-                    Slmast.sl_osc_cmd("/sl/{}/set".format(str(-y + 7)), ["sync", int(Slmast.loops[y].sync)])
+                    yinv = -y + 7
+                    Slmast.sl_osc_cmd("/sl/{}/set".format(str(yinv)), ["sync", int(Slmast.loops[y].sync)])
+                    stage_osc.send('/sync/' + str(-y + 7), int(loopsync))
+                    print (loopsync)
+
                 elif vel == False:
                     Grid.ledout(8, y, Grid.pgrid[x,y]["current"], temp=True)
 
-            elif Grid.mode in ["instr", "rand"]:
+            elif Grid.mode in ["instr"]:
                 if vel == True:
                     sl_loopmode_cmd(0, y, vel)
 

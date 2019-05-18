@@ -42,7 +42,7 @@
     <Symbol>bpm</Symbol>
     <MidiCC>2</MidiCC>
     <MidiChannel>1</MidiChannel>
-    <Value>77</Value>
+    <Value>190</Value>
    </Parameter>
 
    <Parameter>
@@ -51,7 +51,7 @@
     <Symbol>beats</Symbol>
     <MidiCC>3</MidiCC>
     <MidiChannel>1</MidiChannel>
-    <Value>1</Value>
+    <Value>2</Value>
    </Parameter>
 
    <Parameter>
@@ -60,7 +60,7 @@
     <Symbol>division</Symbol>
     <MidiCC>4</MidiCC>
     <MidiChannel>1</MidiChannel>
-    <Value>14</Value>
+    <Value>13</Value>
    </Parameter>
 
    <Parameter>
@@ -74,7 +74,7 @@
     <Index>5</Index>
     <Name>Attack</Name>
     <Symbol>attack</Symbol>
-    <Value>0.492063492536545</Value>
+    <Value>0.380887031555176</Value>
    </Parameter>
 
    <Parameter>
@@ -102,7 +102,7 @@
     <Index>9</Index>
     <Name>Speed</Name>
     <Symbol>speed</Symbol>
-    <Value>1</Value>
+    <Value>0.25</Value>
    </Parameter>
   </Data>
  </Plugin>
@@ -390,6 +390,7 @@
 
   <Data>
    <Active>Yes</Active>
+   <DryWet>0</DryWet>
    <ControlChannel>1</ControlChannel>
    <Options>0x0</Options>
 
@@ -397,7 +398,7 @@
     <Index>0</Index>
     <Name>31 Hz</Name>
     <Symbol>band31hz</Symbol>
-    <Value>0</Value>
+    <Value>-7.16879987716675</Value>
    </Parameter>
 
    <Parameter>
@@ -425,28 +426,28 @@
     <Index>4</Index>
     <Name>500 Hz</Name>
     <Symbol>band500hz</Symbol>
-    <Value>0</Value>
+    <Value>-1.0305882692337</Value>
    </Parameter>
 
    <Parameter>
     <Index>5</Index>
     <Name>1 kHz</Name>
     <Symbol>band1khz</Symbol>
-    <Value>0</Value>
+    <Value>4.47529411315918</Value>
    </Parameter>
 
    <Parameter>
     <Index>6</Index>
     <Name>2 kHz</Name>
     <Symbol>band2khz</Symbol>
-    <Value>0</Value>
+    <Value>-2.04705882072449</Value>
    </Parameter>
 
    <Parameter>
     <Index>7</Index>
     <Name>4 kHz</Name>
     <Symbol>band4khz</Symbol>
-    <Value>0</Value>
+    <Value>2.95440006256104</Value>
    </Parameter>
 
    <Parameter>
@@ -475,7 +476,7 @@
 
   <Data>
    <Active>Yes</Active>
-   <DryWet>0</DryWet>
+   <Volume>0.901954</Volume>
    <ControlChannel>1</ControlChannel>
    <Options>0x0</Options>
 
@@ -511,21 +512,21 @@
     <Index>5</Index>
     <Name>Highpass Frequency</Name>
     <Symbol>HPfreq</Symbol>
-    <Value>1000</Value>
+    <Value>20</Value>
    </Parameter>
 
    <Parameter>
     <Index>6</Index>
     <Name>HighPass Resonance</Name>
     <Symbol>HPQ</Symbol>
-    <Value>0.698993027210236</Value>
+    <Value>0.699999988079071</Value>
    </Parameter>
 
    <Parameter>
     <Index>7</Index>
     <Name>Lowpass</Name>
     <Symbol>LowPass</Symbol>
-    <Value>0</Value>
+    <Value>1</Value>
    </Parameter>
 
    <Parameter>
@@ -553,21 +554,21 @@
     <Index>11</Index>
     <Name>Lowshelf Frequency</Name>
     <Symbol>LSfreq</Symbol>
-    <Value>25</Value>
+    <Value>400</Value>
    </Parameter>
 
    <Parameter>
     <Index>12</Index>
     <Name>Lowshelf Bandwidth</Name>
     <Symbol>LSq</Symbol>
-    <Value>0.0625</Value>
+    <Value>1</Value>
    </Parameter>
 
    <Parameter>
     <Index>13</Index>
     <Name>Lowshelf Gain</Name>
     <Symbol>LSgain</Symbol>
-    <Value>-18</Value>
+    <Value>1.20000100135803</Value>
    </Parameter>
 
    <Parameter>
@@ -581,21 +582,21 @@
     <Index>15</Index>
     <Name>Frequency 1</Name>
     <Symbol>freq1</Symbol>
-    <Value>223.652496337891</Value>
+    <Value>2000</Value>
    </Parameter>
 
    <Parameter>
     <Index>16</Index>
     <Name>Bandwidth 1</Name>
     <Symbol>q1</Symbol>
-    <Value>0.601512014865875</Value>
+    <Value>4</Value>
    </Parameter>
 
    <Parameter>
     <Index>17</Index>
     <Name>Gain 1</Name>
     <Symbol>gain1</Symbol>
-    <Value>-0.199999004602432</Value>
+    <Value>0</Value>
    </Parameter>
 
    <Parameter>
@@ -609,21 +610,21 @@
     <Index>19</Index>
     <Name>Frequency 2</Name>
     <Symbol>freq2</Symbol>
-    <Value>397.000030517578</Value>
+    <Value>923.389770507812</Value>
    </Parameter>
 
    <Parameter>
     <Index>20</Index>
     <Name>Bandwidth 2</Name>
     <Symbol>q2</Symbol>
-    <Value>0.601512014865875</Value>
+    <Value>0.137103006243706</Value>
    </Parameter>
 
    <Parameter>
     <Index>21</Index>
     <Name>Gain 2</Name>
     <Symbol>gain2</Symbol>
-    <Value>0</Value>
+    <Value>-18</Value>
    </Parameter>
 
    <Parameter>
@@ -665,7 +666,7 @@
     <Index>27</Index>
     <Name>Frequency 4</Name>
     <Symbol>freq4</Symbol>
-    <Value>2430.15966796875</Value>
+    <Value>2500.00024414062</Value>
    </Parameter>
 
    <Parameter>
@@ -679,7 +680,7 @@
     <Index>29</Index>
     <Name>Gain 4</Name>
     <Symbol>gain4</Symbol>
-    <Value>0.600000023841858</Value>
+    <Value>0</Value>
    </Parameter>
 
    <Parameter>
@@ -693,7 +694,7 @@
     <Index>31</Index>
     <Name>Highshelf Frequency</Name>
     <Symbol>HSfreq</Symbol>
-    <Value>7999.99951171875</Value>
+    <Value>8204.791015625</Value>
    </Parameter>
 
    <Parameter>
@@ -707,7 +708,7 @@
     <Index>33</Index>
     <Name>Highshelf Gain</Name>
     <Symbol>HSgain</Symbol>
-    <Value>0</Value>
+    <Value>-1.19999897480011</Value>
    </Parameter>
 
    <CustomData>
@@ -719,7 +720,7 @@
    <CustomData>
     <Type>http://lv2plug.in/ns/ext/atom#Float</Type>
     <Key>http://gareus.org/oss/lv2/fil4#fftgain</Key>
-    <Value>AAAAAA==</Value>
+    <Value>AACAPw==</Value>
    </CustomData>
 
    <CustomData>
@@ -731,13 +732,40 @@
    <CustomData>
     <Type>http://lv2plug.in/ns/ext/atom#Int</Type>
     <Key>http://gareus.org/oss/lv2/fil4#fftmode</Key>
-    <Value>ARIAAA==</Value>
+    <Value>BRIAAA==</Value>
    </CustomData>
 
    <CustomData>
     <Type>http://lv2plug.in/ns/ext/atom#Int</Type>
     <Key>http://gareus.org/oss/lv2/fil4#fftchannel</Key>
     <Value>/////w==</Value>
+   </CustomData>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
+ <!-- 1/3 Octave Spectrum Display Stereo -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>1/3 Octave Spectrum Display Stereo</Name>
+   <URI>http://gareus.org/oss/lv2/meters#spectr30stereo</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x0</Options>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>true</Value>
    </CustomData>
   </Data>
  </Plugin>
@@ -809,11 +837,11 @@
   </Connection>
   <Connection>
    <Source>Bitrot Repeat:Audio Output 1</Source>
-   <Target>system:playback_1</Target>
+   <Target>x42-eq - Parametric Equalizer Stereo:In Left</Target>
   </Connection>
   <Connection>
    <Source>Bitrot Repeat:Audio Output 2</Source>
-   <Target>system:playback_2</Target>
+   <Target>x42-eq - Parametric Equalizer Stereo:In Right</Target>
   </Connection>
   <Connection>
    <Source>a2j:glass_instrument [136] (capture): glass_instrument</Source>
@@ -832,12 +860,36 @@
    <Target>Bitrot Repeat:events-in</Target>
   </Connection>
   <Connection>
+   <Source>C* Eq10X2 - 10-band equalizer:Out Left</Source>
+   <Target>1/3 Octave Spectrum Display Stereo:InL</Target>
+  </Connection>
+  <Connection>
+   <Source>C* Eq10X2 - 10-band equalizer:Out Right</Source>
+   <Target>1/3 Octave Spectrum Display Stereo:InR</Target>
+  </Connection>
+  <Connection>
    <Source>zynaddsubfx:out_1</Source>
    <Target>sooperlooper:common_in_1</Target>
   </Connection>
   <Connection>
    <Source>zynaddsubfx:out_2</Source>
    <Target>sooperlooper:common_in_2</Target>
+  </Connection>
+  <Connection>
+   <Source>x42-eq - Parametric Equalizer Stereo:Out Left</Source>
+   <Target>C* Eq10X2 - 10-band equalizer:In Left</Target>
+  </Connection>
+  <Connection>
+   <Source>x42-eq - Parametric Equalizer Stereo:Out Right</Source>
+   <Target>C* Eq10X2 - 10-band equalizer:In Right</Target>
+  </Connection>
+  <Connection>
+   <Source>1/3 Octave Spectrum Display Stereo:OutL</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>1/3 Octave Spectrum Display Stereo:OutR</Source>
+   <Target>system:playback_2</Target>
   </Connection>
  </ExternalPatchbay>
 </CARLA-PROJECT>

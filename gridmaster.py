@@ -116,8 +116,8 @@ class Gridmaster():
             
             if stage == True:
                 self.stage_grid(x, y, color)
-        else:
-            print  ('repeated led')
+        #else:
+        #    print  ('repeated led')
 
 
 
