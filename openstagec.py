@@ -177,6 +177,9 @@ class OpenStageControl():
             print (loop_num, args[-1])
             self.Slmast.sl_osc_cmd("/sl/{}/set".format(loop_num), ['playback_sync', args[-1]])
 
+        elif args[0][:9] ==  '/mastereq':
+            idx = int(args[0][10:])
+            self.glass_cc.send_noteon(176, 15 + idx, args[-1])
 
         else:
             print ('no handler for ', args)

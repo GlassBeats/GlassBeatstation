@@ -45,6 +45,8 @@ def coordinate(x, y, vel):
         elif (x,y) in Grid.pressed:
             del Grid.pressed[x,y]
 
+        print (Grid.pressed)
+
         if x == 8:
             if Grid.mode in ["loop", 'rand']:
                 loopsync = Slmast.loops[y].sync
@@ -55,7 +57,7 @@ def coordinate(x, y, vel):
                     yinv = -y + 7
                     Slmast.sl_osc_cmd("/sl/{}/set".format(str(yinv)), ["sync", int(Slmast.loops[y].sync)])
                     stage_osc.send('/sync/' + str(-y + 7), int(loopsync))
-                    print (loopsync)
+
 
                 elif vel == False:
                     Grid.ledout(8, y, Grid.pgrid[x,y]["current"], temp=True)

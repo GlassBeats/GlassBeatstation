@@ -1943,12 +1943,12 @@
       "widgets": [
         {
           "type": "matrix",
-          "top": 40,
-          "left": 30,
-          "id": "matrix_2",
+          "top": 20,
+          "left": 10,
+          "id": "system eq",
           "linkId": "",
-          "width": 1250,
-          "height": 340,
+          "width": 540,
+          "height": 230,
           "label": "auto",
           "color": "auto",
           "css": "",
@@ -1964,8 +1964,8 @@
           "props": {},
           "default": 0.67,
           "value": "",
-          "precision": 2,
-          "address": "/fader",
+          "precision": 0,
+          "address": "/mastereq",
           "preArgs": "",
           "target": "",
           "bypass": false
