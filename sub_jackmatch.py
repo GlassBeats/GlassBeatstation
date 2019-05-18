@@ -29,6 +29,7 @@ jmatchmkr = jackmatchmaker.JackMatchmaker([
         
         ["^a2j:glass_cc", "^sooperlooper"],
         ["^a2j:glass_cc", "^Bitrot"],
+        ["^a2j:glass_cc", 'C* Eq10X2 - 10-band equalizer:events-in'],
 
         ["^a2j:glass_drum", "^Hydrogen"],
 
