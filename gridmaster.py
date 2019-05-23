@@ -84,7 +84,7 @@ class Gridmaster():
         
                 
     def gridpress(self, x, y, vel):
-        print (self.pgrid[x,y][self.mode][vel])
+        print (self.fgrid[x,y][self.mode][vel])
         self.ledout(x, y, self.pgrid[x,y][self.mode][vel])
 
         func = self.fgrid[x,y][self.mode][0][vel]
@@ -209,17 +209,24 @@ class Gridmaster():
                     self.stage_osc.send("/column_text/" + str(i), " ")
 
     def bitrotchange(self, active, val):
-        print ('activity', active, val, '\n', '*'*30, self.pressed)
+
         bitrots = {(0,0),(0,1),(0,2),(0,3)}
-        
-        if any(b in bitrots for b in self.pressed):
-            print ('allready press-ed')
 
-        if active == False:
-            self.glass_cc.send_noteon(176, 1, 0)
+        for b in bitrots:
+            bitrotactivity = True if b in self.pressed else False
 
-        if active == 1 and self.bitrot != True: #if not already on
-            self.glass_cc.send_noteon(176, 3, val)
-            self.glass_cc.send_noteon(176, 1, 127)
 
-        self.bitrot = active #turned on
+        print ('activity', bitrotactivity,  'val', val, '\n', '*'*30, self.pressed)
+        if bitrotactivity == False:
+            if active == False:
+                self.glass_cc.send_noteon(176, 1, 0)
+
+            elif active == True: #if not already on
+                self.glass_cc.send_noteon(176, 4, val)
+                self.glass_cc.send_noteon(176, 1, 127)
+
+
+        elif bitrotactivity == True:
+            self.glass_cc.send_noteon(176, 4, val)
+
+        #self.bitrot = active #turned on

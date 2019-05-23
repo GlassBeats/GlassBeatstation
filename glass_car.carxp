@@ -24,6 +24,7 @@
 
   <Data>
    <Active>Yes</Active>
+   <Volume>1.27</Volume>
    <ControlChannel>10</ControlChannel>
    <Options>0x0</Options>
 
@@ -60,7 +61,7 @@
     <Symbol>division</Symbol>
     <MidiCC>4</MidiCC>
     <MidiChannel>1</MidiChannel>
-    <Value>13</Value>
+    <Value>8</Value>
    </Parameter>
 
    <Parameter>
@@ -74,7 +75,7 @@
     <Index>5</Index>
     <Name>Attack</Name>
     <Symbol>attack</Symbol>
-    <Value>0.380887031555176</Value>
+    <Value>0.619117617607117</Value>
    </Parameter>
 
    <Parameter>
@@ -117,6 +118,8 @@
 
   <Data>
    <Active>Yes</Active>
+   <DryWet>0.4567647</DryWet>
+   <Volume>1.10795</Volume>
    <ControlChannel>1</ControlChannel>
    <Options>0x1e4</Options>
 
@@ -463,6 +466,12 @@
     <Symbol>band16khz</Symbol>
     <Value>0</Value>
    </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
   </Data>
  </Plugin>
 
@@ -476,6 +485,7 @@
 
   <Data>
    <Active>Yes</Active>
+   <DryWet>0</DryWet>
    <Volume>0.901954</Volume>
    <ControlChannel>1</ControlChannel>
    <Options>0x0</Options>
@@ -765,47 +775,147 @@
    <CustomData>
     <Type>http://kxstudio.sf.net/ns/carla/property</Type>
     <Key>CarlaSkinIsCompacted</Key>
-    <Value>true</Value>
+    <Value>false</Value>
    </CustomData>
+  </Data>
+ </Plugin>
+
+ <!-- MDA ePiano -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>MDA ePiano</Name>
+   <URI>http://moddevices.com/plugins/mda/EPiano</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <Volume>0.5775383</Volume>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x1e4</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Envelope Decay</Name>
+    <Symbol>env_decay</Symbol>
+    <Value>50</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>Envelope Release</Name>
+    <Symbol>env_release</Symbol>
+    <Value>50</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>Hardness</Name>
+    <Symbol>hardness</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>Treble Boost</Name>
+    <Symbol>treble_boost</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>Modulation</Name>
+    <Symbol>modulation</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>5</Index>
+    <Name>LFO Rate</Name>
+    <Symbol>lfo_rate</Symbol>
+    <Value>24.0549983978271</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>Velocity Sense</Name>
+    <Symbol>vel_sense</Symbol>
+    <Value>25</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>Stereo Width</Name>
+    <Symbol>stereo_width</Symbol>
+    <Value>100</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>8</Index>
+    <Name>Polyphonic</Name>
+    <Symbol>polyphonic</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>Fine Tuning</Name>
+    <Symbol>fine_tuning</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>10</Index>
+    <Name>Random Tuning</Name>
+    <Symbol>random_tuning</Symbol>
+    <Value>7.29999971389771</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>11</Index>
+    <Name>Overdrive</Name>
+    <Symbol>overdrive</Symbol>
+    <Value>0</Value>
+   </Parameter>
   </Data>
  </Plugin>
 
  <ExternalPatchbay>
   <Connection>
    <Source>system:capture_1</Source>
-   <Target>PulseAudio JACK Source:front-left</Target>
-  </Connection>
-  <Connection>
-   <Source>system:capture_1</Source>
-   <Target>system:playback_1</Target>
-  </Connection>
-  <Connection>
-   <Source>system:capture_1</Source>
    <Target>pure_data_0:input0</Target>
   </Connection>
   <Connection>
-   <Source>system:capture_2</Source>
-   <Target>PulseAudio JACK Source:front-right</Target>
+   <Source>system:capture_1</Source>
+   <Target>sooperlooper:common_in_1</Target>
+  </Connection>
+  <Connection>
+   <Source>system:capture_1</Source>
+   <Target>sooperlooper:common_in_2</Target>
+  </Connection>
+  <Connection>
+   <Source>system:capture_1</Source>
+   <Target>Tal-Vocoder-II:Audio Input 1</Target>
+  </Connection>
+  <Connection>
+   <Source>system:capture_1</Source>
+   <Target>Tal-Vocoder-II:Audio Input 2</Target>
   </Connection>
   <Connection>
    <Source>system:capture_2</Source>
    <Target>pure_data_0:input1</Target>
   </Connection>
   <Connection>
-   <Source>PulseAudio JACK Sink:front-left</Source>
-   <Target>system:playback_1</Target>
+   <Source>system:capture_2</Source>
+   <Target>sooperlooper:common_in_1</Target>
   </Connection>
   <Connection>
-   <Source>PulseAudio JACK Sink:front-left</Source>
-   <Target>system:playback_2</Target>
+   <Source>system:capture_2</Source>
+   <Target>sooperlooper:common_in_2</Target>
   </Connection>
   <Connection>
-   <Source>PulseAudio JACK Sink:front-right</Source>
-   <Target>system:playback_2</Target>
-  </Connection>
-  <Connection>
-   <Source>PulseAudio JACK Sink:front-right</Source>
-   <Target>system:playback_1</Target>
+   <Source>system:midi_capture_17</Source>
+   <Target>a2j:mk2-launchpad [133] (playback): mk2-in</Target>
   </Connection>
   <Connection>
    <Source>sooperlooper:common_out_1</Source>
@@ -816,16 +926,8 @@
    <Target>Bitrot Repeat:Audio Input 2</Target>
   </Connection>
   <Connection>
-   <Source>Hydrogen:out_L</Source>
-   <Target>sooperlooper:common_in_1</Target>
-  </Connection>
-  <Connection>
-   <Source>Hydrogen:out_R</Source>
-   <Target>sooperlooper:common_in_2</Target>
-  </Connection>
-  <Connection>
-   <Source>a2j:Pure Data [132] (capture): Pure Data Midi-Out 1</Source>
-   <Target>a2j:Hydrogen [131] (playback): Hydrogen Midi-In</Target>
+   <Source>a2j:Pure Data [130] (capture): Pure Data Midi-Out 1</Source>
+   <Target>a2j:Hydrogen [139] (playback): Hydrogen Midi-In</Target>
   </Connection>
   <Connection>
    <Source>pure_data_0:output0</Source>
@@ -837,27 +939,19 @@
   </Connection>
   <Connection>
    <Source>Bitrot Repeat:Audio Output 1</Source>
-   <Target>x42-eq - Parametric Equalizer Stereo:In Left</Target>
+   <Target>system:playback_1</Target>
   </Connection>
   <Connection>
    <Source>Bitrot Repeat:Audio Output 2</Source>
-   <Target>x42-eq - Parametric Equalizer Stereo:In Right</Target>
+   <Target>system:playback_2</Target>
   </Connection>
   <Connection>
-   <Source>a2j:glass_instrument [136] (capture): glass_instrument</Source>
-   <Target>zynaddsubfx:midi_input</Target>
+   <Source>Tal-Vocoder-II:Audio Output 1</Source>
+   <Target>sooperlooper:common_in_1</Target>
   </Connection>
   <Connection>
-   <Source>a2j:glass_drum [137] (capture): glass_drum</Source>
-   <Target>system:midi_playback_6</Target>
-  </Connection>
-  <Connection>
-   <Source>a2j:glass_cc [138] (capture): glass_cc</Source>
-   <Target>system:midi_playback_17</Target>
-  </Connection>
-  <Connection>
-   <Source>a2j:glass_cc [138] (capture): glass_cc</Source>
-   <Target>Bitrot Repeat:events-in</Target>
+   <Source>Tal-Vocoder-II:Audio Output 2</Source>
+   <Target>sooperlooper:common_in_2</Target>
   </Connection>
   <Connection>
    <Source>C* Eq10X2 - 10-band equalizer:Out Left</Source>
@@ -866,14 +960,6 @@
   <Connection>
    <Source>C* Eq10X2 - 10-band equalizer:Out Right</Source>
    <Target>1/3 Octave Spectrum Display Stereo:InR</Target>
-  </Connection>
-  <Connection>
-   <Source>zynaddsubfx:out_1</Source>
-   <Target>sooperlooper:common_in_1</Target>
-  </Connection>
-  <Connection>
-   <Source>zynaddsubfx:out_2</Source>
-   <Target>sooperlooper:common_in_2</Target>
   </Connection>
   <Connection>
    <Source>x42-eq - Parametric Equalizer Stereo:Out Left</Source>
@@ -890,6 +976,42 @@
   <Connection>
    <Source>1/3 Octave Spectrum Display Stereo:OutR</Source>
    <Target>system:playback_2</Target>
+  </Connection>
+  <Connection>
+   <Source>a2j:mk2-launchpad [134] (capture): mk2-out</Source>
+   <Target>system:midi_playback_12</Target>
+  </Connection>
+  <Connection>
+   <Source>a2j:glass_instrument [135] (capture): glass_instrument</Source>
+   <Target>zynaddsubfx:midi_input</Target>
+  </Connection>
+  <Connection>
+   <Source>a2j:glass_drum [136] (capture): glass_drum</Source>
+   <Target>system:midi_playback_15</Target>
+  </Connection>
+  <Connection>
+   <Source>a2j:glass_cc [137] (capture): glass_cc</Source>
+   <Target>Bitrot Repeat:events-in</Target>
+  </Connection>
+  <Connection>
+   <Source>Hydrogen:out_L</Source>
+   <Target>sooperlooper:common_in_1</Target>
+  </Connection>
+  <Connection>
+   <Source>Hydrogen:out_R</Source>
+   <Target>sooperlooper:common_in_2</Target>
+  </Connection>
+  <Connection>
+   <Source>a2j:Launchkey Mini [28] (capture): Launchkey Mini MIDI 1</Source>
+   <Target>MDA ePiano:events-in</Target>
+  </Connection>
+  <Connection>
+   <Source>MDA ePiano:Left Out</Source>
+   <Target>sooperlooper:common_in_1</Target>
+  </Connection>
+  <Connection>
+   <Source>MDA ePiano:Right Out</Source>
+   <Target>sooperlooper:common_in_2</Target>
   </Connection>
  </ExternalPatchbay>
 </CARLA-PROJECT>

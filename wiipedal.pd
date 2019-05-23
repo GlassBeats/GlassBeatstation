@@ -2,7 +2,7 @@
 #N struct NC-stick float x float y;
 #N struct cc-left-stick float x float y;
 #N struct cc-right-stick float x float y;
-#N canvas 251 196 830 538 10;
+#N canvas 1014 377 796 499 10;
 #X text 36 528 You can also specify the address as a creation argument:
 ;
 #X text 35 544 (make sure to enable discover mode before creation)
@@ -48,13 +48,13 @@ empty -2 -8 0 10 -204786 -1 -1 0 1;
 #X obj 949 40 tgl 25 0 empty empty empty 17 7 0 10 -232576 -1 -1 0
 1;
 #X msg 851 92 setLED \$1;
-#X obj 851 39 tgl 15 0 empty empty empty 17 7 0 10 -4032 -1 -1 0 1
+#X obj 851 39 tgl 15 0 empty empty empty 17 7 0 10 -4032 -1 -1 1 1
 ;
 #X obj 875 39 tgl 15 0 empty empty empty 17 7 0 10 -4032 -1 -1 0 1
 ;
 #X obj 900 39 tgl 15 0 empty empty empty 17 7 0 10 -4032 -1 -1 0 1
 ;
-#X obj 925 40 tgl 15 0 empty empty empty 17 7 0 10 -4032 -1 -1 0 1
+#X obj 925 40 tgl 15 0 empty empty empty 17 7 0 10 -4032 -1 -1 1 1
 ;
 #X text 846 15 LEDs:;
 #N canvas 0 50 409 401 bytemask 0;
@@ -641,24 +641,30 @@ empty -2 -8 0 10 -203904 -1 -1 0 1;
 #X msg 12 88 connect 00:1B:7A:50:16:A1;
 #X obj 252 29 tgl 13 0 \$0.bli \$0.button.minus - 5 8 0 10 -191407
 -1 -1 0 16;
-#X obj 276 29 tgl 13 0 \$0.bli \$0.button.home empty 17 7 0 10 -191407
--1 -1 0 128;
-#X obj 300 29 tgl 13 0 \$0.bli \$0.button.plus + 5 8 0 10 -191407 -1
+#X obj 435 33 tgl 13 0 \$0.bli \$0.button.plus + 5 8 0 10 -191407 -1
 -1 0 16;
-#X obj 263 280 noteout;
-#X obj 263 258 makenote 36 120;
-#X msg 254 194 37;
-#X msg 318 197 36;
+#X obj 238 363 noteout;
+#X msg 319 208 36;
 #X obj 36 569 wiimote 00:1B:7A:50:16:A2;
-#X obj 310 59 sel 16;
 #X obj 252 55 sel 16;
-#X obj 213 136 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
--1 -1;
 #X obj 262 97 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
 -1;
 #X obj 333 101 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #X obj 23 40 loadbang;
+#X floatatom 362 47 5 0 0 0 - - -, f 5;
+#X obj 315 30 tgl 13 0 \$0.bli \$0.button.left empty 17 7 0 10 -191407
+-1 -1 0 1;
+#X obj 310 59 sel 1;
+#X msg 254 194 38;
+#X floatatom 458 288 5 0 0 0 - - -, f 5;
+#X obj 458 340 ctlout;
+#X floatatom 452 163 5 0 0 0 - - -, f 5;
+#X msg 396 211 69;
+#X obj 238 341 makenote 127 120;
+#X obj 249 264 spigot;
+#X obj 278 239 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
 #X connect 19 0 18 0;
 #X connect 20 0 18 0;
 #X connect 21 0 22 0;
@@ -679,17 +685,20 @@ empty -2 -8 0 10 -203904 -1 -1 0 1;
 #X connect 56 0 58 0;
 #X connect 57 0 56 0;
 #X connect 65 0 18 0;
-#X connect 66 0 75 0;
-#X connect 66 0 76 0;
-#X connect 68 0 74 0;
-#X connect 70 0 69 0;
-#X connect 70 1 69 1;
-#X connect 71 0 70 0;
-#X connect 72 0 70 0;
-#X connect 73 0 17 0;
-#X connect 74 0 72 0;
-#X connect 74 0 78 0;
-#X connect 75 0 71 0;
-#X connect 75 0 77 0;
-#X connect 79 0 65 0;
+#X connect 66 0 71 0;
+#X connect 69 0 84 0;
+#X connect 69 0 83 0;
+#X connect 70 0 17 0;
+#X connect 71 0 78 0;
+#X connect 71 0 72 0;
+#X connect 76 0 75 0;
+#X connect 76 0 77 0;
+#X connect 77 0 69 0;
+#X connect 77 0 73 0;
+#X connect 78 0 84 0;
+#X connect 82 0 83 0;
+#X connect 83 0 68 0;
+#X connect 83 1 68 1;
+#X connect 84 0 83 0;
+#X connect 85 0 84 1;
 #X coords 0 0 1 1 50 50 0;

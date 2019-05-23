@@ -45,8 +45,6 @@ def coordinate(x, y, vel):
         elif (x,y) in Grid.pressed:
             del Grid.pressed[x,y]
 
-        print (Grid.pressed)
-
         if x == 8:
             if Grid.mode in ["loop", 'rand']:
                 loopsync = Slmast.loops[y].sync
@@ -200,7 +198,7 @@ if __name__ == "__main__":
             note = x + (y * 4) + 36
             for i in True, False:
                 Grid.alter_pressfunc(x + 4, y, i, func=glass_drum.send_noteon, args =[144, note, i * 127], color = [30,20,15])
-            #Grid.alter_pressfunc(x + 4, 0, False, func=glass_instr.send_noteon, args =[144, note, 0], color = [30,20,15])
+
 
 
     for y in range(4):  # add oneshot buttons
@@ -220,21 +218,12 @@ if __name__ == "__main__":
 
     for i in range(4):
         invi = -i + 3
-
         Grid.alter_pressfunc(0, invi, True, func=[Grid.bitrotchange],
                              args=[[True, i * 31], None], color = [63, 63, 63])  # estimated good cc note values
-        Grid.alter_pressfunc(0, i, False, func=[Grid.bitrotchange], args=[[False, 0],None],
+
+        Grid.alter_pressfunc(0, invi, False, func=[Grid.bitrotchange], args=[[False, 0],None],
                              color=[30 + c * i for c in cc_clr])
 
-
-
-
-
-
-        '''Grid.alter_pressfunc(0, invi, True,  func=[glass_cc.send_noteon, Grid.bitrotchange],
-                                          args=[[176, 3, i * 31], True]) #estimated good cc note values
-        Grid.alter_pressfunc(0, i, False, func=[Grid.bitrotchange], args=[False, [176, 1, 0]],
-                             color = [30 + c * i for c in cc_clr])'''
 
     toprow = ['loop', 'instr', 'clr', 'custom', 'pause', ' ', ' ', ' ']  #automap controls labels
     for y in range(8):
