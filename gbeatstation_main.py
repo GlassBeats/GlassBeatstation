@@ -35,7 +35,6 @@ def coordinate(x, y, vel):
                 Grid.buttonclrchange(x, y, False, Grid.addaction["color"])
 
     else:
-
         if y < 8 and x < 8 and vel == True: #pulse when pressed
             var = ["pulse", 119]
         else:  var = None
@@ -45,7 +44,12 @@ def coordinate(x, y, vel):
         elif (x,y) in Grid.pressed:
             del Grid.pressed[x,y]
 
-        if x == 8:
+        if Grid.mode == "lplay":
+            #each button must hold values for
+            pass
+
+
+        elif x == 8:
             if Grid.mode in ["loop", 'rand']:
                 loopsync = Slmast.loops[y].sync
                 syncclr = [0, 0, 0] if loopsync == True else [0,0,63]
@@ -91,6 +95,7 @@ def coordinate(x, y, vel):
                 glass_instr.send_noteon(144, midinote, vel * 127)
             elif Grid.mode == "rand":
                 Grid.gridpress(x, y, vel)
+
 
 
 
@@ -225,7 +230,7 @@ if __name__ == "__main__":
                              color=[30 + c * i for c in cc_clr])
 
 
-    toprow = ['loop', 'instr', 'clr', 'custom', 'pause', ' ', ' ', ' ']  #automap controls labels
+    toprow = ['loop', 'instr', 'lplay', 'custom', 'pause', ' ', ' ', ' ']  #automap controls labels
     for y in range(8):
         OStageC.send('/column_text/' + str(y), str(y))
         OStageC.send('/automap_text/' + str(y), toprow[y])

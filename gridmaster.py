@@ -95,7 +95,6 @@ class Gridmaster():
                 for f in range(len(func)):
 
                     if isinstance(args[f], list) == True:
-                        #print (func[f], args[f])
                         func[f](*args[f])
                     else:
                         func[f](*args[f])
