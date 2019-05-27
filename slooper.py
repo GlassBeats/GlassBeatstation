@@ -34,8 +34,8 @@ class Slmaster():
 
         oscclient.send("/register_auto_update", ["tempo", 10, "localhost:9998", "/sloop"])
 
-        self.invlps = [Sloop(Grid, oscclient) for i in range(8)]
-        self.loops = self.invlps[::-1]
+
+        self.loops = None #updated in main
 
         self.funcs = {"state":self.track_state, "loop_len":self.track_len, "loop_pos":self.track_pos}
 

@@ -44,8 +44,23 @@ def coordinate(x, y, vel):
         elif (x,y) in Grid.pressed:
             del Grid.pressed[x,y]
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+        #if Grid.mode == "lplay":
+            #each button must hold values for state, sync, activated/not
+        #=    pass
+>>>>>>> Stashed changes
 
         if x == 8:
+=======
+        #if Grid.mode == "lplay":
+            #each button must hold values for state, sync, activated/not
+        #=    pass
+
+
+        elif x == 8:
+>>>>>>> Stashed changes
             if Grid.mode in ["loop", 'rand']:
                 loopsync = Slmast.loops[y].sync
                 syncclr = [0, 0, 0] if loopsync == True else [0,0,63]
@@ -91,9 +106,6 @@ def coordinate(x, y, vel):
                 glass_instr.send_noteon(144, midinote, vel * 127)
             elif Grid.mode == "rand":
                 Grid.gridpress(x, y, vel)
-
-
-
 
 def sl_loopmode_cmd(x, y, vel):
     yinv = y
@@ -174,7 +186,12 @@ if __name__ == "__main__":
     stage_osc = OSC_Sender(ipaddr="127.0.0.1", port=8080)
     
     Grid = gridmaster.Gridmaster(stage_osc, Mk2_out, glass_cc)
-    Slmast = Slmaster(Grid, slclient)                        
+
+    Slmast = Slmaster(Grid, slclient)
+
+    invlps = [Sloop(Grid,slclient) for i in range(8)] #instantiate invidual loops
+    Slmast.loops = invlps[::-1]
+
     OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc, jack)
 
 
@@ -237,7 +254,7 @@ if __name__ == "__main__":
     dispatcher.map("/sloop", Slmast.sloschandler)  # sooperlooper handler
     dispatcher.set_default_handler(OStageC.stage_handler)    
     server = osc_server.ThreadingOSCUDPServer(("localhost", 9998), dispatcher)
-    
+
     for mde in Grid.modelst:
         Grid.switchmode(mde)
         time.sleep(.25)
