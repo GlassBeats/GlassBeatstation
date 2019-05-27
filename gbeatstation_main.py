@@ -44,12 +44,8 @@ def coordinate(x, y, vel):
         elif (x,y) in Grid.pressed:
             del Grid.pressed[x,y]
 
-        if Grid.mode == "lplay":
-            #each button must hold values for
-            pass
 
-
-        elif x == 8:
+        if x == 8:
             if Grid.mode in ["loop", 'rand']:
                 loopsync = Slmast.loops[y].sync
                 syncclr = [0, 0, 0] if loopsync == True else [0,0,63]
