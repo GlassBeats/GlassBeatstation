@@ -16,7 +16,7 @@ class Gridmaster():
             for y in range (9):
                 self.pgrid[x,y] = {"loop":[clroff,clron],  #layers for modes
                                   "instr":[clroff, clron],  #[x*7,y*7, (-y+7)*7]],
-                                  "lplay":[[x*7, y*7, (-y+8)*7],clron],
+                                  "lplay":[clroff,clron],
                                    "rand":[clroff, clron],
                                    "current":[0,0,0],}
         del self.pgrid[8,8]
@@ -39,8 +39,9 @@ class Gridmaster():
         for xy in fgrid:
             for mode in self.modelst:
                 fgrid[xy][mode] = [[None, None], [None, None]]
-        #[[['func for button release'], ['func button press']], [['argsoff'],['argson']]  ] 
-                   
+        #[[['func for button release'], ['func button press']], [['argsoff'],['argson']]  ]
+
+
 
         for x in range(8): # to highligh ionian scale
             for y in range(8):
@@ -48,14 +49,14 @@ class Gridmaster():
                 print (note)
 
                 ionclr = [0, 50, 50]
-                
+
                 if note % 12 == 0:  #INSTRUMENT MODE
                     self.pgrid[x,y]["instr"][False] = [0,63,63]
                 elif note % 12 in [5,7]:
                     self.pgrid[x,y]["instr"][False] = [5, 14,40]
                 elif note % 12 in [2, 4, 9, 11]:
                     self.pgrid[x,y]["instr"][False] = [0, 0, 15]
-                    
+
                 
 
     def buttonclrchange(self, x, y, vel, clr):
@@ -160,7 +161,7 @@ class Gridmaster():
 
             
     def switchmode(self,mode, loopstuff=None):
-        if mode not in self.modelst: raise TypeError( mode ," is not a valid mode")
+        if mode not in self.modelst: raise TypeError(mode," is not a valid mode")
         else:
             print ('switching to', mode, "mode")
             self.mode = mode

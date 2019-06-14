@@ -124,19 +124,30 @@ class Slmaster():
         if args[2] == 'tempo':
             print ('tempo', args[2])
             self.tempo = args[2]
+
         elif isinstance(args[1], str) == True:
-            print ('random slosc', args)
+            print (args[1][:4])
+            if args[1][:4] == 'osc':
+                print ('ping! - # of loops : ', args[-1])
+
+            else:
+                print ('random slosc', args)
 
             
         else:
+
             invloop = args[1]
             loop_num = invloop
-            loopobj = self.loops[loop_num]
-            param, value = args[2], args[3] # args[1:]
-            if param != "loop_len" and value > 14:
-                raise  ValueError('something needs a reset :', param, value)
-            self.funcs[param](loopobj, value) # these could be more in parallel?
-                
+            if loop_num < 8: #if one of the first 8 loops
+                loopobj = self.loops[loop_num]
+                param, value = args[2], args[3] # args[1:]
+                if param != "loop_len" and value > 14:
+                    print("loop #", loop_num, param, value, "has not been recorded yet")
+                else:
+                    self.funcs[param](loopobj, value) # these could be more in parallel?
+            else: # if one of the lplay loops
+                print (args)
+
 class Sloop(Slmaster):
     def __init__(self, grid, oscclient):
         '''individual sooperlooper tracking states, position'''

@@ -24,6 +24,15 @@ class OpenStageControl():
             self.portnames['loop{}_out'.format(str(p))] = "sooperlooper:loop{}_out_".format(str(p))
             self.portnames['loop{}_in'.format(str(p))] = "sooperlooper:loop{}_in_".format(str(p))
 
+
+    '''def gridtextreset(self):
+        toprow = ['loop', 'instr', 'lplay', 'custom', 'pause', ' ', ' ', ' ']  # automap controls labels
+        for y in range(8):
+            self.send('/column_text/' + str(y), str(y))
+            self.send('/automap_text/' + str(y), toprow[y])
+            self.Grid.reset()'''
+
+
     def stage_handler(self, *args):
         Grid = self.Grid
         send = self.send
@@ -172,6 +181,10 @@ class OpenStageControl():
                 outport = [p + chan for p in outports]
                 self.jack.routyconnect(inport + str(channel), outport)
 
+        elif args[0] == '/midipatch':
+            pass
+
+
         elif args[0][:6] == '/psync':
             loop_num = args[0][7]
             print (loop_num, args[-1])
@@ -186,6 +199,10 @@ class OpenStageControl():
             print (idx, args[-1])
             #self.glass_cc.send_noteon(176, 25 + idx, args[-1])
             self.Slmast.sl_osc_cmd('/sl/{}/set'.format(str(self.Slmast.loops[idx])), ['rate', args[-1]])
+
+        elif args[0] == '/gridreset':
+            self.Grid.reset()
+
 
         else:
             print ('no handler for ', args)

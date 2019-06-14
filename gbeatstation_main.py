@@ -2,8 +2,12 @@ import rtmidi2, jackmatchmaker, subprocess, atexit, time, os, random
 from pythonosc import udp_client, dispatcher, osc_server
 
 # project specific internals
-import gridmaster, openstagec, jackconnect
+import gridmaster, openstagec, jackconnect, lplay
 from slooper import *
+
+def alsaconnect():
+    mk2_to_python = subprocess.Popen(['aconnect', 'mk2', 'Launchpad'], stdout=subprocess.PIPE)
+    python_to_mk2 = subprocess.Popen(['aconnect', 'Launchpad', 'mk2'], stdout=subprocess.PIPE)
 
 def callback_midi(note, time_stamp):
     chan, note, vel = note
@@ -12,13 +16,12 @@ def callback_midi(note, time_stamp):
         print(note, vel)
         x = note - 104
         y = 8
-    else:
+    else:                                                                                                                           
         x = (note - 1) % 10
         y = (99 - note) // 10
         y = -y + 8
 
     coordinate(x, y, vel)
-
 
 def coordinate(x, y, vel):
     if Grid.swap != None:
@@ -92,6 +95,8 @@ def coordinate(x, y, vel):
                 glass_instr.send_noteon(144, midinote, vel * 127)
             elif Grid.mode == "rand":
                 Grid.gridpress(x, y, vel)
+            elif Grid.mode == "lplay":
+                Loopplay.press(x,y,vel)
 
 
 def sl_loopmode_cmd(x, y, vel):
@@ -144,10 +149,10 @@ class OSC_Sender():
 
 
 if __name__ == "__main__":
-    Mk2_in = rtmidi2.MidiIn("mk2-launchpad")  # midi input AND output port combined
+    Mk2_in = rtmidi2.MidiIn("mk2in")  # midi input AND output port combined
     Mk2_in.open_virtual_port("mk2-in")
     Mk2_in.callback = callback_midi
-    Mk2_out = rtmidi2.MidiOut("mk2-launchpad")  # midi output
+    Mk2_out = rtmidi2.MidiOut("mk2out")  # midi output
     Mk2_out.open_virtual_port("mk2-out")
 
     # instrument
@@ -176,6 +181,9 @@ if __name__ == "__main__":
 
     invlps = [Sloop(Grid, slclient) for i in range(8)]
     Slmast.loops = invlps[::-1]
+
+    Lplaymast = lplay.playloops_master()
+    Loopplay = lplay.playloops(Slmast, slclient, Lplaymast)
 
     for y in range(4):
         clr = Slmast.loops[y].color  # this is confusing..
@@ -223,11 +231,6 @@ if __name__ == "__main__":
         Grid.alter_pressfunc(0, invi, False, func=[Grid.bitrotchange], args=[[False, 0], None],
                              color=[30 + c * i for c in cc_clr])
 
-    toprow = ['loop', 'instr', 'lplay', 'custom', 'pause', ' ', ' ', ' ']  # automap controls labels
-    for y in range(8):
-        OStageC.send('/column_text/' + str(y), str(y))
-        OStageC.send('/automap_text/' + str(y), toprow[y])
-
     # osc server handlers
     dispatcher = dispatcher.Dispatcher()
     dispatcher.map("/sloop", Slmast.sloschandler)  # sooperlooper handler
@@ -243,8 +246,12 @@ if __name__ == "__main__":
         print('exiting')
         Grid.reset()
 
+    alsaconnect()
+
+
 
     slclient.send("/ping", ["localhost:9998", "/sloop"])
+
     for i in range(8):
         slclient.send("/sl/{}/get".format(i), ["loop_len", "localhost:9998", "/sloop"])
 
