@@ -2116,7 +2116,8 @@
                     "loop6_out",
                     "loop7_out",
                     "fx out",
-                    "vocoder out"
+                    "vocoder out",
+                    "hydrogen"
                   ],
                   "outputs": [
                     "common_in",

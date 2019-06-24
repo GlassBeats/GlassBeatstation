@@ -7,7 +7,7 @@ stagecontrol = subprocess.Popen(["open-stage-control","-l", cwd + "/stagecontrol
 
 sl = subprocess.Popen(["sooperlooper", "-l 8", "-m", cwd + "/sl_bindings.slb"], stdout=subprocess.PIPE)  # start sooperlooper
 
-#jackmatch = subprocess.Popen(["python3", cwd + "/sub_jackmatch.py"], stdout=subprocess.PIPE)
+jackmatch = subprocess.Popen(["python3", cwd + "/sub_jackmatch.py"], stdout=subprocess.PIPE)
 
 carla = subprocess.Popen(["carla", cwd + "/glass_car.carxp"]) #, "-n"], stdout=subprocess.PIPE) #  "-n" to run headless
 
@@ -16,9 +16,9 @@ carla = subprocess.Popen(["carla", cwd + "/glass_car.carxp"]) #, "-n"], stdout=s
 def exit_handler():
     print ("exiting")
     jackmatch.terminate()
-    sl.terminate()
+    #sl.terminate()
     carla.terminate()
-    pd.terminate()
+    #pd.terminate()
     stagecontrol.terminate()
 
 atexit.register(exit_handler)

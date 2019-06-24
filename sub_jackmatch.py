@@ -1,8 +1,8 @@
 import jackmatchmaker
 
 jmatchmkr = jackmatchmaker.JackMatchmaker([
-        ["^a2j:mk2", "^Launchpad"],
-        ["^Launchpad", "^a2j:mk2"],
+        #["^a2j:mk2", "^Launchpad"], this has been replaced by aconnect bc rpi and alsa midi recognition issue for mk2
+        #["^Launchpad", "^a2j:mk2"],
 
         ["^a2j:open-stage_cc", "^Bitrot"],
         ["^a2j:open-stage_cc", "^sooperloop"],

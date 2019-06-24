@@ -25,8 +25,8 @@ class JackConnections():
         ["sooperlooper:common_out_1", "Bitrot Repeat:Audio Input 1"],
         ["sooperlooper:common_out_2", "Bitrot Repeat:Audio Input 2"],
 
-        #["Hydrogen:out_L", "system:playback_1"],
-        #["Hydrogen:out_R", "system:playback_2"],
+        ["Hydrogen:out_L", "sooperlooper:common_in_1"],
+        ["Hydrogen:out_R", "sooperlooper:common_in_2"],
         ]
 
         midiconnections = [
@@ -36,12 +36,11 @@ class JackConnections():
             #['a2j:glass_instrument [134] (capture): glass_instrument',]
         ]
 
-        self.connecting(connections)
+        self.initial_connect(connections)
 
-        #self.connect()
-        'a2j:glass_instrument [134] (capture): glass_instrument'
+        self.client.disconnect("Hydrogen:out_L", "system:playback_1")
+        self.client.disconnect("Hydrogen:out_R", "system:playback_2")
 
-        
     def connect(self, inport, outport, stereo=True):
         j = self.client
 
@@ -99,11 +98,11 @@ class JackConnections():
                     #print ('already connected', inport, outports)
 
 
-    def connecting(self, connections):
+    def initial_connect(self, connections):
         print (connections)
-        for i in range(8):
-            for s in range(1,3):
-                connections.append(["sooperlooper:loop{}_out_{}".format(str(i),str(s)), "pure_data_0:input" + str(i)])
+        #for i in range(8):
+        #    for s in range(1,3):
+        #        connections.append(["sooperlooper:loop{}_out_{}".format(str(i),str(s)), "pure_data_0:input" + str(i)])
           
         for i in range(len(connections)):
             try:

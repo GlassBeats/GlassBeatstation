@@ -19,6 +19,7 @@ class OpenStageControl():
                           'dac':'system:playback_',
                           'vocoder in':'Tal-Vocoder-II:Audio Input ',
                           'vocoder out':'Tal-Vocoder-II:Audio Output ',
+                          #'hydrogen':'Hydrogen:out_L'
                           }
         for p in range(8):
             self.portnames['loop{}_out'.format(str(p))] = "sooperlooper:loop{}_out_".format(str(p))
@@ -174,8 +175,8 @@ class OpenStageControl():
             for p in args[2:]:
                 port = self.portnames[p] if p in self.portnames else p
                 outports.append(port)
-                x = [self.portnames[i] for i in args[2:]]
-            print ('patching', inport, outports)
+                #x = [self.portnames[i] for i in args[2:]]
+
             for channel in range(1, 3):
                 chan = str(channel)
                 outport = [p + chan for p in outports]

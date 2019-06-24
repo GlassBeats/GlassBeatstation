@@ -6,8 +6,8 @@ import gridmaster, openstagec, jackconnect, lplay
 from slooper import *
 
 def alsaconnect():
-    mk2_to_python = subprocess.Popen(['aconnect', 'mk2', 'Launchpad'], stdout=subprocess.PIPE)
-    python_to_mk2 = subprocess.Popen(['aconnect', 'Launchpad', 'mk2'], stdout=subprocess.PIPE)
+    mk2_to_python = subprocess.Popen(['aconnect', 'mk2out', 'Launchpad'], stdout=subprocess.PIPE)
+    python_to_mk2 = subprocess.Popen(['aconnect', 'Launchpad', 'mk2in'], stdout=subprocess.PIPE)
 
 def callback_midi(note, time_stamp):
     chan, note, vel = note
@@ -155,6 +155,9 @@ if __name__ == "__main__":
     Mk2_out = rtmidi2.MidiOut("mk2out")  # midi output
     Mk2_out.open_virtual_port("mk2-out")
 
+    alsaconnect() # connect python with launchpad mk2
+
+
     # instrument
     glass_instr = rtmidi2.MidiOut("glass_instrument")  # midi output
     glass_instr.open_virtual_port("glass_instrument")
@@ -245,10 +248,6 @@ if __name__ == "__main__":
     def exit_handler():
         print('exiting')
         Grid.reset()
-
-    alsaconnect()
-
-
 
     slclient.send("/ping", ["localhost:9998", "/sloop"])
 
