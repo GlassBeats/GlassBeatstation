@@ -1,7 +1,8 @@
 import time, os, re
 
 class OpenStageControl():
-    def __init__(self, Grid, coord, Slobj, stage_osc_cli, midicc, jack):
+    def __init__(self, Grid, coord, Slobj, stage_osc_cli, midicc, midiinstr, jack):
+        self.glass_instr = midiinstr
         self.jack = jack
         self.Grid = Grid
         self.Slmast = Slobj
@@ -194,6 +195,11 @@ class OpenStageControl():
         elif args[0][:9] ==  '/mastereq':
             idx = int(args[0][10:])
             self.glass_cc.send_noteon(176, 15 + idx, args[-1])
+
+        elif args[0][:9] == '/oct_grid':
+            idx = int(args[0][10:])
+            print (idx)
+            self.glass_instr.send_noteon(144, idx, args[-1] * 127)
 
         elif args[0] == '/playrate':
             idx = 0 #int(args[0][9:])

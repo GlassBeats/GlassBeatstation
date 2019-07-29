@@ -2331,8 +2331,8 @@
         },
         {
           "type": "matrix",
-          "top": -20,
-          "left": 10,
+          "top": 0,
+          "left": 0,
           "id": "octavegrid",
           "linkId": "",
           "width": 890,
@@ -2340,7 +2340,7 @@
           "label": "auto",
           "color": "auto",
           "css": "",
-          "widgetType": "toggle",
+          "widgetType": "push",
           "matrix": [
             12,
             8
@@ -2349,11 +2349,13 @@
           "spacing": 0,
           "traversing": true,
           "border": true,
-          "props": {},
+          "props": {
+            "label": false
+          },
           "default": "",
           "value": "",
-          "precision": 2,
-          "address": "/matrix_4",
+          "precision": 0,
+          "address": "/oct_grid",
           "preArgs": "",
           "target": "",
           "bypass": false

@@ -5,25 +5,29 @@ from collections import OrderedDict
 class Slmaster():
     loop_num = 0
     interval = 10
+
+    def add_loop(self):
+        pass
+
     def __init__(self, Grid, oscclient):
         self.slclient = oscclient
         self.Grid = Grid
         self.tempo = -1
         self.seqmaster = 0 #which loop is timebase master for the sequencer
         self.states = OrderedDict([("Off", [0,0,0]),
-                                ("WaitStart", [40,0,63]), #pulsings??
+                                ("WaitStart", [30,0,63]), #pulsings??
                                 ("Recording", [63,0,0]),
-                                 ("WaitStop", [63,0,40]), #pulse
+                                 ("WaitStop", [63,0,30]), #pulse
                                  ("Playing", [0,63,0]), #4
                                 ("Overdubbing", [40,40,0]),
                                  ("Multiplying", [63,63,0]),
-                                 ("Inserting", [30,30,30]),
-                                 ("Replacing", [30,30,30]),
+                                 ("Inserting", [0,60,30]),
+                                 ("Replacing", [0,30,60]),
                                 ("Delay", [0,0,0]),
                                  ("Muted", [10,10,10]),  # 10
                                   ("Scratching", [0,0,40]), 
                                    ("OneShot", [0,63,63]),
-                                    ("Subsitute", [30,30,30]),
+                                    ("Subsitute", [0,50,63]),
                                      ("Paused", [0,5,20])])#blink
                                   
         self.stateslst = list(self.states.items())
@@ -115,7 +119,7 @@ class Slmaster():
                     Grid.ledout(pos_8th - 1, 8, [0,0,0])
 
 
-                    if Grid.mode == "loop" or  Grid.mode == "rand" and y > 3:
+                    if Grid.mode == "loop" or  Grid.mode == "rand" and y in Grid.ledloops:
                         Grid.ledout(pos_8th, y, Grid.pgrid[pos_8th,y]["loop"][True])
                         Grid.ledout(pos_8th - 1, y, Grid.pgrid[pos_8th - 1, y]["loop"][False])
 

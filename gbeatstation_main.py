@@ -180,9 +180,9 @@ if __name__ == "__main__":
 
     Grid = gridmaster.Gridmaster(stage_osc, Mk2_out, glass_cc)
     Slmast = Slmaster(Grid, slclient)
-    OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc, jack)
+    OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc, glass_instr, jack)
 
-    invlps = [Sloop(Grid, slclient) for i in range(8)]
+    invlps = [Sloop(Grid, slclient) for i in range(8)]  #initiate  8 initial loops
     Slmast.loops = invlps[::-1]
 
     Lplaymast = lplay.playloops_master()
@@ -196,9 +196,6 @@ if __name__ == "__main__":
             if x == 2:
                 Grid.alter_pressfunc(x, y, False, func=sl_loopmode_cmd, args=[x, y, 0])
             Grid.pgrid[x, y]['rand'][True] = clr
-            # else:  # could probably reduce this redundancy and get ri["^a2j:glass_cc", "^Bitrot"],d of if/else
-            # Grid.alter_pressfunc(i, y, False)
-            # ??
 
     for x in range(4):
         y = 8

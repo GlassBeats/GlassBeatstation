@@ -10,6 +10,8 @@ class Gridmaster():
         self.bitrot = False
 
 
+        self.ledloops = [0,1,2,3]
+
         self.pgrid = {} #primarygrid for mode states of buttons
         clroff, clron = [0,0,0], [63,63,63]
         for x in range(9):
@@ -60,7 +62,7 @@ class Gridmaster():
                 
 
     def buttonclrchange(self, x, y, vel, clr):
-        print(x ,y, vel,'changing color from', self.pgrid[x,y]["rand"][vel], "to ", clr)
+        #print(x ,y, vel,'changing color from', self.pgrid[x,y]["rand"][vel], "to ", clr)
         self.pgrid[x,y]["rand"][vel] = clr
         self.ledout(x,y, clr)
         
@@ -71,10 +73,10 @@ class Gridmaster():
         if color:
             self.buttonclrchange(x, y, vel, color)
 
-        print (self.fgrid[x,y][mode])
+        #print (self.fgrid[x,y][mode])
         self.fgrid[x,y][mode][0][vel] = func
         self.fgrid[x,y][mode][1][vel] = args
-        print ('altered', self.fgrid[x,y][mode])
+        #print ('altered', self.fgrid[x,y][mode])
 
             
 
@@ -85,7 +87,7 @@ class Gridmaster():
         
                 
     def gridpress(self, x, y, vel):
-        print (self.fgrid[x,y][self.mode][vel])
+        #print (self.fgrid[x,y][self.mode][vel])
         self.ledout(x, y, self.pgrid[x,y][self.mode][vel])
 
         func = self.fgrid[x,y][self.mode][0][vel]
@@ -216,7 +218,7 @@ class Gridmaster():
             bitrotactivity = True if b in self.pressed else False
 
 
-        print ('activity', bitrotactivity,  'val', val, '\n', '*'*30, self.pressed)
+        #print ('activity', bitrotactivity,  'val', val, '\n', '*'*30, self.pressed)
         if bitrotactivity == False:
             if active == False:
                 self.glass_cc.send_noteon(176, 1, 0)
