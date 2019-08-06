@@ -119,7 +119,7 @@ class Slmaster():
                     Grid.ledout(pos_8th - 1, 8, [0,0,0])
 
 
-                    if Grid.mode == "loop" or  Grid.mode == "rand" and y in Grid.ledloops:
+                    if Grid.mode == "loop" or  Grid.mode == "rand" and y > 3:
                         Grid.ledout(pos_8th, y, Grid.pgrid[pos_8th,y]["loop"][True])
                         Grid.ledout(pos_8th - 1, y, Grid.pgrid[pos_8th - 1, y]["loop"][False])
 
