@@ -28,33 +28,26 @@ class JackConnections():
 
 
 
-        ["Hydrogen:out_L",'C* Eq10X2 - 10-band equalizer:In Left'],
-        ["Hydrogen:out_R",'C* Eq10X2 - 10-band equalizer:In Right'],
+        #["Hydrogen:out_L",'C* Eq10X2 - 10-band equalizer:In Left'],
+       # ["Hydrogen:out_R",'C* Eq10X2 - 10-band equalizer:In Right'],
 
-        ["zynaddsubfx:out_1", 'C* Eq10X2 - 10-band equalizer:In Left'],
-        ["zynaddsubfx:out_2", 'C* Eq10X2 - 10-band equalizer:In Right'],
+        #["zynaddsubfx:out_1", 'C* Eq10X2 - 10-band equalizer:In Left'],
+       # ["zynaddsubfx:out_2", 'C* Eq10X2 - 10-band equalizer:In Right'],
 
-        ['C* Eq10X2 - 10-band equalizer:Out Left', "sooperlooper:common_in_1"],
-        ['C* Eq10X2 - 10-band equalizer:Out Right', "sooperlooper:common_in_2"],
+        #['C* Eq10X2 - 10-band equalizer:Out Left', "sooperlooper:common_in_1"],
+       # ['C* Eq10X2 - 10-band equalizer:Out Right', "sooperlooper:common_in_2"],
 
 
         ["sooperlooper:common_out_1", "Bitrot Repeat:Audio Input 1"],
         ["sooperlooper:common_out_2", "Bitrot Repeat:Audio Input 2"],
+
+        #midi
+        ['a2j:glass_cc [134] (capture): glass_cc', 'a2j:sooperlooper [129] (playback): sooperlooper'],
+        ['a2j:glass_cc [134] (capture): glass_cc', "ardour"]
         ]
 
-        midiconnections = [
-        ['a2j:mk2-launchpad [133] (capture): mk2-out', 'a2j:Launchpad MK2 [20] (playback): Launchpad MK2 MIDI 1'],
-        ['a2j:Launchpad MK2 [20] (playback): Launchpad MK2 MIDI 1', 'a2j:mk2-launchpad [132] (playback): mk2-out'],
-
-            #['a2j:glass_instrument [134] (capture): glass_instrument',]
-        ]
 
         self.initial_connect(connections)
-        try:
-            self.client.disconnect("Hydrogen:out_L", "system:playback_1")
-            self.client.disconnect("Hydrogen:out_R", "system:playback_2")
-        except jack.JackError:
-            print ("Hydrogen isn't open")
 
     def connect(self, inport, outport, stereo=True):
         j = self.client
@@ -115,10 +108,6 @@ class JackConnections():
 
     def initial_connect(self, connections):
         print (connections)
-        #for i in range(8):
-        #    for s in range(1,3):
-        #        connections.append(["sooperlooper:loop{}_out_{}".format(str(i),str(s)), "pure_data_0:input" + str(i)])
-          
         for i in range(len(connections)):
             try:
                 self.client.connect(*connections[i])

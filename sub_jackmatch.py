@@ -1,11 +1,11 @@
 import jackmatchmaker
 
 jmatchmkr = jackmatchmaker.JackMatchmaker([
-        #["^a2j:mk2", "^Launchpad"], this has been replaced by aconnect bc rpi and alsa midi recognition issue for mk2
-        #["^Launchpad", "^a2j:mk2"],
+        ["^a2j:mk2", "^a2j:Launchpad"], #this has been replaced by aconnect bc rpi and alsa midi recognition issue for mk2
+        ["^a2j:Launchpad", "^a2j:mk2"],
 
-        ["^a2j:open-stage_cc", "^Bitrot"],
-        ["^a2j:open-stage_cc", "^sooperloop"],
+        #["^a2j:open-stage_cc", "^Bitrot"],
+        ["^a2j:open-stage_control", "^sooperlooper"],
 
         ["zynaddsubfx:out_1", "sooperlooper:common_in_1"],
         ["zynaddsubfx:out_2", "sooperlooper:common_in_2"],
@@ -19,15 +19,21 @@ jmatchmkr = jackmatchmaker.JackMatchmaker([
 
 
 
-        ["^a2j:glass_instr","^zynaddsubfx:midi_input"],
+        ["^a2j:glass_instrument", "^ardour:Keys"],
 
 
-        ['^a2j:Pure Data', # [132] (capture): Pure Data Midi-Out 1',
-         '^a2j:Hydrogen'], # [131] (playback): Hydrogen Midi-In'],
+        #['^a2j:Pure Data', # [132] (capture): Pure Data Midi-Out 1',
+       #  '^a2j:Hydrogen'], # [131] (playback): Hydrogen Midi-In'],
 
+        ["^a2j:open-stage-control", "^ardour:MIDI control in"],
+        ["^a2j:USB Trigger Finger", "^ardour:MIDI control in"],
+        ["^a2j:USB Trigger Finger", "^ardour:Drums"],
 
-        
-        ["^a2j:glass_cc", "^sooperlooper"],
+        ["^a2j:USB Axiom 61", "^ardour:Keys"],
+        ["^a2j:glass_drum", "^ardour:Drums"],
+
+        ["^a2j:glass_cc", "^a2j:sooperlooper"],
+        ["^a2j:glass_cc", "^ardour:MIDI control in"],
         ["^a2j:glass_cc", "^Bitrot"],
         ["^a2j:glass_cc", 'C* Eq10X2 - 10-band equalizer:events-in'],
 
