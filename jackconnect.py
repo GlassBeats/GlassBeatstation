@@ -23,21 +23,6 @@ class JackConnections():
 
         connections = [
 
-        #["Hydrogen:out_L", "sooperlooper:common_in_1"],
-        #["Hydrogen:out_R", "sooperlooper:common_in_2"],
-
-
-
-        #["Hydrogen:out_L",'C* Eq10X2 - 10-band equalizer:In Left'],
-       # ["Hydrogen:out_R",'C* Eq10X2 - 10-band equalizer:In Right'],
-
-        #["zynaddsubfx:out_1", 'C* Eq10X2 - 10-band equalizer:In Left'],
-       # ["zynaddsubfx:out_2", 'C* Eq10X2 - 10-band equalizer:In Right'],
-
-        #['C* Eq10X2 - 10-band equalizer:Out Left', "sooperlooper:common_in_1"],
-       # ['C* Eq10X2 - 10-band equalizer:Out Right', "sooperlooper:common_in_2"],
-
-
         ["sooperlooper:common_out_1", "Bitrot Repeat:Audio Input 1"],
         ["sooperlooper:common_out_2", "Bitrot Repeat:Audio Input 2"],
 

@@ -67,10 +67,12 @@ class OpenStageControl():
             self.Slmast.sl_osc_cmd("/sl/{}/set".format(loopnum), ["sync", val])
 
 
-        elif args[0] == "/quantize":  # choose global? cycle size
+        elif args[0] == "/quantize":  #quantization boundaries
             self.Slmast.sl_osc_cmd("/sl/0/set", ["quantize", args[1]])
+            sel = args[1]
 
         elif args[0] == "/globalsync":  # global sync sync source
+            print ('global sync source')
             self.Slmast.sl_osc_cmd("/set", ["sync_source", args[-1]])
 
 

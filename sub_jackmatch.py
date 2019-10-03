@@ -1,7 +1,7 @@
 import jackmatchmaker
 
 jmatchmkr = jackmatchmaker.JackMatchmaker([
-        ["^a2j:mk2", "^a2j:Launchpad"], #this has been replaced by aconnect bc rpi and alsa midi recognition issue for mk2
+        ["^a2j:mk2", "^a2j:Launchpad"],
         ["^a2j:Launchpad", "^a2j:mk2"],
 
         #["^a2j:open-stage_cc", "^Bitrot"],
@@ -21,10 +21,6 @@ jmatchmkr = jackmatchmaker.JackMatchmaker([
 
         ["^a2j:glass_instrument", "^ardour:Keys"],
 
-
-        #['^a2j:Pure Data', # [132] (capture): Pure Data Midi-Out 1',
-       #  '^a2j:Hydrogen'], # [131] (playback): Hydrogen Midi-In'],
-
         ["^a2j:open-stage-control", "^ardour:MIDI control in"],
         ["^a2j:USB Trigger Finger", "^ardour:MIDI control in"],
         ["^a2j:USB Trigger Finger", "^ardour:Drums"],
@@ -40,7 +36,5 @@ jmatchmkr = jackmatchmaker.JackMatchmaker([
         ["^a2j:glass_drum", "^Hydrogen"],
 
         ])          
-     
-    
-#jackmatchmaker.main("-v")
+
 jmatchmkr.run()

@@ -104,13 +104,6 @@ def sl_loopmode_cmd(x, y, vel):
     y = -y + 7
     lp = Slmast.loops[y]
 
-    '''if x == 1 or x == 2 :
-        if Grid.mode == "loop":
-            if vel == 1:
-                for i in range(7):  # change colors of row to clear old loop pos
-                    if i +1 != x:
-                        y = -y + 7
-                        Grid.ledout(i + 1, y, Grid.pgrid[x,y][Grid.mode][False])'''
     if x == 2:
         if vel == True:
             if Slmast.loops[y].sync == False:
@@ -145,8 +138,6 @@ class OSC_Sender():
         self.osc_client.send_message(addr, arg)
 
 
-# should commands to sooperlooper be midi driven for expediency? if less bytes, diff bottleneck
-
 
 if __name__ == "__main__":
     Mk2_in = rtmidi2.MidiIn("mk2in")  # midi input AND output port combined
@@ -154,8 +145,6 @@ if __name__ == "__main__":
     Mk2_in.callback = callback_midi
     Mk2_out = rtmidi2.MidiOut("mk2out")  # midi output
     Mk2_out.open_virtual_port("mk2-out")
-
-    #alsaconnect() # connect python with launchpad mk2
 
 
     # instrument
@@ -241,16 +230,13 @@ if __name__ == "__main__":
         Grid.switchmode(mde)
         time.sleep(.25)
 
-
     def exit_handler():
         print('exiting')
         Grid.reset()
-
-    slclient.send("/ping", ["localhost:9998", "/sloop"])
 
     for i in range(8):
         slclient.send("/sl/{}/get".format(i), ["loop_len", "localhost:9998", "/sloop"])
 
     atexit.register(exit_handler)
-    server.serve_forever()  # blocking osc server=
+    server.serve_forever()  # blocking osc server
 

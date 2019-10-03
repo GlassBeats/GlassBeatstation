@@ -54,13 +54,6 @@ class Slmaster():
             print (self.stateslst[loopobj.state])
             clr = (self.stateslst[loopobj.state][1])
             self.Grid.ledout(8, loopobj.loop_num, clr)
-            #if loopobj.state == 4:
-            #    for i in range(8):
-            #        # add feature: if not in 'pressed'
-            #        y = -loopobj.loop_num + 7
-            #        loopclr = self.Grid.pgrid[i, y][self.Grid.mode][False]
-            #        self.Grid.ledout(i, y, loopclr)
-            
 
     def track_len(self, loopobj, length):
         if loopobj.len != length:
@@ -79,14 +72,14 @@ class Slmaster():
                         x = seconds - 8
                         clr = [40,0,0]
                         code = 106
-                    elif  seconds >= 16:
+                    elif  24 > seconds >= 16:
                         x = seconds - 16
                         clr = [10,0,0]
                         code = 6
                     else:
-                        x = seconds % 8
+                        pass
 
-                    if seconds >= 0:
+                    if 24 > seconds >= 0:
                         self.Grid.ledout(x, loopobj.loop_num, clr, var=["pulse", code])
 
     def track_pos(self, loopobj, pos):
@@ -144,11 +137,8 @@ class Slmaster():
             loop_num = invloop
             if loop_num < 8: #if one of the first 8 loops
                 loopobj = self.loops[loop_num]
-                param, value = args[2], args[3] # args[1:]
-                if param != "loop_len" and value > 14:
-                    print("loop #", loop_num, param, value, "has not been recorded yet")
-                else:
-                    self.funcs[param](loopobj, value) # these could be more in parallel?
+                param, value = args[2], args[3]
+                self.funcs[param](loopobj, value) # these could be more in parallel?
             else: # if one of the lplay loops
                 print (args)
 
@@ -163,7 +153,6 @@ class Sloop(Slmaster):
         self.state = 0
         self.sync = False
         self.rev = False
-        #self.quant = False
         self.color = [random.randint(25,63) for i in range(3)] #randomize loop colors
         for x in range(8):
             grid.pgrid[x, self.loop_num]["loop"][True] = self.color
