@@ -50,10 +50,23 @@ class Slmaster():
 
     def track_state(self, loopobj, state):
         if loopobj.state != state:
+            loopobj.laststate = loopobj.state
             loopobj.state = int(state)
-            print (self.stateslst[loopobj.state])
+            try:
+                statename = self.stateslst[loopobj.state][0]
+            except:
+                print ('error with state',loopobj.state)
+            print ("loop number", self.loop_num, statename)
             clr = (self.stateslst[loopobj.state][1])
             self.Grid.ledout(8, loopobj.loop_num, clr)
+
+            print ('testament', statename, loopobj.laststate)
+            #if loop is paused, clear the loop leds
+            if statename == "Paused" and loopobj.laststate in [2, 4, 12]:
+                    for i in range(8):
+                        self.Grid.ledout(i, loopobj.loop_num, [0,0,0])
+
+
 
     def track_len(self, loopobj, length):
         if loopobj.len != length:
@@ -151,6 +164,7 @@ class Sloop(Slmaster):
         self.pos_eighth = -2
         self.len = -1
         self.state = 0
+        self.laststate = 0
         self.sync = False
         self.rev = False
         self.color = [random.randint(25,63) for i in range(3)] #randomize loop colors
