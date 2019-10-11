@@ -43,8 +43,8 @@ class JackConnections():
         ]
 
         midiconnections = [
-        ['a2j:mk2-launchpad [133] (capture): mk2-out', 'a2j:Launchpad MK2 [20] (playback): Launchpad MK2 MIDI 1'],
-        ['a2j:Launchpad MK2 [20] (playback): Launchpad MK2 MIDI 1', 'a2j:mk2-launchpad [132] (playback): mk2-out'],
+        #['a2j:mk2-launchpad [133] (capture): mk2-out', 'a2j:Launchpad MK2 [20] (playback): Launchpad MK2 MIDI 1'],
+        #['a2j:Launchpad MK2 [20] (playback): Launchpad MK2 MIDI 1', 'a2j:mk2-launchpad [132] (playback): mk2-out'],
 
             #['a2j:glass_instrument [134] (capture): glass_instrument',]
         ]
