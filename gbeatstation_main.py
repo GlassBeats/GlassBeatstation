@@ -2,12 +2,8 @@ import rtmidi2, jackmatchmaker, subprocess, atexit, time, os, random
 from pythonosc import udp_client, dispatcher, osc_server
 
 # project specific internals
-import gridmaster, openstagec, jackconnect, lplay
+import gridmaster, openstagec, jackconnect
 from slooper import *
-
-def alsaconnect():
-    mk2_to_python = subprocess.Popen(['aconnect', 'mk2out', 'Launchpad'], stdout=subprocess.PIPE)
-    python_to_mk2 = subprocess.Popen(['aconnect', 'Launchpad', 'mk2in'], stdout=subprocess.PIPE)
 
 def callback_midi(note, time_stamp):
     chan, note, vel = note
@@ -104,13 +100,6 @@ def sl_loopmode_cmd(x, y, vel):
     y = -y + 7
     lp = Slmast.loops[y]
 
-    '''if x == 1 or x == 2 :
-        if Grid.mode == "loop":
-            if vel == 1:
-                for i in range(7):  # change colors of row to clear old loop pos
-                    if i +1 != x:
-                        y = -y + 7
-                        Grid.ledout(i + 1, y, Grid.pgrid[x,y][Grid.mode][False])'''
     if x == 2:
         if vel == True:
             if Slmast.loops[y].sync == False:
@@ -118,12 +107,11 @@ def sl_loopmode_cmd(x, y, vel):
                 Slmast.loops[y].sync = True
 
             slclient.send("/sl/{}/down".format(str(y)), "oneshot")
-            # Grid.ledrow(1, 90)
 
-        elif vel == False:  # 'oneshot' release is a pause
+        elif vel == False:  # 'oneshot' button release is a pause
             if lp.state != 14:
                 loop_pause(y)
-                # Grid.ledrow(1, 0)
+
         Grid.ledout(0, yinv, Grid.pgrid[0, yinv][Grid.mode][vel])
 
     elif vel == True:
@@ -136,7 +124,6 @@ def loop_pause(y):  # aka mute pause for the weird states
         slclient.send("/sl/{}/down".format(str(y)), "pause")
         # reset loop_pos to start?
 
-
 class OSC_Sender():
     def __init__(self, ipaddr="127.0.0.1", port=9951):
         self.osc_client = udp_client.SimpleUDPClient(ipaddr, port)
@@ -145,18 +132,12 @@ class OSC_Sender():
         self.osc_client.send_message(addr, arg)
 
 
-# should commands to sooperlooper be midi driven for expediency? if less bytes, diff bottleneck
-
-
 if __name__ == "__main__":
     Mk2_in = rtmidi2.MidiIn("mk2in")  # midi input AND output port combined
     Mk2_in.open_virtual_port("mk2-in")
     Mk2_in.callback = callback_midi
     Mk2_out = rtmidi2.MidiOut("mk2out")  # midi output
     Mk2_out.open_virtual_port("mk2-out")
-
-    alsaconnect() # connect python with launchpad mk2
-
 
     # instrument
     glass_instr = rtmidi2.MidiOut("glass_instrument")  # midi output
@@ -184,9 +165,6 @@ if __name__ == "__main__":
 
     invlps = [Sloop(Grid, slclient) for i in range(8)]  #initiate  8 initial loops
     Slmast.loops = invlps[::-1]
-
-    Lplaymast = lplay.playloops_master()
-    Loopplay = lplay.playloops(Slmast, slclient, Lplaymast)
 
     for y in range(4):
         clr = Slmast.loops[y].color  # this is confusing..

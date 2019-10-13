@@ -218,7 +218,8 @@
                   "address": "/quantize",
                   "preArgs": "",
                   "target": "",
-                  "bypass": false
+                  "bypass": false,
+                  "traversing": true
                 },
                 {
                   "type": "dropdown",
@@ -279,7 +280,8 @@
                     "8": 8,
                     "16": 16,
                     "32": 32
-                  }
+                  },
+                  "traversing": true
                 },
                 {
                   "type": "matrix",
@@ -1012,7 +1014,8 @@
                   "logScale": false,
                   "unit": "",
                   "origin": "auto",
-                  "touchAddress": ""
+                  "touchAddress": "",
+                  "compact": false
                 },
                 {
                   "type": "matrix",
@@ -1142,7 +1145,8 @@
                     "midi:open-stage_cc"
                   ],
                   "bypass": false,
-                  "touchAddress": ""
+                  "touchAddress": "",
+                  "compact": false
                 },
                 {
                   "type": "fader",
@@ -1622,7 +1626,8 @@
                   "preArgs": "",
                   "target": "",
                   "bypass": false,
-                  "touchAddress": ""
+                  "touchAddress": "",
+                  "compact": false
                 },
                 {
                   "type": "push",
@@ -2105,20 +2110,7 @@
                   "label": "auto",
                   "color": "auto",
                   "css": "",
-                  "inputs": [
-                    "common_out",
-                    "loop0_out",
-                    "loop1_out",
-                    "loop2_out",
-                    "loop3_out",
-                    "loop4_out",
-                    "loop5_out",
-                    "loop6_out",
-                    "loop7_out",
-                    "fx out",
-                    "vocoder out",
-                    "hydrogen"
-                  ],
+                  "inputs": "[\n  \"common_out\",\n  \"Mic 1\",\n  \"Mic 2\",\n  \"Instr 3\",\n  \"Instr 4\",\n  \"Drums\",\n  \"Keys Synth\",\n  \"Keys Piano\",\n\"Ninja Sampler,\n]",
                   "outputs": [
                     "common_in",
                     "loop0_in",
@@ -2289,7 +2281,8 @@
             "midi:open-stage_keys"
           ],
           "bypass": false,
-          "split": false
+          "split": false,
+          "toggles": false
         },
         {
           "type": "multixy",
