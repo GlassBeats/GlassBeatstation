@@ -4,7 +4,7 @@ class Gridmaster():
         self.glass_cc = glass_cc
         self.mk2_out = mk2_out
         self.mode = "rand"
-        self.modelst = ["loop", "instr", "lplay", "rand"]
+        self.modelst = ["loop", "instr", "seq", "rand"]
         self.cmds = ["record", "overdub", "oneshot", "trigger",
                       "pause", "reverse", "undo", "redo"]
         self.bitrot = False
@@ -18,7 +18,7 @@ class Gridmaster():
             for y in range (9):
                 self.pgrid[x,y] = {"loop":[clroff,clron],  #layers for modes
                                   "instr":[clroff, clron],  #[x*7,y*7, (-y+7)*7]],
-                                  "lplay":[clroff,clron],
+                                  "seq":[clroff,clron],
                                    "rand":[clroff, clron],
                                    "current":[0,0,0],}
         del self.pgrid[8,8]
@@ -42,10 +42,9 @@ class Gridmaster():
             for mode in self.modelst:
                 fgrid[xy][mode] = [[None, None], [None, None]]
         #[[['func for button release'], ['func button press']], [['argsoff'],['argson']]  ]
+        
 
-
-
-        for x in range(8): # to highligh ionian scale
+        for x in range(8): # to highlight ionian scale
             for y in range(8):
                 note = x + (y * 8)
                 print (note)

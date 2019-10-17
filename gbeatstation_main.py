@@ -2,7 +2,7 @@ import rtmidi2, jackmatchmaker, subprocess, atexit, time, os, random
 from pythonosc import udp_client, dispatcher, osc_server
 
 # project specific internals
-import gridmaster, openstagec, jackconnect
+import gridmaster, openstagec, jackconnect, sequencer
 from slooper import *
 
 def callback_midi(note, time_stamp):
@@ -91,8 +91,9 @@ def coordinate(x, y, vel):
                 glass_instr.send_noteon(144, midinote, vel * 127)
             elif Grid.mode == "rand":
                 Grid.gridpress(x, y, vel)
-            elif Grid.mode == "lplay":
-                Loopplay.press(x,y,vel)
+            elif Grid.mode == "seq":
+                Seq.change_step(x,y,vel)
+
 
 
 def sl_loopmode_cmd(x, y, vel):
@@ -160,11 +161,17 @@ if __name__ == "__main__":
     stage_osc = OSC_Sender(ipaddr="127.0.0.1", port=8080)
 
     Grid = gridmaster.Gridmaster(stage_osc, Mk2_out, glass_cc)
-    Slmast = Slmaster(Grid, slclient)
+    Seq = sequencer.Sequencer(8, 8, glass_seq, Grid)
+    Slmast = Slmaster(Grid, slclient, Seq)
     OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc, glass_instr, jack)
 
+
+    
+    
     invlps = [Sloop(Grid, slclient) for i in range(8)]  #initiate  8 initial loops
     Slmast.loops = invlps[::-1]
+
+    
 
     for y in range(4):
         clr = Slmast.loops[y].color  # this is confusing..

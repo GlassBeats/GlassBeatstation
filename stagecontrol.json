@@ -2110,7 +2110,17 @@
                   "label": "auto",
                   "color": "auto",
                   "css": "",
-                  "inputs": "[\n  \"common_out\",\n  \"Mic 1\",\n  \"Mic 2\",\n  \"Instr 3\",\n  \"Instr 4\",\n  \"Drums\",\n  \"Keys Synth\",\n  \"Keys Piano\",\n\"Ninja Sampler,\n]",
+                  "inputs": [
+                    "common_out",
+                    "Mic 1",
+                    "Mic 2",
+                    "Instr 3",
+                    "Instr 4",
+                    "Drums",
+                    "Keys Synth",
+                    "Keys Piano",
+                    "Ninja Sampler"
+                  ],
                   "outputs": [
                     "common_in",
                     "loop0_in",

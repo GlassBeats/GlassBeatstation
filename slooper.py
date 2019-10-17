@@ -9,7 +9,8 @@ class Slmaster():
     def add_loop(self):
         pass
 
-    def __init__(self, Grid, oscclient):
+    def __init__(self, Grid, oscclient, Sequencer):
+        self.Seq = Sequencer
         self.slclient = oscclient
         self.Grid = Grid
         self.tempo = -1
@@ -43,10 +44,8 @@ class Slmaster():
 
         self.funcs = {"state":self.track_state, "loop_len":self.track_len, "loop_pos":self.track_pos}
 
-    def sl_osc_cmd(self, prefix, args):  # necessary for scoping purposes perhaps
+    def sl_osc_cmd(self, prefix, args):
         self.slclient.send(prefix, args)
-        
-
 
     def track_state(self, loopobj, state):
         if loopobj.state != state:
@@ -105,7 +104,11 @@ class Slmaster():
             lp.pos_eighth = pos_8th
 
             if lp.state in [4,5,6,10,12]: #if in one of the playing states
+                
 
+                if y == 7: #correct to seqmaster
+                    self.Seq.check_step(pos_8th)
+                
                 if pos_8th == 0:
                     Grid.ledout(0, 8, lp.color)
                     Grid.ledout(7, 8, [0,0,0])
