@@ -12,87 +12,73 @@ class JackConnections():
 
         self.curr_connex = {}
 
-        self.inports = ["Bitrot Repeat:Audio Input ",
-                         "system:playback_",
+        self.inports = [
                          "sooperlooper:common_in_",
                          ]
-
-        self.outports= ["Bitrot Repeat:Audio Output ",
+        self.INPORTS= [
                         "sooperlooper:common_out_",
                         ]
 
-        connections = [
 
-        ["sooperlooper:common_out_1", "Bitrot Repeat:Audio Input 1"],
-        ["sooperlooper:common_out_2", "Bitrot Repeat:Audio Input 2"],
-
-        #midi
-        ['a2j:glass_cc [134] (capture): glass_cc', 'a2j:sooperlooper [129] (playback): sooperlooper'],
-        ['a2j:glass_cc [134] (capture): glass_cc', "ardour"]
-        ]
-
-
-        self.initial_connect(connections)
-
-    def connect(self, inport, outport, stereo=True):
+    def connect(self, OUTPORT, INPORT, stereo=True):
         j = self.client
 
-        for item in j.get_all_connections(inport):
+        for item in j.get_all_connections(OUTPORT):
             print (item.name)
 
-        current_outs = [o.name for o in j.get_all_connections(inport)]
+        current_inputs = [o.name for o in j.get_all_connections(OUTPORT)]
 
-        if outport not in current_outs:
+        if INPORT not in current_inputs:
             try:
-                j.connect(inport, outport)
-                print ('connecting', inport, outport)
+                j.connect(OUTPORT, INPORT)
+                print ('connecting', OUTPORT, INPORT)
             except jack.JackError:
-                print('fail', inport, outport)
+                print('fail', OUTPORT, INPORT)
         else:
-            print ('already connected', inport, outport)
+            print ('already connected', OUTPORT, INPORT)
 
 
-    def routyconnect(self, inport, outports, stereo=True):
+    def routyconnect(self, OUTPORT, INPORTS, stereo=True):
         j = self.client
 
-
+        
         print ('*** current connections ***')
-        current_outs = [o.name for o in j.get_all_connections(inport)]
+        current_inputs = [o.name for o in j.get_all_connections(OUTPORT)]
+        
         print('***')
-        print('currently', inport, '-->', current_outs)
-        print('going to connect ', inport, '-->', outports)
+        print('currently', OUTPORT, '-->', current_inputs)
+        print('going to connect ', OUTPORT, '-->', INPORTS)
 
+        for i in range(1,3):
+            try:
+                current_inputs.remove('ardour:SLoop_Main/audio_in ' + str(i)) #dont disconect main
+            except:
+                pass
 
-        if outports == []:
-            for o in current_outs:
+        if INPORTS == []:
+            for o in current_inputs:
                 print ('disconnect all')
-                j.disconnect(inport, o)
+                j.disconnect(OUTPORT, o)
         else:
-            for out in current_outs:
-                print ('out', out)
-                print ('outports', outports)
-                if out not in outports and out != outports:
-                    j.disconnect(inport, out)
-                    print('disconnecting', inport, out)
-            for outs in outports:
-                if outs not in current_outs:
+            for inport in current_inputs:
+                print ('inport', inport)
+                print ('INPORTS', INPORTS)
+                if inport not in INPORTS and inport != INPORTS:
+                    j.disconnect(OUTPORT, inport)
+                    print('disconnecting', OUTPORT, inport)
+            for inputs in INPORTS:
+                if inputs not in current_inputs:
                     try:
-                        j.connect(inport, outs)
-                        print('connecting', inport, outports)
+                        j.connect(OUTPORT, inputs)
+                        print('connecting', OUTPORT, INPORTS)
                     except jack.JackError:
-                        print('failed to connect', inport, outports)
+                        print('failed to connect', OUTPORT, INPORTS)
 
             print ('-' * 80)
 
-
-
-                            #print('fail', inport, outports)
-                #else:
-                    #print ('already connected', inport, outports)
-
-
     def initial_connect(self, connections):
         print (connections)
+
         for i in range(len(connections)):
             try:
                 self.client.connect(*connections[i])

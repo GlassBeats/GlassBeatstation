@@ -4,7 +4,7 @@ class Gridmaster():
         self.glass_cc = glass_cc
         self.mk2_out = mk2_out
         self.mode = "rand"
-        self.modelst = ["loop", "instr", "lplay", "rand"]
+        self.modelst = ["loop", "instr", "seq", "rand"]
         self.cmds = ["record", "overdub", "oneshot", "trigger",
                       "pause", "reverse", "undo", "redo"]
         self.bitrot = False
@@ -18,7 +18,7 @@ class Gridmaster():
             for y in range (9):
                 self.pgrid[x,y] = {"loop":[clroff,clron],  #layers for modes
                                   "instr":[clroff, clron],  #[x*7,y*7, (-y+7)*7]],
-                                  "lplay":[clroff,clron],
+                                  "seq":[clroff,clron],
                                    "rand":[clroff, clron],
                                    "current":[0,0,0],}
         del self.pgrid[8,8]
@@ -42,10 +42,9 @@ class Gridmaster():
             for mode in self.modelst:
                 fgrid[xy][mode] = [[None, None], [None, None]]
         #[[['func for button release'], ['func button press']], [['argsoff'],['argson']]  ]
+        
 
-
-
-        for x in range(8): # to highligh ionian scale
+        for x in range(8): # to highlight ionian scale
             for y in range(8):
                 note = x + (y * 8)
                 print (note)
@@ -73,8 +72,12 @@ class Gridmaster():
         if color:
             self.buttonclrchange(x, y, vel, color)
 
+        #print (self.fgrid[x,y][mode])
         self.fgrid[x,y][mode][0][vel] = func
         self.fgrid[x,y][mode][1][vel] = args
+        #print ('altered', self.fgrid[x,y][mode])
+
+            
 
     def buttonchange(self, x, y, vel, arg=None, func=None, clr=None): #clr=None?
         self.fgrid[x,y]["rand"][vel] = func
@@ -83,6 +86,7 @@ class Gridmaster():
         
                 
     def gridpress(self, x, y, vel):
+        #print (self.fgrid[x,y][self.mode][vel])
         self.ledout(x, y, self.pgrid[x,y][self.mode][vel])
 
         func = self.fgrid[x,y][self.mode][0][vel]
@@ -113,6 +117,9 @@ class Gridmaster():
             
             if stage == True:
                 self.stage_grid(x, y, color)
+        #else:
+        #    print  ('repeated led')
+
 
 
     def xy_to_stage(self, x, y):
@@ -213,8 +220,7 @@ class Gridmaster():
         #print ('activity', bitrotactivity,  'val', val, '\n', '*'*30, self.pressed)
         if bitrotactivity == False:
             if active == False:
-                self.glass_cc.send_noteon(176, 1, 127)
-
+                self.glass_cc.send_noteon(176, 1, 0)
 
             elif active == True: #if not already on
                 self.glass_cc.send_noteon(176, 4, val)
@@ -223,3 +229,5 @@ class Gridmaster():
 
         elif bitrotactivity == True:
             self.glass_cc.send_noteon(176, 4, val)
+
+        #self.bitrot = active #turned on

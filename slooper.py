@@ -9,7 +9,8 @@ class Slmaster():
     def add_loop(self):
         pass
 
-    def __init__(self, Grid, oscclient):
+    def __init__(self, Grid, oscclient, Sequencer):
+        self.Seq = Sequencer
         self.slclient = oscclient
         self.Grid = Grid
         self.tempo = -1
@@ -43,30 +44,22 @@ class Slmaster():
 
         self.funcs = {"state":self.track_state, "loop_len":self.track_len, "loop_pos":self.track_pos}
 
-    def sl_osc_cmd(self, prefix, args):  # necessary for scoping purposes perhaps
+    def sl_osc_cmd(self, prefix, args):
         self.slclient.send(prefix, args)
-        
-
 
     def track_state(self, loopobj, state):
         if loopobj.state != state:
-            loopobj.laststate = loopobj.state
             loopobj.state = int(state)
-            try:
-                statename = self.stateslst[loopobj.state][0]
-            except:
-                print ('error with state',loopobj.state)
-            print ("loop number", self.loop_num, statename)
+            print (self.stateslst[loopobj.state])
             clr = (self.stateslst[loopobj.state][1])
             self.Grid.ledout(8, loopobj.loop_num, clr)
-
-            print ('testament', statename, loopobj.laststate)
-            #if loop is paused, clear the loop leds
-            if statename == "Paused" and loopobj.laststate in [2, 4, 12]:
-                    for i in range(8):
-                        self.Grid.ledout(i, loopobj.loop_num, [0,0,0])
-
-
+            #if loopobj.state == 4:
+            #    for i in range(8):
+            #        # add feature: if not in 'pressed'
+            #        y = -loopobj.loop_num + 7
+            #        loopclr = self.Grid.pgrid[i, y][self.Grid.mode][False]
+            #        self.Grid.ledout(i, y, loopclr)
+            
 
     def track_len(self, loopobj, length):
         if loopobj.len != length:
@@ -85,14 +78,14 @@ class Slmaster():
                         x = seconds - 8
                         clr = [40,0,0]
                         code = 106
-                    elif  24 > seconds >= 16:
+                    elif  seconds >= 16:
                         x = seconds - 16
                         clr = [10,0,0]
                         code = 6
                     else:
-                        pass
+                        x = seconds % 8
 
-                    if 24 > seconds >= 0:
+                    if seconds >= 0:
                         self.Grid.ledout(x, loopobj.loop_num, clr, var=["pulse", code])
 
     def track_pos(self, loopobj, pos):
@@ -111,7 +104,11 @@ class Slmaster():
             lp.pos_eighth = pos_8th
 
             if lp.state in [4,5,6,10,12]: #if in one of the playing states
+                
 
+                if y == 7: #correct to seqmaster
+                    self.Seq.check_step(pos_8th)
+                
                 if pos_8th == 0:
                     Grid.ledout(0, 8, lp.color)
                     Grid.ledout(7, 8, [0,0,0])
@@ -150,8 +147,11 @@ class Slmaster():
             loop_num = invloop
             if loop_num < 8: #if one of the first 8 loops
                 loopobj = self.loops[loop_num]
-                param, value = args[2], args[3]
-                self.funcs[param](loopobj, value) # these could be more in parallel?
+                param, value = args[2], args[3] # args[1:]
+                if param != "loop_len" and value > 14:
+                    print("loop #", loop_num, param, value, "has not been recorded yet")
+                else:
+                    self.funcs[param](loopobj, value) # these could be more in parallel?
             else: # if one of the lplay loops
                 print (args)
 
@@ -164,9 +164,9 @@ class Sloop(Slmaster):
         self.pos_eighth = -2
         self.len = -1
         self.state = 0
-        self.laststate = 0
         self.sync = False
         self.rev = False
+        #self.quant = False
         self.color = [random.randint(25,63) for i in range(3)] #randomize loop colors
         for x in range(8):
             grid.pgrid[x, self.loop_num]["loop"][True] = self.color

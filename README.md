@@ -9,7 +9,7 @@ Python 3 (all available via pip3:)
     pip3 install python-osc
     pip3 install jack-matchmaker
     
-Open Stage Control 0.41.4
+Open Stage Control
     https://osc.ammd.net/
     or
     https://github.com/jean-emmanuel/open-stage-control
@@ -19,17 +19,6 @@ Sooperlooper 1.7.3
     or
     https://github.com/essej/sooperlooper
     
-Hydrogen (optional - used for jack sync - sequencer will not work without):
-    http://hydrogen-music.org/downloads/
-    
-USAGE: (must be run in seperate terminals simultaneously)
-    python3 gbeatstation_main.py
-
-can use a variety of programs to route audio/midi to your liking. I recommend catia from the kxstudio repos for it's simplicity and patchbay style, but I believe qjackctl is quite commonly used as well
-
-
-
-
-
+You can use a variety of programs to route audio/midi to your liking. I recommend catia from the kxstudio repos for it's simplicity and patchbay style, but I believe qjackctl is quite commonly used as well
 
 also big thanks to the project https://github.com/FMMT666/launchpad.py - for determining the errors in the launchpad documentation!

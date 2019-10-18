@@ -2,12 +2,8 @@ import rtmidi2, jackmatchmaker, subprocess, atexit, time, os, random
 from pythonosc import udp_client, dispatcher, osc_server
 
 # project specific internals
-import gridmaster, openstagec, jackconnect, lplay
+import gridmaster, openstagec, jackconnect, sequencer
 from slooper import *
-
-#def alsaconnect():
-  #  mk2_to_python = subprocess.Popen(['aconnect', 'mk2out', 'Launchpad'], stdout=subprocess.PIPE)
-   # python_to_mk2 = subprocess.Popen(['aconnect', 'Launchpad', 'mk2in'], stdout=subprocess.PIPE)
 
 def callback_midi(note, time_stamp):
     chan, note, vel = note
@@ -95,8 +91,9 @@ def coordinate(x, y, vel):
                 glass_instr.send_noteon(144, midinote, vel * 127)
             elif Grid.mode == "rand":
                 Grid.gridpress(x, y, vel)
-            elif Grid.mode == "lplay":
-                Loopplay.press(x,y,vel)
+            elif Grid.mode == "seq":
+                Seq.change_step(x,y,vel)
+
 
 
 def sl_loopmode_cmd(x, y, vel):
@@ -111,12 +108,11 @@ def sl_loopmode_cmd(x, y, vel):
                 Slmast.loops[y].sync = True
 
             slclient.send("/sl/{}/down".format(str(y)), "oneshot")
-            # Grid.ledrow(1, 90)
 
-        elif vel == False:  # 'oneshot' release is a pause
+        elif vel == False:  # 'oneshot' button release is a pause
             if lp.state != 14:
                 loop_pause(y)
-                # Grid.ledrow(1, 0)
+
         Grid.ledout(0, yinv, Grid.pgrid[0, yinv][Grid.mode][vel])
 
     elif vel == True:
@@ -129,7 +125,6 @@ def loop_pause(y):  # aka mute pause for the weird states
         slclient.send("/sl/{}/down".format(str(y)), "pause")
         # reset loop_pos to start?
 
-
 class OSC_Sender():
     def __init__(self, ipaddr="127.0.0.1", port=9951):
         self.osc_client = udp_client.SimpleUDPClient(ipaddr, port)
@@ -138,28 +133,26 @@ class OSC_Sender():
         self.osc_client.send_message(addr, arg)
 
 
-
 if __name__ == "__main__":
-    Mk2_in = rtmidi2.MidiIn("mk2in")  # midi input AND output port combined
+    Mk2_in = rtmidi2.MidiIn("mk2")  # midi input AND output port combined
     Mk2_in.open_virtual_port("mk2-in")
     Mk2_in.callback = callback_midi
-    Mk2_out = rtmidi2.MidiOut("mk2out")  # midi output
+    Mk2_out = rtmidi2.MidiOut("mk2")  # midi output
     Mk2_out.open_virtual_port("mk2-out")
 
-
     # instrument
-    glass_instr = rtmidi2.MidiOut("glass_instrument")  # midi output
+    glass_instr = rtmidi2.MidiOut("glassbeats")  # midi output
     glass_instr.open_virtual_port("glass_instrument")
 
-    glass_drum = rtmidi2.MidiOut("glass_drum")  # midi output
+    glass_drum = rtmidi2.MidiOut("glassbeats")  # midi output
     glass_drum.open_virtual_port("glass_drum")
 
     # midiccouts
-    glass_cc = rtmidi2.MidiOut("glass_cc")  # midi output
+    glass_cc = rtmidi2.MidiOut("glassbeats")  # midi output
     glass_cc.open_virtual_port("glass_cc")
 
     # sequencer
-    glass_seq = rtmidi2.MidiOut("glass_sequencer")  # midi output
+    glass_seq = rtmidi2.MidiOut("glassbeats")  # midi output
     glass_seq.open_virtual_port("glass_sequencer")
 
     jack = jackconnect.JackConnections()
@@ -168,14 +161,17 @@ if __name__ == "__main__":
     stage_osc = OSC_Sender(ipaddr="127.0.0.1", port=8080)
 
     Grid = gridmaster.Gridmaster(stage_osc, Mk2_out, glass_cc)
-    Slmast = Slmaster(Grid, slclient)
+    Seq = sequencer.Sequencer(8, 8, glass_seq, Grid)
+    Slmast = Slmaster(Grid, slclient, Seq)
     OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc, glass_instr, jack)
 
+
+    
+    
     invlps = [Sloop(Grid, slclient) for i in range(8)]  #initiate  8 initial loops
     Slmast.loops = invlps[::-1]
 
-    Lplaymast = lplay.playloops_master()
-    Loopplay = lplay.playloops(Slmast, slclient, Lplaymast)
+    
 
     for y in range(4):
         clr = Slmast.loops[y].color  # this is confusing..
@@ -230,13 +226,16 @@ if __name__ == "__main__":
         Grid.switchmode(mde)
         time.sleep(.25)
 
+
     def exit_handler():
         print('exiting')
         Grid.reset()
+
+    slclient.send("/ping", ["localhost:9998", "/sloop"])
 
     for i in range(8):
         slclient.send("/sl/{}/get".format(i), ["loop_len", "localhost:9998", "/sloop"])
 
     atexit.register(exit_handler)
-    server.serve_forever()  # blocking osc server
+    server.serve_forever()  # blocking osc server=
 
