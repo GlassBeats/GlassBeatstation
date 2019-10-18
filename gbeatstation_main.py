@@ -134,25 +134,25 @@ class OSC_Sender():
 
 
 if __name__ == "__main__":
-    Mk2_in = rtmidi2.MidiIn("mk2in")  # midi input AND output port combined
+    Mk2_in = rtmidi2.MidiIn("mk2")  # midi input AND output port combined
     Mk2_in.open_virtual_port("mk2-in")
     Mk2_in.callback = callback_midi
-    Mk2_out = rtmidi2.MidiOut("mk2out")  # midi output
+    Mk2_out = rtmidi2.MidiOut("mk2")  # midi output
     Mk2_out.open_virtual_port("mk2-out")
 
     # instrument
-    glass_instr = rtmidi2.MidiOut("glass_instrument")  # midi output
+    glass_instr = rtmidi2.MidiOut("glassbeats")  # midi output
     glass_instr.open_virtual_port("glass_instrument")
 
-    glass_drum = rtmidi2.MidiOut("glass_drum")  # midi output
+    glass_drum = rtmidi2.MidiOut("glassbeats")  # midi output
     glass_drum.open_virtual_port("glass_drum")
 
     # midiccouts
-    glass_cc = rtmidi2.MidiOut("glass_cc")  # midi output
+    glass_cc = rtmidi2.MidiOut("glassbeats")  # midi output
     glass_cc.open_virtual_port("glass_cc")
 
     # sequencer
-    glass_seq = rtmidi2.MidiOut("glass_sequencer")  # midi output
+    glass_seq = rtmidi2.MidiOut("glassbeats")  # midi output
     glass_seq.open_virtual_port("glass_sequencer")
 
     jack = jackconnect.JackConnections()

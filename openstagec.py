@@ -13,29 +13,27 @@ class OpenStageControl():
 
         self.x0, self.y0, self.p0 = 0, 0, 0
 
-        self.portnames = {'fx in':"Bitrot Repeat:Audio Input ",
-                          'fx out': "Bitrot Repeat:Audio Output ",
-                          'common_out':'sooperlooper:common_out_',
+        self.portnames = {'common_out':'sooperlooper:common_out_',
                           'common_in': 'sooperlooper:common_in_',
                           'dac':'system:playback_',
-                          'vocoder in':'Tal-Vocoder-II:Audio Input ',
-                          'vocoder out':'Tal-Vocoder-II:Audio Output ',
                           #'hydrogen':'Hydrogen:out_L'
                           }
+        self.gridtextreset()
+        
         for p in range(8):
             self.portnames['loop{}_out'.format(str(p))] = "sooperlooper:loop{}_out_".format(str(p))
             self.portnames['loop{}_in'.format(str(p))] = "sooperlooper:loop{}_in_".format(str(p))
 
 
-    '''def gridtextreset(self):
+    def gridtextreset(self):
         toprow = ['loop', 'instr', 'lplay', 'custom', 'pause', ' ', ' ', ' ']  # automap controls labels
         for y in range(8):
-            self.send('/column_text/' + str(y), str(y))
             self.send('/automap_text/' + str(y), toprow[y])
-            self.Grid.reset()'''
+            self.Grid.reset()
 
 
     def stage_handler(self, *args):
+        print (args)
         Grid = self.Grid
         send = self.send
         if args[0][:8] == "/beatpad":  # open-stage-c matrix - emulation of launchpad
