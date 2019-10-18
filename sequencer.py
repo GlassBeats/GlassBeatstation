@@ -9,10 +9,15 @@ class Sequencer():
         print (self.seq)
         print ('*' * 200)
     def change_step(self, x, y, vel):
-        
         if vel == True:
+            print ('*****', x, y, self.seq[y])
             self.seq[y][x] = not self.seq[y][x]
-            print (self.seq[y])
+            if self.seq[y][x] == True:
+                self.Grid.pgrid[x,y]["seq"][False] = [0, 63, 63]
+            else:
+                self.Grid.pgrid[x,y]["seq"][False] = [0, 0, 0]
+
+            
 
     def check_step(self, x):
         for y in range(8):                
