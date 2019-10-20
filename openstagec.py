@@ -60,7 +60,8 @@ class OpenStageControl():
 
 
         elif args[0] == "/quantize":  # choose global? cycle size
-            self.Slmast.sl_osc_cmd("/sl/0/set", ["quantize", args[1]])
+            #self.Slmast.sl_osc_cmd("/sl/0/set", ["quantize", args[1]])
+            self.glass_cc.send_noteon(176,100, args[-1] * 42)
 
         elif args[0] == "/globalsync":  # global sync sync source
             self.Slmast.sl_osc_cmd("/set", ["sync_source", args[-1]])
@@ -152,19 +153,27 @@ class OpenStageControl():
             self.glass_cc.send_noteon(175, int(args[0][5]), args[-1])
 
         elif args[0] == '/patch':
-            inport = self.portnames[args[1]] if args[1] in self.portnames else "ardour:" + args[1] + "/audio_out "
-            outports = []
+            OUTPORT = self.portnames[args[1]] if args[1] in self.portnames else "ardour:" + args[1] + "/audio_out "
+            inports = []
+
+            print (args[1][:4])
+            if args[1][:4] == "sooperlooper:loop":
+                loop_num = args[1][:4]
+                common_inputs = False if len(args) > 2 else True
+                print (common_inputs)
+                    
+                self.Slmast.sl_osc_cmd("/sl/{}/set".format(loop_num), ["use_common_ins", str(common_inputs)])            
+            
             for p in args[2:]:
                 port = self.portnames[p] if p in self.portnames else p 
-                outports.append(port)
-                #x = [self.portnames[i] for i in args[2:]]
+                inports.append(port)
 
             for channel in range(1, 3):
                 chan = str(channel)
-                outport = [p + chan for p in outports]
-                self.jack.routyconnect(inport + str(channel), outport)
+                INPORT = [p + chan for p in inports]
+                self.jack.routyconnect(OUTPORT + str(channel), INPORT)
                 
-
+ 
         elif args[0] == '/midipatch':
             pass
 

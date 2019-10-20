@@ -49,7 +49,7 @@ class JackConnections():
 
         for i in range(1,3):
             try:
-                current_inputs.remove('ardour:SLoop_Main/audio_in ' + str(i)) #dont disconect main
+                current_inputs.remove('ardour:Master/audio_in ' + str(i)) #dont disconect main
             except:
                 pass
 
@@ -61,10 +61,10 @@ class JackConnections():
             for inport in current_inputs:
                 print ('INPORTS', INPORTS)
                 if inport not in INPORTS and inport != INPORTS:
-                    print (inport[13])
-                    if inport[:13] != "ardour:Master":
-                        j.disconnect(OUTPORT, inport) 
+                    #f inport[:13] != "ardour:Master":
                         print('disconnecting', OUTPORT, inport)
+                        j.disconnect(OUTPORT, inport) 
+                        
             for inputs in INPORTS:
                 if inputs not in current_inputs:
                     try:

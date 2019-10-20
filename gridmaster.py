@@ -202,7 +202,7 @@ class Gridmaster():
                     self.stage_osc.send("/automap_text/" + str(i), " ")
                     self.stage_osc.send("/column_text/" + str(i), " ")
     
-        toprow = ['loop', 'instr', 'lplay', 'custom', 'pause', ' ', ' ', ' ']  # automap controls labels
+        toprow = ['loop', 'instr', 'seq', 'custom', 'pause', ' ', ' ', ' ']  # automap controls labels
         for y in range(8):
             self.stage_osc.send('/automap_text/' + str(y), toprow[y])
            
