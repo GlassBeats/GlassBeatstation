@@ -44,8 +44,6 @@ class JackConnections():
         
         print ('*** current connections ***')
         current_inputs = [o.name for o in j.get_all_connections(OUTPORT)]
-        
-        print('***')
         print('currently', OUTPORT, '-->', current_inputs)
         print('going to connect ', OUTPORT, '-->', INPORTS)
 
@@ -61,11 +59,12 @@ class JackConnections():
                 j.disconnect(OUTPORT, o)
         else:
             for inport in current_inputs:
-                print ('inport', inport)
                 print ('INPORTS', INPORTS)
                 if inport not in INPORTS and inport != INPORTS:
-                    j.disconnect(OUTPORT, inport)
-                    print('disconnecting', OUTPORT, inport)
+                    print (inport[13])
+                    if inport[:13] != "ardour:Master":
+                        j.disconnect(OUTPORT, inport) 
+                        print('disconnecting', OUTPORT, inport)
             for inputs in INPORTS:
                 if inputs not in current_inputs:
                     try:

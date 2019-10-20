@@ -18,7 +18,10 @@ Sooperlooper 1.7.3
     http://essej.net/sooperlooper/download.html
     or
     https://github.com/essej/sooperlooper
-    
-You can use a variety of programs to route audio/midi to your liking. I recommend catia from the kxstudio repos for it's simplicity and patchbay style, but I believe qjackctl is quite commonly used as well
+
+This is a constructed interface for looping, sequencing, and sampling in realtime.
+It uses, at a bare minimum, sooperlooper and open-stage control with a custom GUI.
+It can be used with a physical launchpad or the emulated version on open-stage control.
+I recommend using ardour for multitrack recording and carla or another plugin host for effects. 
 
 also big thanks to the project https://github.com/FMMT666/launchpad.py - for determining the errors in the launchpad documentation!

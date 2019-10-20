@@ -16,20 +16,14 @@ class OpenStageControl():
         self.portnames = {'common_out':'sooperlooper:common_out_',
                           'common_in': 'sooperlooper:common_in_',
                           'dac':'system:playback_',
-                          #'hydrogen':'Hydrogen:out_L'
                           }
-        self.gridtextreset()
         
         for p in range(8):
             self.portnames['loop{}_out'.format(str(p))] = "sooperlooper:loop{}_out_".format(str(p))
             self.portnames['loop{}_in'.format(str(p))] = "sooperlooper:loop{}_in_".format(str(p))
 
 
-    def gridtextreset(self):
-        toprow = ['loop', 'instr', 'lplay', 'custom', 'pause', ' ', ' ', ' ']  # automap controls labels
-        for y in range(8):
-            self.send('/automap_text/' + str(y), toprow[y])
-            self.Grid.reset()
+     
 
 
     def stage_handler(self, *args):
@@ -77,7 +71,6 @@ class OpenStageControl():
 
         elif args[0][:11] == "/common_ins":  # use common ins (per each loop)
             loop = args[0][-1]
-            #loop = str(-int(loop) + 7)
             self.Slmast.sl_osc_cmd("/sl/{}/set".format(loop), ["use_common_ins", args[-1]])
 
         elif args[0][:12] == "/common_outs":  # use common outs (per each loop)
@@ -88,7 +81,6 @@ class OpenStageControl():
         elif args[0][:6] == "/fader":
             vel = int(args[1] * 127)
             note = int(args[0][7])
-            #note = -note + 7
             self.glass_cc.send_noteon(144, note, vel) # send fader controls to EQ
 
         elif args[0] == "/bitbeats":
@@ -97,9 +89,7 @@ class OpenStageControl():
         elif args[0][:6] == "/mutes":
             print (args[0][:6], args[0][-1])
             loop = int(args[0][-1])
-            #loop = -loopinv + 7
             print ('loop', loop)
-            #if self.Slmast.loops[loop].state == 4:
             self.Slmast.sl_osc_cmd("/sl/{}/hit".format(str(loop)), "mute")
 
         elif args[0][:5] == "/save": #into directory labelled as the exact time
@@ -161,18 +151,11 @@ class OpenStageControl():
         elif args[0][:5] == "/gain":
             self.glass_cc.send_noteon(175, int(args[0][5]), args[-1])
 
-        elif args[0] == '/test':
-            #print (self.Slmast.loops[0].pos_eighth)
-            if args[-1] == True:
-
-                self.jack.routyconnect('sooperlooper:common_out_1', 'Bitrot Repeat:Audio Input 2')
-
-
         elif args[0] == '/patch':
-            inport = self.portnames[args[1]] if args[1] in self.portnames else args[1]
+            inport = self.portnames[args[1]] if args[1] in self.portnames else "ardour:" + args[1] + "/audio_out "
             outports = []
             for p in args[2:]:
-                port = self.portnames[p] if p in self.portnames else p
+                port = self.portnames[p] if p in self.portnames else p 
                 outports.append(port)
                 #x = [self.portnames[i] for i in args[2:]]
 
@@ -180,6 +163,7 @@ class OpenStageControl():
                 chan = str(channel)
                 outport = [p + chan for p in outports]
                 self.jack.routyconnect(inport + str(channel), outport)
+                
 
         elif args[0] == '/midipatch':
             pass
@@ -200,9 +184,8 @@ class OpenStageControl():
             self.glass_instr.send_noteon(144, idx, args[-1] * 127)
 
         elif args[0] == '/playrate':
-            idx = 0 #int(args[0][9:])
+            idx = 0 
             print (idx, args[-1])
-            #self.glass_cc.send_noteon(176, 25 + idx, args[-1])
             self.Slmast.sl_osc_cmd('/sl/{}/set'.format(str(self.Slmast.loops[idx])), ['rate', args[-1]])
 
         elif args[0] == '/gridreset':

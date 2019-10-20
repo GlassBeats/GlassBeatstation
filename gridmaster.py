@@ -72,12 +72,9 @@ class Gridmaster():
         if color:
             self.buttonclrchange(x, y, vel, color)
 
-        #print (self.fgrid[x,y][mode])
         self.fgrid[x,y][mode][0][vel] = func
         self.fgrid[x,y][mode][1][vel] = args
-        #print ('altered', self.fgrid[x,y][mode])
-
-            
+         
 
     def buttonchange(self, x, y, vel, arg=None, func=None, clr=None): #clr=None?
         self.fgrid[x,y]["rand"][vel] = func
@@ -86,7 +83,6 @@ class Gridmaster():
         
                 
     def gridpress(self, x, y, vel):
-        #print (self.fgrid[x,y][self.mode][vel])
         self.ledout(x, y, self.pgrid[x,y][self.mode][vel])
 
         func = self.fgrid[x,y][self.mode][0][vel]
@@ -185,10 +181,7 @@ class Gridmaster():
 
     def ledrow(self, y, colorcode): #bottom to top 0 - 8
         self.mk2_out.send_sysex(0, 32, 41, 2, 24, 13, colorcode)
-        #clr = [0,255,255] if colorcode == 90 else [0,0,0]
-        #for x in range(8):
-        #    self.stage_osc.send("/griddy/"+ str(x + (8 * (-y + 7))), clr)
-
+    
     def ledall(self, colorcode):
         self.mk2_out.send_sysex(0, 32, 41, 2, 24, 14, colorcode)
         
@@ -208,6 +201,11 @@ class Gridmaster():
                 if i < 8:
                     self.stage_osc.send("/automap_text/" + str(i), " ")
                     self.stage_osc.send("/column_text/" + str(i), " ")
+    
+        toprow = ['loop', 'instr', 'lplay', 'custom', 'pause', ' ', ' ', ' ']  # automap controls labels
+        for y in range(8):
+            self.stage_osc.send('/automap_text/' + str(y), toprow[y])
+           
 
     def bitrotchange(self, active, val):
 
@@ -216,8 +214,6 @@ class Gridmaster():
         for b in bitrots:
             bitrotactivity = True if b in self.pressed else False
 
-
-        #print ('activity', bitrotactivity,  'val', val, '\n', '*'*30, self.pressed)
         if bitrotactivity == False:
             if active == False:
                 self.glass_cc.send_noteon(176, 1, 0)
@@ -230,4 +226,3 @@ class Gridmaster():
         elif bitrotactivity == True:
             self.glass_cc.send_noteon(176, 4, val)
 
-        #self.bitrot = active #turned on
