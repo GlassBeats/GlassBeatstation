@@ -59,6 +59,7 @@ class OpenStageControl():
             self.Slmast.sl_osc_cmd("/sl/{}/set".format(loopnum), ["sync", val])
 
 
+
         elif args[0] == "/quantize":  # choose global? cycle size
             #self.Slmast.sl_osc_cmd("/sl/0/set", ["quantize", args[1]])
             self.glass_cc.send_noteon(176,100, args[-1] * 42)

@@ -50,6 +50,7 @@ class JackConnections():
         for i in range(1,3):
             try:
                 current_inputs.remove('ardour:Master/audio_in ' + str(i)) #dont disconect main
+                current_inputs.remove('sooperlooper/common_in_ ' + str(i))
             except:
                 pass
 

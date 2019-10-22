@@ -1408,7 +1408,7 @@
           "type": "matrix",
           "top": 110,
           "left": 690,
-          "id": "textmat1",
+          "id": "textcolumn",
           "linkId": "",
           "width": 80,
           "height": 670,
@@ -1430,7 +1430,7 @@
           "default": "",
           "value": "",
           "precision": 2,
-          "address": "/column_text",
+          "address": "/columntext",
           "preArgs": "",
           "target": "",
           "bypass": false
