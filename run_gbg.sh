@@ -11,10 +11,12 @@ sooperlooper -L default_sl.slsess -l 8 -m sl_bindings.slb &
 
 ./jackmatch.sh & # this script for automatically persisting midi connections with jack-matchmaker
 
-if [ $# >  0 ]
-then
-	echo running without gbeatstation_main.py
-else
+if [ $# = 1 ]
+
+	then
+		echo $# &&
+		echo running without gbeatstation_main.py
+	else
 	sleep 5 &&
 	python3 gbeatstation_main.py &
 fi
