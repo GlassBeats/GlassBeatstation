@@ -55,8 +55,8 @@ def coordinate(x, y, vel):
                     yinv = -y + 7
                     Slmast.sl_osc_cmd("/sl/{}/set".format(str(yinv)), ["sync", int(Slmast.loops[y].sync)])
                     stage_osc.send('/sync/' + str(-y + 7), int(loopsync))
-                    value = "Sync" if val == True else " "
-                    stage_osc.send("/columntext/" + str(loopnum), value)
+                    value = "Sync" if Slmast.loops[y].sync == True else " "
+                    stage_osc.send("/columntext/" + str(-y + 7), value)
 
 
                 elif vel == False:
