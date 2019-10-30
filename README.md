@@ -1,8 +1,5 @@
 DEPENDENCIES:
 
-Jack audio
-    http://jackaudio.org/downloads/
-    
 Python 3 (all available via pip3:)
     pip3 install jack-Client
     pip3 install rtmidi2
@@ -22,6 +19,6 @@ Sooperlooper 1.7.3
 This is a constructed interface for looping, sequencing, and sampling in realtime.
 It uses, at a bare minimum, sooperlooper and open-stage control with a custom GUI.
 It can be used with a physical launchpad or the emulated version on open-stage control.
-I recommend using ardour for multitrack recording and carla or another plugin host for effects. 
+I recommend using ardour for multitrack recording or carla/nother plugin host for effects. 
 
-also big thanks to the project https://github.com/FMMT666/launchpad.py - for determining the errors in the launchpad documentation!
+also thanks to the project https://github.com/FMMT666/launchpad.py - for determining the errors in the launchpad documentation!
