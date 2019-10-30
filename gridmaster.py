@@ -1,3 +1,4 @@
+#!/python3
 class Gridmaster():
     def __init__(self, stage_osc, mk2_out, glass_cc):
         self.stage_osc = stage_osc
@@ -113,9 +114,6 @@ class Gridmaster():
             
             if stage == True:
                 self.stage_grid(x, y, color)
-        #else:
-        #    print  ('repeated led')
-
 
 
     def xy_to_stage(self, x, y):
@@ -200,8 +198,8 @@ class Gridmaster():
                 self.stage_osc.send("/griddy/" + str(i), [0, 0, 0])
                 if i < 8:
                     self.stage_osc.send("/automap_text/" + str(i), " ")
-                    self.stage_osc.send("/column_text/" + str(i), " ")
-    
+                    self.stage_osc.send("/columntext/" + str(i), " ")
+                    
         toprow = ['loop', 'instr', 'seq', 'custom', 'pause', ' ', ' ', ' ']  # automap controls labels
         for y in range(8):
             self.stage_osc.send('/automap_text/' + str(y), toprow[y])

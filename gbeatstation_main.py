@@ -2,7 +2,7 @@ import rtmidi2, jackmatchmaker, subprocess, atexit, time, os, random
 from pythonosc import udp_client, dispatcher, osc_server
 
 # project specific internals
-import gridmaster, openstagec, jackconnect, sequencer
+import gridmaster, openstagec, jackconnect, sequencer, gridmode
 from slooper import *
 
 def callback_midi(note, time_stamp):
@@ -88,7 +88,7 @@ def coordinate(x, y, vel):
                 sl_loopmode_cmd(x, y, vel)
             elif Grid.mode == "instr":
                 var = None
-                midinote = x + (y * 8) + 12
+                midinote = x + (y * 8) + (12 * Instrumentmode.octave)
                 print(midinote)
                 glass_instr.send_noteon(144, midinote, vel * 127)
             elif Grid.mode == "rand":
@@ -162,10 +162,13 @@ if __name__ == "__main__":
     slclient = OSC_Sender(ipaddr="127.0.0.1", port=9951)
     stage_osc = OSC_Sender(ipaddr="127.0.0.1", port=8080)
 
+
+    
+    Instrumentmode = gridmode.Mode()
     Grid = gridmaster.Gridmaster(stage_osc, Mk2_out, glass_cc)
     Seq = sequencer.Sequencer(8, 8, glass_seq, Grid)
     Slmast = Slmaster(Grid, slclient, Seq)
-    OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc, glass_instr, jack)
+    OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc, glass_instr, jack, Instrumentmode)
 
 
     
@@ -226,7 +229,11 @@ if __name__ == "__main__":
 
     for mde in Grid.modelst:
         Grid.switchmode(mde)
-        time.sleep(.25)
+        time.sleep(1)
+
+    Grid.reset()
+
+        
 
 
     def exit_handler():

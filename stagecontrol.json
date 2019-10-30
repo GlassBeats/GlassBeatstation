@@ -196,7 +196,7 @@
                 {
                   "type": "switch",
                   "top": 90,
-                  "left": 240,
+                  "left": 260,
                   "id": "quantize",
                   "linkId": "",
                   "width": 100,
@@ -204,27 +204,32 @@
                   "label": "auto",
                   "color": "auto",
                   "css": "",
+                  "default": 0,
+                  "value": "",
+                  "precision": 0,
+                  "address": "/control",
+                  "preArgs": [
+                    1,
+                    125
+                  ],
+                  "target": [
+                    "midi:open-stage-cc"
+                  ],
+                  "bypass": false,
                   "horizontal": false,
                   "showValues": false,
                   "values": {
                     "off": 0,
-                    "cycle": 1,
-                    "8ths": 2,
-                    "loop": 3
+                    "cycle": 42,
+                    "8ths": 84,
+                    "loop": 127
                   },
-                  "default": 0,
-                  "value": "",
-                  "precision": 0,
-                  "address": "/quantize",
-                  "preArgs": "",
-                  "target": "",
-                  "bypass": false,
                   "traversing": true
                 },
                 {
                   "type": "dropdown",
                   "top": 10,
-                  "left": 240,
+                  "left": 260,
                   "id": "dropdown_1",
                   "linkId": "",
                   "width": 100,
@@ -232,6 +237,13 @@
                   "label": "Global Sync",
                   "color": "auto",
                   "css": "",
+                  "default": 0,
+                  "value": "",
+                  "precision": 0,
+                  "address": "/globalsync",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false,
                   "values": {
                     "Internal": -3,
                     "Jack": -1,
@@ -244,19 +256,12 @@
                     "Loop 5": 6,
                     "Loop 6": 7,
                     "Loop 7": 8
-                  },
-                  "default": 0,
-                  "value": "",
-                  "precision": 0,
-                  "address": "/globalsync",
-                  "preArgs": "",
-                  "target": "",
-                  "bypass": false
+                  }
                 },
                 {
                   "type": "switch",
                   "top": 10,
-                  "left": 350,
+                  "left": 370,
                   "id": "cycle",
                   "linkId": "",
                   "width": 100,
@@ -264,6 +269,7 @@
                   "label": "auto",
                   "color": "auto",
                   "css": "",
+                  "traversing": true,
                   "default": 16,
                   "value": "",
                   "precision": 0,
@@ -280,8 +286,7 @@
                     "8": 8,
                     "16": 16,
                     "32": 32
-                  },
-                  "traversing": true
+                  }
                 },
                 {
                   "type": "matrix",
@@ -433,7 +438,7 @@
                 {
                   "type": "push",
                   "top": 120,
-                  "left": 460,
+                  "left": 480,
                   "id": "replace",
                   "linkId": "",
                   "width": 70,
@@ -457,7 +462,7 @@
                 {
                   "type": "push",
                   "top": 40,
-                  "left": 460,
+                  "left": 480,
                   "id": "replace0",
                   "linkId": "",
                   "width": 70,
@@ -568,7 +573,8 @@
                   ],
                   "bypass": false,
                   "touchAddress": "",
-                  "meterAddress": ""
+                  "meterAddress": "",
+                  "sensitivity": 1
                 },
                 {
                   "type": "fader",
@@ -612,7 +618,8 @@
                   ],
                   "bypass": false,
                   "touchAddress": "",
-                  "meterAddress": ""
+                  "meterAddress": "",
+                  "sensitivity": 1
                 },
                 {
                   "type": "modal",
@@ -639,163 +646,69 @@
                   "target": "",
                   "bypass": false,
                   "variables": "@{parent.variables}",
-                  "widgets": [
-                    {
-                      "type": "push",
-                      "top": 10,
-                      "left": 10,
-                      "id": "save",
-                      "linkId": "",
-                      "width": "auto",
-                      "height": "auto",
-                      "label": "auto",
-                      "color": "auto",
-                      "css": "",
-                      "doubleTap": false,
-                      "on": 1,
-                      "off": 0,
-                      "norelease": false,
-                      "precision": 0,
-                      "address": "/save",
-                      "preArgs": "",
-                      "target": "",
-                      "bypass": false,
-                      "value": ""
-                    },
-                    {
-                      "type": "dropdown",
-                      "top": 10,
-                      "left": 150,
-                      "id": "seq master",
-                      "linkId": "",
-                      "width": "auto",
-                      "height": "auto",
-                      "label": "auto",
-                      "color": "auto",
-                      "css": "",
-                      "values": {
-                        "Loop 0": 0,
-                        "Loop 1": 1,
-                        "Loop 2": 2,
-                        "Loop 3": 3,
-                        "Loop 4": 4,
-                        "Loop 5": 5,
-                        "Loop 6": 6,
-                        "Loop 7": 7
-                      },
-                      "default": 1,
-                      "value": "",
-                      "precision": 0,
-                      "address": "/seqbase",
-                      "preArgs": "",
-                      "target": "",
-                      "bypass": false
-                    },
-                    {
-                      "type": "rgb",
-                      "top": 80,
-                      "left": 190,
-                      "id": "loop colors",
-                      "linkId": "",
-                      "width": "auto",
-                      "height": "auto",
-                      "label": "auto",
-                      "css": "",
-                      "snap": false,
-                      "spring": false,
-                      "range": {
-                        "min": 0,
-                        "max": 255
-                      },
-                      "input": true,
-                      "alpha": false,
-                      "default": "",
-                      "value": "",
-                      "precision": 0,
-                      "address": "/loop_rgb",
-                      "preArgs": "",
-                      "target": "",
-                      "bypass": false,
-                      "split": false,
-                      "pointSize": 10
-                    },
-                    {
-                      "type": "dropdown",
-                      "top": 10,
-                      "left": 310,
-                      "id": "loop color",
-                      "linkId": "",
-                      "width": "auto",
-                      "height": "auto",
-                      "label": "auto",
-                      "color": "auto",
-                      "css": "",
-                      "values": {
-                        "Loop 0": 0,
-                        "Loop 1": 1,
-                        "Loop 2": 2,
-                        "Loop 3": 3,
-                        "Loop 4": 4,
-                        "Loop 5": 5,
-                        "Loop 6": 6,
-                        "Loop 7": 7
-                      },
-                      "default": 1,
-                      "value": "",
-                      "precision": 0,
-                      "address": "/loopclrsel",
-                      "preArgs": "",
-                      "target": "",
-                      "bypass": false
-                    },
-                    {
-                      "type": "toggle",
-                      "top": 180,
-                      "left": 10,
-                      "id": "add",
-                      "linkId": "",
-                      "width": 40,
-                      "height": 50,
-                      "label": "auto",
-                      "color": "auto",
-                      "css": "",
-                      "doubleTap": false,
-                      "on": 1,
-                      "off": 0,
-                      "value": "",
-                      "precision": 2,
-                      "address": "/swapadd",
-                      "preArgs": "",
-                      "target": "",
-                      "bypass": false,
-                      "led": false,
-                      "default": ""
-                    },
-                    {
-                      "type": "toggle",
-                      "top": 180,
-                      "left": 60,
-                      "id": "imp",
-                      "linkId": "",
-                      "width": 40,
-                      "height": 50,
-                      "label": "auto",
-                      "color": "auto",
-                      "css": "",
-                      "doubleTap": false,
-                      "on": 1,
-                      "off": 0,
-                      "value": "",
-                      "precision": 2,
-                      "address": "/swapimp",
-                      "preArgs": "",
-                      "target": "",
-                      "bypass": false,
-                      "led": false,
-                      "default": ""
-                    }
-                  ],
+                  "widgets": [],
                   "scroll": true
+                },
+                {
+                  "type": "knob",
+                  "top": 0,
+                  "left": 80,
+                  "id": "rate",
+                  "linkId": "rate",
+                  "width": 110,
+                  "height": 130,
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "pips": true,
+                  "input": true,
+                  "compact": false,
+                  "dashed": false,
+                  "snap": false,
+                  "spring": false,
+                  "doubleTap": false,
+                  "range": {
+                    "min": 0,
+                    "max": 4
+                  },
+                  "logScale": false,
+                  "sensitivity": 1,
+                  "steps": "",
+                  "unit": "",
+                  "origin": "auto",
+                  "default": 1,
+                  "value": "",
+                  "precision": 2,
+                  "address": "/sl/0/set",
+                  "preArgs": [
+                    "rate"
+                  ],
+                  "target": "127.0.0.1:9951",
+                  "bypass": false,
+                  "touchAddress": "",
+                  "angle": 270
+                },
+                {
+                  "type": "push",
+                  "top": 40,
+                  "left": 200,
+                  "id": "1x",
+                  "linkId": "rate",
+                  "width": 50,
+                  "height": 60,
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "doubleTap": false,
+                  "on": 1,
+                  "off": null,
+                  "norelease": true,
+                  "value": "",
+                  "precision": 2,
+                  "address": "/push_1",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false
                 }
               ],
               "tabs": [],
@@ -803,7 +716,7 @@
             },
             {
               "type": "tab",
-              "id": "matrix",
+              "id": "fx",
               "linkId": "",
               "label": "auto",
               "color": "auto",
@@ -828,11 +741,20 @@
                   "label": false,
                   "color": "auto",
                   "css": "",
-                  "points": 1,
-                  "pointSize": 20,
+                  "precision": 0,
+                  "address": "/xy",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false,
+                  "default": "",
+                  "value": "",
+                  "pips": true,
                   "snap": true,
                   "spring": true,
-                  "pips": true,
+                  "touchAddress": "",
+                  "sensitivity": 1,
+                  "points": 1,
+                  "pointSize": 20,
                   "rangeX": {
                     "min": 0,
                     "max": 127
@@ -843,14 +765,6 @@
                   },
                   "logScaleX": false,
                   "logScaleY": false,
-                  "default": "",
-                  "value": "",
-                  "precision": 0,
-                  "address": "/xy",
-                  "preArgs": "",
-                  "target": "",
-                  "bypass": false,
-                  "touchAddress": "",
                   "split": false
                 },
                 {
@@ -864,6 +778,13 @@
                   "label": false,
                   "color": "auto",
                   "css": ":host {\nz-index:11;\npointer-events:none;\nopacity:.3\n}",
+                  "default": "",
+                  "value": "",
+                  "precision": 0,
+                  "address": "/xyrgb",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false,
                   "widgetType": "rgbled",
                   "matrix": [
                     8,
@@ -875,14 +796,7 @@
                   "border": true,
                   "props": {
                     "label": false
-                  },
-                  "default": "",
-                  "value": "",
-                  "precision": 0,
-                  "address": "/xyrgb",
-                  "preArgs": "",
-                  "target": "",
-                  "bypass": false
+                  }
                 },
                 {
                   "type": "matrix",
@@ -895,6 +809,13 @@
                   "label": "auto",
                   "color": "auto",
                   "css": "",
+                  "precision": 0,
+                  "address": "/mutes",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false,
+                  "default": "",
+                  "value": "",
                   "matrix": [
                     1,
                     8
@@ -902,13 +823,6 @@
                   "start": 0,
                   "spacing": 0,
                   "traversing": true,
-                  "default": "",
-                  "value": "",
-                  "precision": 0,
-                  "address": "/mutes",
-                  "preArgs": "",
-                  "target": "",
-                  "bypass": false,
                   "widgetType": "push",
                   "border": true,
                   "props": {}
@@ -970,7 +884,8 @@
                   "unit": "",
                   "origin": "auto",
                   "touchAddress": "",
-                  "meterAddress": ""
+                  "meterAddress": "",
+                  "sensitivity": 1
                 },
                 {
                   "type": "knob",
@@ -1011,7 +926,8 @@
                   ],
                   "bypass": false,
                   "touchAddress": "",
-                  "compact": false
+                  "compact": false,
+                  "sensitivity": 1
                 },
                 {
                   "type": "fader",
@@ -1050,7 +966,8 @@
                   "unit": "",
                   "origin": "auto",
                   "touchAddress": "",
-                  "meterAddress": ""
+                  "meterAddress": "",
+                  "sensitivity": 1
                 },
                 {
                   "type": "fader",
@@ -1089,7 +1006,8 @@
                   "unit": "",
                   "origin": "auto",
                   "touchAddress": "",
-                  "meterAddress": ""
+                  "meterAddress": "",
+                  "sensitivity": 1
                 },
                 {
                   "type": "fader",
@@ -1128,7 +1046,8 @@
                   "unit": "",
                   "origin": "auto",
                   "touchAddress": "",
-                  "meterAddress": ""
+                  "meterAddress": "",
+                  "sensitivity": 1
                 },
                 {
                   "type": "fader",
@@ -1167,7 +1086,8 @@
                   "unit": "",
                   "origin": "auto",
                   "touchAddress": "",
-                  "meterAddress": ""
+                  "meterAddress": "",
+                  "sensitivity": 1
                 },
                 {
                   "type": "fader",
@@ -1206,7 +1126,8 @@
                   "unit": "",
                   "origin": "auto",
                   "touchAddress": "",
-                  "meterAddress": ""
+                  "meterAddress": "",
+                  "sensitivity": 1
                 },
                 {
                   "type": "fader",
@@ -1245,7 +1166,8 @@
                   "unit": "",
                   "origin": "auto",
                   "touchAddress": "",
-                  "meterAddress": ""
+                  "meterAddress": "",
+                  "sensitivity": 1
                 },
                 {
                   "type": "fader",
@@ -1284,7 +1206,8 @@
                   "unit": "",
                   "origin": "auto",
                   "touchAddress": "",
-                  "meterAddress": ""
+                  "meterAddress": "",
+                  "sensitivity": 1
                 }
               ],
               "tabs": [],
@@ -1305,7 +1228,206 @@
               "target": "",
               "bypass": false,
               "variables": "@{parent.variables}",
-              "widgets": [],
+              "widgets": [
+                {
+                  "type": "push",
+                  "top": 10,
+                  "left": 10,
+                  "id": "save",
+                  "linkId": "",
+                  "width": "auto",
+                  "height": "auto",
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "doubleTap": false,
+                  "on": 1,
+                  "off": 0,
+                  "norelease": false,
+                  "precision": 0,
+                  "address": "/save",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false,
+                  "value": ""
+                },
+                {
+                  "type": "dropdown",
+                  "top": 10,
+                  "left": 150,
+                  "id": "seq master",
+                  "linkId": "",
+                  "width": "auto",
+                  "height": "auto",
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "values": {
+                    "Loop 0": 0,
+                    "Loop 1": 1,
+                    "Loop 2": 2,
+                    "Loop 3": 3,
+                    "Loop 4": 4,
+                    "Loop 5": 5,
+                    "Loop 6": 6,
+                    "Loop 7": 7
+                  },
+                  "default": 1,
+                  "value": "",
+                  "precision": 0,
+                  "address": "/seqbase",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false
+                },
+                {
+                  "type": "rgb",
+                  "top": 80,
+                  "left": 190,
+                  "id": "loop colors",
+                  "linkId": "",
+                  "width": "auto",
+                  "height": "auto",
+                  "label": "auto",
+                  "css": "",
+                  "snap": false,
+                  "spring": false,
+                  "range": {
+                    "min": 0,
+                    "max": 255
+                  },
+                  "input": true,
+                  "alpha": false,
+                  "default": "",
+                  "value": "",
+                  "precision": 0,
+                  "address": "/loop_rgb",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false,
+                  "split": false,
+                  "pointSize": 10
+                },
+                {
+                  "type": "dropdown",
+                  "top": 10,
+                  "left": 310,
+                  "id": "loop color",
+                  "linkId": "",
+                  "width": "auto",
+                  "height": "auto",
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "values": {
+                    "Loop 0": 0,
+                    "Loop 1": 1,
+                    "Loop 2": 2,
+                    "Loop 3": 3,
+                    "Loop 4": 4,
+                    "Loop 5": 5,
+                    "Loop 6": 6,
+                    "Loop 7": 7
+                  },
+                  "default": 1,
+                  "value": "",
+                  "precision": 0,
+                  "address": "/loopclrsel",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false
+                },
+                {
+                  "type": "toggle",
+                  "top": 180,
+                  "left": 10,
+                  "id": "add",
+                  "linkId": "",
+                  "width": 40,
+                  "height": 50,
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "doubleTap": false,
+                  "on": 1,
+                  "off": 0,
+                  "value": "",
+                  "precision": 2,
+                  "address": "/swapadd",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false,
+                  "led": false,
+                  "default": ""
+                },
+                {
+                  "type": "toggle",
+                  "top": 180,
+                  "left": 60,
+                  "id": "imp",
+                  "linkId": "",
+                  "width": 40,
+                  "height": 50,
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "doubleTap": false,
+                  "on": 1,
+                  "off": 0,
+                  "value": "",
+                  "precision": 2,
+                  "address": "/swapimp",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false,
+                  "led": false,
+                  "default": ""
+                },
+                {
+                  "type": "push",
+                  "top": 360,
+                  "left": 10,
+                  "id": "octave up",
+                  "linkId": "",
+                  "width": "auto",
+                  "height": "auto",
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "doubleTap": false,
+                  "on": 1,
+                  "off": null,
+                  "norelease": true,
+                  "value": "",
+                  "precision": 2,
+                  "address": "/octup",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false
+                },
+                {
+                  "type": "push",
+                  "top": 430,
+                  "left": 10,
+                  "id": "octave down",
+                  "linkId": "",
+                  "width": "auto",
+                  "height": "auto",
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "doubleTap": false,
+                  "on": 1,
+                  "off": null,
+                  "norelease": true,
+                  "value": "",
+                  "precision": 2,
+                  "address": "/octdown",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false
+                }
+              ],
               "tabs": [],
               "scroll": true
             }
@@ -1603,7 +1725,8 @@
           "target": "",
           "bypass": false,
           "touchAddress": "",
-          "meterAddress": ""
+          "meterAddress": "",
+          "sensitivity": 1
         },
         {
           "type": "fader",
@@ -1642,7 +1765,8 @@
           "target": "]",
           "bypass": false,
           "touchAddress": "",
-          "meterAddress": ""
+          "meterAddress": "",
+          "sensitivity": 1
         },
         {
           "type": "fader",
@@ -1681,7 +1805,8 @@
           "target": "]",
           "bypass": false,
           "touchAddress": "",
-          "meterAddress": ""
+          "meterAddress": "",
+          "sensitivity": 1
         },
         {
           "type": "panel",

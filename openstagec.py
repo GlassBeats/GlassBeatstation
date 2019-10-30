@@ -1,7 +1,8 @@
 import time, os, re
 
 class OpenStageControl():
-    def __init__(self, Grid, coord, Slobj, stage_osc_cli, midicc, midiinstr, jack):
+    def __init__(self, Grid, coord, Slobj, stage_osc_cli, midicc, midiinstr, jack, instrmode):
+        self.instrmode = instrmode
         self.glass_instr = midiinstr
         self.jack = jack
         self.Grid = Grid
@@ -200,6 +201,11 @@ class OpenStageControl():
 
         elif args[0] == '/gridreset':
             self.Grid.reset()
+
+        elif args[0] == '/octup':
+            self.instrmode.octave += 1
+        elif args[0] == '/octdown':
+            self.instrmode.octave -= 1
 
 
         else:
