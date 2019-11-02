@@ -98,16 +98,23 @@ class Slmaster():
         y = lp.loop_num            
         Grid = self.Grid
         if pos_8th != lp.pos_eighth:
+            print (pos_8th, lp.state)
+
+            
             if pos_8th > 8:  # if out of range, make sure length is updated
                 self.slclient.send("/sl/{}/get".format(str(y)), ["loop_len", "localhost:9998", "/sloop"])
 
             lp.pos_eighth = pos_8th
+
+            if pos_8th == 0 and lp.state == 2:
+                self.Seq.check_step(0)
 
             if lp.state in [4,5,6,10,12]: #if in one of the playing states
                 
 
                 if y == 7: #correct to seqmaster
                     self.Seq.check_step(pos_8th)
+                    print ('seqqycheck', pos_8th)
                 
                 if pos_8th == 0:
                     Grid.ledout(0, 8, lp.color)
@@ -148,7 +155,7 @@ class Slmaster():
             if loop_num < 8: #if one of the first 8 loops
                 loopobj = self.loops[loop_num]
                 param, value = args[2], args[3] # args[1:]
-                if param != "loop_len" and value > 14:
+                if param != "loop_len" and value > 40:
                     print("loop #", loop_num, param, value, "has not been recorded yet")
                 else:
                     self.funcs[param](loopobj, value) # these could be more in parallel?

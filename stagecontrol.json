@@ -550,7 +550,7 @@
                   "compact": false,
                   "dashed": false,
                   "snap": true,
-                  "spring": false,
+                  "spring": true,
                   "doubleTap": false,
                   "range": {
                     "min": 0,
@@ -560,7 +560,7 @@
                   "logScale": false,
                   "unit": "",
                   "origin": "auto",
-                  "default": 127,
+                  "default": 0,
                   "value": "",
                   "precision": 0,
                   "address": "/control",
@@ -595,7 +595,7 @@
                   "compact": false,
                   "dashed": false,
                   "snap": true,
-                  "spring": false,
+                  "spring": true,
                   "doubleTap": false,
                   "range": {
                     "min": 0,
@@ -605,8 +605,8 @@
                   "logScale": false,
                   "unit": "",
                   "origin": "auto",
-                  "default": "",
-                  "value": 0,
+                  "default": 127,
+                  "value": "",
                   "precision": 0,
                   "address": "/control",
                   "preArgs": [
