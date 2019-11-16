@@ -206,6 +206,7 @@ class OpenStageControl():
             self.instrmode.octave += 1
         elif args[0] == '/octdown':
             self.instrmode.octave -= 1
+        #elif args[0] == 
 
 
         else:

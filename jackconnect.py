@@ -63,7 +63,8 @@ class JackConnections():
             for inport in current_inputs:
                 print ('INPORTS', INPORTS)
                 if inport not in INPORTS and inport != INPORTS:
-                    #f inport[:13] != "ardour:Master":
+                    print ('test', inport[:7])
+                    if inport[:6] != "ardour":
                         print('disconnecting', OUTPORT, inport)
                         j.disconnect(OUTPORT, inport) 
                         

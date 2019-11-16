@@ -1349,7 +1349,7 @@
         {
           "type": "matrix",
           "top": 10,
-          "left": 90,
+          "left": 930,
           "id": "common out",
           "linkId": "",
           "width": 80,
@@ -1378,7 +1378,7 @@
         {
           "type": "matrix",
           "top": 10,
-          "left": 0,
+          "left": 840,
           "id": "common in",
           "linkId": "",
           "width": 80,
@@ -1527,7 +1527,7 @@
         {
           "type": "panel",
           "top": 10,
-          "left": 180,
+          "left": -20,
           "id": "panel_1",
           "linkId": "",
           "width": 830,
