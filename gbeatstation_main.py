@@ -171,6 +171,7 @@ if __name__ == "__main__":
     Grid = gridmaster.Gridmaster(stage_osc, Mk2_out, glass_cc)
     Seq = sequencer.Sequencer(8, 8, glass_seq, Grid)
     Slmast = Slmaster(Grid, slclient, Seq)
+    print (Slmast.clrs)
     OStageC = openstagec.OpenStageControl(Grid, coordinate, Slmast, stage_osc, glass_cc, glass_instr, jack, Instrumentmode)
 
 

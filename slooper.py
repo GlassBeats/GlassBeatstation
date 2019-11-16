@@ -41,7 +41,16 @@ class Slmaster():
 
 
         self.loops = None #updated in main
-
+        self.clrs = [
+            [63,63,63],
+            [0,63,63],
+            [0,63,0],
+            [0,20,63],
+            [63,30,0],
+            [0,0,63],
+            [40,63,40],
+            [20,40,60],
+            ]
         self.funcs = {"state":self.track_state, "loop_len":self.track_len, "loop_pos":self.track_pos}
 
     def sl_osc_cmd(self, prefix, args):
@@ -53,13 +62,6 @@ class Slmaster():
             print (self.stateslst[loopobj.state])
             clr = (self.stateslst[loopobj.state][1])
             self.Grid.ledout(8, loopobj.loop_num, clr)
-            #if loopobj.state == 4:
-            #    for i in range(8):
-            #        # add feature: if not in 'pressed'
-            #        y = -loopobj.loop_num + 7
-            #        loopclr = self.Grid.pgrid[i, y][self.Grid.mode][False]
-            #        self.Grid.ledout(i, y, loopclr)
-            
 
     def track_len(self, loopobj, length):
         if loopobj.len != length:
@@ -114,7 +116,6 @@ class Slmaster():
 
                 if y == 7: #correct to seqmaster
                     self.Seq.check_step(pos_8th)
-                    print ('seqqycheck', pos_8th)
                 
                 if pos_8th == 0:
                     Grid.ledout(0, 8, lp.color)
@@ -174,7 +175,16 @@ class Sloop(Slmaster):
         self.sync = False
         self.rev = False
         #self.quant = False
-        self.color = [random.randint(25,63) for i in range(3)] #randomize loop colors
+        clrs = [
+            [20,40,60],
+            [40,63,40],
+            [0,63,63],
+            [63,30,0],
+            [20,50,63],
+            [0,63,63],
+            [0,0,63],
+            [63,63,63], ]
+        self.color = clrs[self.loop_num]
         for x in range(8):
             grid.pgrid[x, self.loop_num]["loop"][True] = self.color
             grid.pgrid[x, self.loop_num]["loop"][False] = [0,0,0]#self.colors
