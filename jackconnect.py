@@ -64,7 +64,7 @@ class JackConnections():
                 print ('INPORTS', INPORTS)
                 if inport not in INPORTS and inport != INPORTS:
                     print ('test', inport[:7])
-                    if inport[:6] != "ardour":
+                    if inport[:6] != "ardour": #dont auto-disconnect from ardour
                         print('disconnecting', OUTPORT, inport)
                         j.disconnect(OUTPORT, inport) 
                         

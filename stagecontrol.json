@@ -467,6 +467,51 @@
                   "preArgs": "",
                   "target": "",
                   "bypass": false
+                },
+                {
+                  "type": "fader",
+                  "top": 300,
+                  "left": 150,
+                  "id": "master gain",
+                  "linkId": "",
+                  "width": "auto",
+                  "height": "auto",
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "horizontal": false,
+                  "alignRight": false,
+                  "pips": true,
+                  "input": true,
+                  "meter": false,
+                  "compact": false,
+                  "dashed": false,
+                  "snap": true,
+                  "spring": true,
+                  "doubleTap": false,
+                  "range": {
+                    "min": 0,
+                    "max": 127
+                  },
+                  "steps": "",
+                  "logScale": false,
+                  "unit": "",
+                  "origin": "auto",
+                  "default": 0,
+                  "value": "",
+                  "precision": 0,
+                  "address": "/control",
+                  "preArgs": [
+                    1,
+                    124
+                  ],
+                  "target": [
+                    "midi:open-stage-cc"
+                  ],
+                  "bypass": false,
+                  "touchAddress": "",
+                  "meterAddress": "",
+                  "sensitivity": 1
                 }
               ],
               "tabs": [],
