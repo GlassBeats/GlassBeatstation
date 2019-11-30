@@ -1785,7 +1785,7 @@
           "type": "matrix",
           "top": 10,
           "left": 10,
-          "id": "system eq",
+          "id": "input eq",
           "linkId": "",
           "width": 540,
           "height": 230,
@@ -1814,6 +1814,92 @@
           "preArgs": "",
           "target": "",
           "bypass": false
+        },
+        {
+          "type": "matrix",
+          "top": 10,
+          "left": 570,
+          "id": "system eq",
+          "linkId": "",
+          "width": 540,
+          "height": 230,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "widgetType": "fader",
+          "matrix": [
+            10,
+            1
+          ],
+          "start": 0,
+          "spacing": 0,
+          "traversing": true,
+          "border": true,
+          "props": {
+            "range": {
+              "min": 0,
+              "max": 127
+            },
+            "preargs": [
+              0,
+              125
+            ],
+            "target": "midi:open-stage-cc"
+          },
+          "default": 0.67,
+          "value": "",
+          "precision": 1,
+          "address": "/control",
+          "preArgs": "",
+          "target": [
+            "midi:open-stage-cc"
+          ],
+          "bypass": false
+        },
+        {
+          "type": "fader",
+          "top": 340,
+          "left": 920,
+          "id": "master gain",
+          "linkId": "",
+          "width": "auto",
+          "height": "auto",
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "horizontal": false,
+          "alignRight": false,
+          "pips": true,
+          "input": true,
+          "meter": false,
+          "compact": false,
+          "dashed": false,
+          "snap": true,
+          "spring": true,
+          "doubleTap": false,
+          "range": {
+            "min": 0,
+            "max": 127
+          },
+          "steps": "",
+          "logScale": false,
+          "unit": "",
+          "origin": "auto",
+          "default": 0,
+          "value": "",
+          "precision": 0,
+          "address": "/control",
+          "preArgs": [
+            1,
+            124
+          ],
+          "target": [
+            "midi:open-stage-cc"
+          ],
+          "bypass": false,
+          "touchAddress": "",
+          "meterAddress": "",
+          "sensitivity": 1
         }
       ],
       "tabs": [],
