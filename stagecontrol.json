@@ -313,7 +313,7 @@
                   "preArgs": "",
                   "target": "",
                   "bypass": false,
-                  "widgetType": "push",
+                  "widgetType": "toggle",
                   "border": true,
                   "props": {}
                 },
@@ -1393,8 +1393,8 @@
       "widgets": [
         {
           "type": "matrix",
-          "top": 10,
-          "left": 930,
+          "top": 50,
+          "left": 910,
           "id": "common out",
           "linkId": "",
           "width": 80,
@@ -1422,8 +1422,8 @@
         },
         {
           "type": "matrix",
-          "top": 10,
-          "left": 840,
+          "top": 50,
+          "left": 830,
           "id": "common in",
           "linkId": "",
           "width": 80,
@@ -1727,7 +1727,7 @@
       "widgets": [
         {
           "type": "matrix",
-          "top": 20,
+          "top": 10,
           "left": 10,
           "id": "system eq",
           "linkId": "",
@@ -1745,7 +1745,12 @@
           "spacing": 0,
           "traversing": true,
           "border": true,
-          "props": {},
+          "props": {
+            "range": {
+              "min": 0,
+              "max": 127
+            }
+          },
           "default": 0.67,
           "value": "",
           "precision": 1,
