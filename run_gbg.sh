@@ -5,11 +5,11 @@ trap "kill 0" EXIT
 #this script needs to be run from the glass_beatstation directory
 
 #this script is oriented towards working with ardour but doesn't need ardour to run, although you will need to route the audio accordingly. change the audio connections manually or in the jackconnect.py script
-jack_bufsize 256  &&
+jack_bufsize 200  &&
 
-sooperlooper -L default_sl.slsess -l 8 -m sl_bindings.slb &
+sooperlooper -L ./interfaces/default_sl.slsess -l 8 -m ./interfaces/sl_bindings.slb &
 
-./jackmatch.sh & # this script for automatically persisting midi connections with jack-matchmaker
+interfaces/jackmatch.sh & # this script for automatically persisting midi connections with jack-matchmaker
 
 if [ $# = 1 ]
 
