@@ -410,6 +410,67 @@
                   "sensitivity": 1
                 },
                 {
+                  "type": "knob",
+                  "top": 0,
+                  "left": 330,
+                  "id": "rate",
+                  "linkId": "rate",
+                  "width": 110,
+                  "height": 130,
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "doubleTap": false,
+                  "value": "",
+                  "precision": 2,
+                  "address": "/sl/0/set",
+                  "preArgs": [
+                    "rate"
+                  ],
+                  "target": "127.0.0.1:9951",
+                  "bypass": false,
+                  "pips": true,
+                  "input": true,
+                  "compact": false,
+                  "dashed": false,
+                  "snap": false,
+                  "spring": false,
+                  "range": {
+                    "min": 0,
+                    "max": 4
+                  },
+                  "logScale": false,
+                  "sensitivity": 1,
+                  "steps": "",
+                  "unit": "",
+                  "origin": "auto",
+                  "default": 1,
+                  "touchAddress": "",
+                  "angle": 270
+                },
+                {
+                  "type": "push",
+                  "top": 40,
+                  "left": 420,
+                  "id": "1x",
+                  "linkId": "rate",
+                  "width": 50,
+                  "height": 60,
+                  "label": "auto",
+                  "color": "auto",
+                  "css": "",
+                  "value": "",
+                  "precision": 2,
+                  "address": "/push_1",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false,
+                  "doubleTap": false,
+                  "on": 1,
+                  "off": null,
+                  "norelease": true
+                },
+                {
                   "type": "fader",
                   "top": 300,
                   "left": 370,
@@ -420,6 +481,18 @@
                   "label": "auto",
                   "color": "auto",
                   "css": "",
+                  "default": 85,
+                  "value": "",
+                  "precision": 0,
+                  "address": "/control",
+                  "preArgs": [
+                    1,
+                    124
+                  ],
+                  "target": [
+                    "midi:open-stage-cc"
+                  ],
+                  "bypass": false,
                   "horizontal": false,
                   "alignRight": false,
                   "pips": true,
@@ -438,18 +511,6 @@
                   "logScale": false,
                   "unit": "",
                   "origin": "auto",
-                  "default": 85,
-                  "value": "",
-                  "precision": 0,
-                  "address": "/control",
-                  "preArgs": [
-                    1,
-                    124
-                  ],
-                  "target": [
-                    "midi:open-stage-cc"
-                  ],
-                  "bypass": false,
                   "touchAddress": "",
                   "meterAddress": "",
                   "sensitivity": 1
@@ -457,7 +518,7 @@
                 {
                   "type": "matrix",
                   "top": 0,
-                  "left": 80,
+                  "left": 90,
                   "id": "playback rate",
                   "linkId": "",
                   "width": 180,
@@ -1767,7 +1828,7 @@
           "left": 0,
           "id": "10 band equalizers",
           "linkId": "",
-          "width": 590,
+          "width": 650,
           "height": 320,
           "label": "auto",
           "color": "auto",
@@ -1802,15 +1863,24 @@
               "widgets": [
                 {
                   "type": "matrix",
-                  "top": -10,
+                  "top": 0,
                   "left": 0,
-                  "id": "input eq",
+                  "id": "system eq",
                   "linkId": "",
-                  "width": 590,
+                  "width": 520,
                   "height": 250,
-                  "label": "auto",
+                  "label": false,
                   "color": "auto",
                   "css": "",
+                  "default": 0.67,
+                  "value": "",
+                  "precision": 0,
+                  "address": "/control",
+                  "preArgs": "",
+                  "target": [
+                    "midi:open-stage-cc"
+                  ],
+                  "bypass": false,
                   "widgetType": "fader",
                   "matrix": [
                     10,
@@ -1820,27 +1890,47 @@
                   "spacing": 0,
                   "traversing": true,
                   "border": true,
-                  "props": {
-                    "address": "/control",
-                    "range": {
-                      "min": 0,
-                      "max": 127
-                    },
-                    "preArgs": [
-                      0,
-                      "JS{{return 90 + $}}"
-                    ],
-                    "target": "midi:open-stage-cc",
-                    "default": 85,
-                    "label": false
+                  "props": "{\n  \"range\": { \"min\": 0, \"max\": 127 },\n  \"target\": \"midi:open-stage-cc\",\n  \"address\": \"/control\",\n  \"preArgs\": [ 0, \"JS{{return 100 + $}}\" ],\n  \"default\": 85,\n  \"label\": false,\n  \"pips\": false, \"value\":@{flat eq}\n}"
+                },
+                {
+                  "type": "fader",
+                  "top": 0,
+                  "left": 550,
+                  "id": "flat eq",
+                  "linkId": "",
+                  "width": 100,
+                  "height": 250,
+                  "label": false,
+                  "color": "auto",
+                  "css": "",
+                  "horizontal": false,
+                  "alignRight": false,
+                  "pips": true,
+                  "input": true,
+                  "meter": false,
+                  "compact": false,
+                  "dashed": false,
+                  "snap": false,
+                  "spring": false,
+                  "doubleTap": false,
+                  "range": {
+                    "min": 0,
+                    "max": 127
                   },
+                  "logScale": false,
+                  "sensitivity": 1,
+                  "steps": "",
+                  "unit": "",
+                  "origin": "auto",
                   "default": "",
                   "value": "",
                   "precision": 0,
-                  "address": "/mastereq",
+                  "address": "/fader_2",
                   "preArgs": "",
                   "target": "",
-                  "bypass": false
+                  "bypass": false,
+                  "touchAddress": "",
+                  "meterAddress": ""
                 }
               ],
               "tabs": [],
@@ -1866,22 +1956,13 @@
                   "type": "matrix",
                   "top": 0,
                   "left": -10,
-                  "id": "system eq",
+                  "id": "input eq",
                   "linkId": "",
-                  "width": 590,
+                  "width": 520,
                   "height": 250,
-                  "label": "auto",
+                  "label": false,
                   "color": "auto",
                   "css": "",
-                  "default": 0.67,
-                  "value": "",
-                  "precision": 0,
-                  "address": "/control",
-                  "preArgs": "",
-                  "target": [
-                    "midi:open-stage-cc"
-                  ],
-                  "bypass": false,
                   "widgetType": "fader",
                   "matrix": [
                     10,
@@ -1891,66 +1972,60 @@
                   "spacing": 0,
                   "traversing": true,
                   "border": true,
-                  "props": {
-                    "range": {
-                      "min": 0,
-                      "max": 127
-                    },
-                    "target": "midi:open-stage-cc",
-                    "address": "/control",
-                    "preArgs": [
-                      0,
-                      "JS{{return 100 + $}}"
-                    ],
-                    "default": 85,
-                    "label": false
-                  }
+                  "props": "{\n  \"address\": \"/control\",\n  \"range\": { \"min\": 0, \"max\": 127 },\n  \"preArgs\": [ 0, \"JS{{return 90 + $}}\" ],\n  \"target\": \"midi:open-stage-cc\",\n  \"default\": 85,\n  \"label\": false,\n  \"pips\": false, \"value\":@{flat eq1}\n}",
+                  "default": "",
+                  "value": "",
+                  "precision": 0,
+                  "address": "/mastereq",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false
+                },
+                {
+                  "type": "fader",
+                  "top": 0,
+                  "left": 550,
+                  "id": "flat eq1",
+                  "linkId": "",
+                  "width": 100,
+                  "height": 250,
+                  "label": false,
+                  "color": "auto",
+                  "css": "",
+                  "horizontal": false,
+                  "alignRight": false,
+                  "pips": true,
+                  "input": true,
+                  "meter": false,
+                  "compact": false,
+                  "dashed": false,
+                  "snap": false,
+                  "spring": false,
+                  "doubleTap": false,
+                  "range": {
+                    "min": 0,
+                    "max": 127
+                  },
+                  "logScale": false,
+                  "sensitivity": 1,
+                  "steps": "",
+                  "unit": "",
+                  "origin": "auto",
+                  "default": "",
+                  "value": "",
+                  "precision": 0,
+                  "address": "/fader_2",
+                  "preArgs": "",
+                  "target": "",
+                  "bypass": false,
+                  "touchAddress": "",
+                  "meterAddress": ""
                 }
               ],
               "tabs": [],
               "scroll": true
             }
           ]
-        },
-        {
-          "type": "fader",
-          "top": 180,
-          "left": 660,
-          "id": "fader_1",
-          "linkId": "",
-          "width": "auto",
-          "height": "auto",
-          "label": "auto",
-          "color": "auto",
-          "css": "",
-          "horizontal": false,
-          "alignRight": false,
-          "pips": true,
-          "input": true,
-          "meter": false,
-          "compact": false,
-          "dashed": false,
-          "snap": false,
-          "spring": false,
-          "doubleTap": false,
-          "range": {
-            "min": 0,
-            "max": 1
-          },
-          "logScale": false,
-          "sensitivity": 1,
-          "steps": "",
-          "unit": "",
-          "origin": "auto",
-          "default": "",
-          "value": "",
-          "precision": 2,
-          "address": "/fader_1",
-          "preArgs": "",
-          "target": "",
-          "bypass": false,
-          "touchAddress": "",
-          "meterAddress": ""
         }
       ],
       "tabs": [],
