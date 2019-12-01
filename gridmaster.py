@@ -60,9 +60,7 @@ class Gridmaster():
                     self.pgrid[x,y]["instr"][False] = [0, 0, 15]
 
                 
-
     def buttonclrchange(self, x, y, vel, clr):
-        #print(x ,y, vel,'changing color from', self.pgrid[x,y]["rand"][vel], "to ", clr)
         self.pgrid[x,y]["rand"][vel] = clr
         self.ledout(x,y, clr)
         

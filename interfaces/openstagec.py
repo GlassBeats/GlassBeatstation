@@ -133,11 +133,9 @@ class OpenStageControl():
 
             print (x0, y0, self.p0)
 
-        elif args[0] == "/pushypulse": #testing pulsing on o-s-c
-            send("/loop_rgb", [100, 100, 100])
-            send("/rgb_pulse", [255, 255, 255])
-            time.sleep(1)
-            send("/pulse", 1)
+        elif args[0] == "/rgb":
+            loop_num = int(args[1])
+            self.Slmast.color_change(loop_num, args[2:])
 
         elif args[0] == "/swapadd":
             Grid.swap = "add" if args[-1] else None

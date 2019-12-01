@@ -1097,7 +1097,7 @@
                   "id": "color",
                   "linkId": "",
                   "width": 190,
-                  "height": 250,
+                  "height": 260,
                   "label": "auto",
                   "color": "auto",
                   "css": "",
@@ -1114,7 +1114,7 @@
                   "widgets": [
                     {
                       "type": "rgb",
-                      "top": 60,
+                      "top": 70,
                       "left": 0,
                       "id": "rgb_1",
                       "linkId": "",
@@ -1133,8 +1133,8 @@
                       "default": "",
                       "value": "",
                       "precision": 2,
-                      "address": "/rgb_1",
-                      "preArgs": "",
+                      "address": "/rgb",
+                      "preArgs": "@{loopcolor.value}",
                       "target": "",
                       "bypass": false,
                       "split": false,
@@ -1142,9 +1142,9 @@
                     },
                     {
                       "type": "dropdown",
-                      "top": 0,
+                      "top": 10,
                       "left": 40,
-                      "id": "loop color",
+                      "id": "loopcolor",
                       "linkId": "",
                       "width": "auto",
                       "height": "auto",
@@ -1167,7 +1167,7 @@
                       "address": "/loopclrsel",
                       "preArgs": "",
                       "target": "",
-                      "bypass": false
+                      "bypass": true
                     }
                   ],
                   "tabs": []

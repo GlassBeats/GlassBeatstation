@@ -53,6 +53,10 @@ class Slmaster():
             ]
         self.funcs = {"state":self.track_state, "loop_len":self.track_len, "loop_pos":self.track_pos}
 
+    def color_change(self, loop_num, color):
+        print (loop_num, color)
+        self.loops[loop_num].color = color
+
     def sl_osc_cmd(self, prefix, args):
         self.slclient.send(prefix, args)
 
@@ -125,7 +129,6 @@ class Slmaster():
 
             if lp.state in [4,5,6,10,12]: #if in one of the playing states
                 
-
                 if y == 7: #correct to seqmaster
                     self.Seq.check_step(pos_8th)
                 
@@ -134,7 +137,7 @@ class Slmaster():
                     Grid.ledout(7, 8, [0,0,0])
 
                     if Grid.mode == "loop" or  Grid.mode == "rand" and y > 3:
-                        Grid.ledout(0, y, Grid.pgrid[0,y]["loop"][True])
+                        Grid.ledout(0, y, lp.color)
                         Grid.ledout(7, y, Grid.pgrid[7,y]["loop"][False])
 
                 else:
@@ -143,7 +146,7 @@ class Slmaster():
 
 
                     if Grid.mode == "loop" or  Grid.mode == "rand" and y > 3:
-                        Grid.ledout(pos_8th, y, Grid.pgrid[pos_8th,y]["loop"][True])
+                        Grid.ledout(pos_8th, y, lp.color)
                         Grid.ledout(pos_8th - 1, y, Grid.pgrid[pos_8th - 1, y]["loop"][False])
 
 
@@ -167,12 +170,12 @@ class Slmaster():
             loop_num = invloop
             if loop_num < 8: #if one of the first 8 loops
                 loopobj = self.loops[loop_num]
-                param, value = args[2], args[3] # args[1:]
+                param, value = args[2], args[3] 
                 if param != "loop_len" and value > 40:
                     print("loop #", loop_num, param, value, "has not been recorded yet")
                 else:
-                    self.funcs[param](loopobj, value) # these could be more in parallel?
-            else: # if one of the lplay loops
+                    self.funcs[param](loopobj, value)
+            else:
                 print (args)
 
 class Sloop(Slmaster):
@@ -186,7 +189,6 @@ class Sloop(Slmaster):
         self.state = 0
         self.sync = False
         self.rev = False
-        #self.quant = False
         clrs = [
             [20,40,60],
             [40,63,40],
