@@ -2,8 +2,9 @@ import rtmidi2, jackmatchmaker, subprocess, atexit, time, os, random
 from pythonosc import udp_client, dispatcher, osc_server
 
 # project specific internals
-import gridmaster, openstagec, jackconnect, sequencer, gridmode
-from slooper import *
+import gridmaster, sequencer, gridmode
+from interfaces import openstagec, slooper, jackconnect
+from interfaces.slooper import *
 
 def callback_midi(note, time_stamp):
     chan, note, vel = note
