@@ -231,13 +231,9 @@ if __name__ == "__main__":
     dispatcher.set_default_handler(OStageC.stage_handler)
     server = osc_server.ThreadingOSCUDPServer(("localhost", 9998), dispatcher)
 
-    for mde in Grid.modelst:
-        Grid.switchmode(mde)
-        time.sleep(1)
-
     Grid.reset()
-
-        
+    time.sleep(1)
+    Grid.switchmode("rand")
 
 
     def exit_handler():

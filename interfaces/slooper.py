@@ -57,9 +57,21 @@ class Slmaster():
         self.slclient.send(prefix, args)
 
     def track_state(self, loopobj, state):
-        if loopobj.state != state:
+        if loopobj.state != state: # if different than previous state
+            
+            if int(state) == 14 and loopobj.state != 4: # if paused and last state was playing
+                if self.Grid.mode == "rand":
+                    if loopobj.loop_num > 4:
+                        for x in range(4): self.Grid.ledout(x, loopobj.loop_num, [0,0,0])
+                elif self.Grid.mode == "loop":
+                    for x in range(8):
+                        self.Grid.ledout(x, loopobj.loop_num, [0,0,0])
+             
+
+
+            
             loopobj.state = int(state)
-            print (self.stateslst[loopobj.state])
+            print ('***'*20, self.stateslst[loopobj.state])
             clr = (self.stateslst[loopobj.state][1])
             self.Grid.ledout(8, loopobj.loop_num, clr)
 
