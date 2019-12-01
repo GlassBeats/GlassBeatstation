@@ -59,7 +59,7 @@ class Slmaster():
     def track_state(self, loopobj, state):
         if loopobj.state != state: # if different than previous state
             
-            if int(state) == 14 and loopobj.state != 4: # if paused and last state was playing
+            if int(state) == 14 and loopobj.state != 4 or int(state) == 4 and loopobj.state == 2: # if paused and last state was playing
                 if self.Grid.mode == "rand":
                     if loopobj.loop_num > 4:
                         for x in range(4): self.Grid.ledout(x, loopobj.loop_num, [0,0,0])
