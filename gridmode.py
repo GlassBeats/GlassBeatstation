@@ -7,18 +7,9 @@ class Mode():
         del self.grid[8,8]
 
         for xy in self.grid:
-            self.grid[x,y]["func"] = ["released function", "pressed function"]
-            self.grid[x,y]["color"] = [[0,0,0], [63, 63, 63]]
+            self.grid[xy]["func"] = ["off", "on"]
+            self.grid[xy]["clr"] = [[0,0,0], [63, 63, 63]]
                 
 
-    def change_btn_func(self, x, y, press=None, release=None):
-        if press:
-            self.grid[x,y]["func"][True] = press
-        if release: 
-            self.grid[x,y]["func"][False] = release
-
-    def change_btn_clr(self, x, y, press=None, release=None):
-        if press:
-            self.grid[x,y]["color"][True] = press
-        if release: 
-            self.grid[x,y]["color"][False] = release
+    def change_button_func(self,press=None, release=None):
+        pass
