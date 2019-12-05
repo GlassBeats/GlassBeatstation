@@ -1,4 +1,4 @@
-import jack, sys
+import jack, sys, rtmidi2
 
 class JackConnections():
     def __init__(self):
@@ -18,6 +18,18 @@ class JackConnections():
         self.INPORTS= [
                         "sooperlooper:common_out_",
                         ]
+
+        self.initial_connections = [            
+            ["sooperlooper:common_out_1", "ardour:Sloop_Main/audio_in 1"],
+            ["sooperlooper:common_out_2", "ardour:Sloop_Main/audio_in 2"],
+            
+            ]
+
+
+
+            
+        self.inital_connect(initial_connections)
+        
 
 
     def connect(self, OUTPORT, INPORT, stereo=True):
