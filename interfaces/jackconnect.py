@@ -28,7 +28,7 @@ class JackConnections():
 
 
             
-        self.inital_connect(initial_connections)
+        self.initial_connect(self.initial_connections)
         
 
 
