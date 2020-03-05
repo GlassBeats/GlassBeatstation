@@ -481,7 +481,7 @@
                   "bypass": false,
                   "widgetType": "fader",
                   "border": true,
-                  "props": "{\n  \"range\": { \"min\": 0, \"max\": 4 },\n  \"preArgs\": \"rate\",\n  \"default\": 1,\n  \"label\": false,\n  \"target\": \"127.0.0.1:9951\",\n  \"horizontal\": true,\n  \"spring\": true,\n  \"address\": \"JS{{return '/sl/' + $ + '/set'}}\", \"value\":@{omnispeed}\n}"
+                  "props": "{\n  \"range\": { \"min\": 0, \"max\": 4 },\n  \"preArgs\": \"rate\",\n  \"default\": 1,\n  \"label\": false,\n  \"target\": \"127.0.0.1:9951\",\n  \"horizontal\": true,\n  \n  \"address\": \"JS{{return '/sl/' + $ + '/set'}}\", \"value\":@{omnispeed}\n}"
                 },
                 {
                   "type": "knob",

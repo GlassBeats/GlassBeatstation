@@ -18,21 +18,6 @@ class JackConnections():
         self.INPORTS= [
                         "sooperlooper:common_out_",
                         ]
-        initial_connections = [
-            ["system:capture_1", "sooperlooper:common_in_1"],
-            ["system:capture_1", "sooperlooper:common_in_2"],
-            
-            ["system:capture_2", "sooperlooper:common_in_1"],
-            ["system:capture_2", "sooperlooper:common_in_2"],
-
-            
-            ["sooperlooper:common_out_1", "system:playback_1"],
-            ["sooperlooper:common_out_2", "system:playback_2"],
-            
-            ]
-        
-        self.initial_connect(initial_connections)
-
     def connect(self, OUTPORT, INPORT, stereo=True):
         j = self.client
 
