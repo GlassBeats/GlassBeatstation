@@ -15,7 +15,7 @@ sleep 2 &&
 
 node /home/pi/installed_local/open-stage-control/app/ -n -l /home/pi/projects/glass_beatstation/interfaces/stagecontrol.json  -s 127.0.0.1:9998 -m "open-stage-cc:virtual" &
 
-cd /home/pi/installed_local/VL53L0X_rasp_python/python/ && python3 ./vlidar_midi.py &
+#cd /home/pi/installed_local/VL53L0X_rasp_python/python/ && python3 ./vlidar_midi.py &
 
 sleep 10 &&
 
