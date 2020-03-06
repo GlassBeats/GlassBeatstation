@@ -2013,6 +2013,141 @@
               "scroll": true
             }
           ]
+        },
+        {
+          "type": "fader",
+          "top": 0,
+          "left": 670,
+          "id": "drums",
+          "linkId": "",
+          "width": 100,
+          "height": 320,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "default": 54,
+          "value": "",
+          "precision": 0,
+          "address": "/control",
+          "preArgs": [
+            1,
+            123
+          ],
+          "target": [
+            "midi:open-stage-cc"
+          ],
+          "bypass": false,
+          "horizontal": false,
+          "alignRight": false,
+          "pips": true,
+          "input": true,
+          "meter": false,
+          "compact": false,
+          "dashed": false,
+          "snap": true,
+          "spring": false,
+          "doubleTap": false,
+          "range": {
+            "min": 0,
+            "max": 127
+          },
+          "steps": "",
+          "logScale": false,
+          "unit": "",
+          "origin": "auto",
+          "touchAddress": "",
+          "meterAddress": "",
+          "sensitivity": 1
+        },
+        {
+          "type": "fader",
+          "top": 0,
+          "left": 770,
+          "id": "keys",
+          "linkId": "",
+          "width": 100,
+          "height": 320,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "default": 77,
+          "value": "",
+          "precision": 0,
+          "address": "/control",
+          "preArgs": [
+            1,
+            122
+          ],
+          "target": [
+            "midi:open-stage-cc"
+          ],
+          "bypass": false,
+          "horizontal": false,
+          "alignRight": false,
+          "pips": true,
+          "input": true,
+          "meter": false,
+          "compact": false,
+          "dashed": false,
+          "snap": true,
+          "spring": false,
+          "doubleTap": false,
+          "range": {
+            "min": 0,
+            "max": 127
+          },
+          "steps": "",
+          "logScale": false,
+          "unit": "",
+          "origin": "auto",
+          "touchAddress": "",
+          "meterAddress": "",
+          "sensitivity": 1
+        },
+        {
+          "type": "fader",
+          "top": 0,
+          "left": 860,
+          "id": "Vocoder",
+          "linkId": "",
+          "width": 100,
+          "height": 320,
+          "label": "auto",
+          "color": "auto",
+          "css": "",
+          "default": 77,
+          "value": "",
+          "precision": 0,
+          "address": "/control",
+          "preArgs": [
+            1,
+            121
+          ],
+          "target": [
+            "midi:open-stage-cc"
+          ],
+          "bypass": false,
+          "horizontal": false,
+          "alignRight": false,
+          "pips": true,
+          "input": true,
+          "meter": false,
+          "compact": false,
+          "dashed": false,
+          "snap": true,
+          "spring": false,
+          "doubleTap": false,
+          "range": {
+            "min": 0,
+            "max": 127
+          },
+          "steps": "",
+          "logScale": false,
+          "unit": "",
+          "origin": "auto",
+          "touchAddress": "",
+          "meterAddress": "",
+          "sensitivity": 1
         }
       ],
       "tabs": [],
