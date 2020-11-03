@@ -1,10 +1,4 @@
 #/usr/bin/python3
-## Totally modular musical-gestural hardware & software interface
-## aka how make any input do anything
-## this is a story
-## join the journey
-
-## consider more stacking
 
 class Grid(object):
     mode = 0
@@ -13,7 +7,8 @@ class Grid(object):
         for x in range(rows):
             for y in range(columns):
                 self.Buttons[(x,y)] = Button(self.mode, (x, y))
-
+    def __repr__(self):
+        pass
                  
 class Button (Grid):
     def __init__(self, mode, coord):
@@ -22,28 +17,39 @@ class Button (Grid):
         self.state = 0
         self.color = [{}, {}] #this should be stackable, last off
 
-    def __repr__(self):
-        return str(self.funcs)
+
+    def __str__(self):
+        return (str(self.coord) + str(self.funcs))
 
     def replace_func(self, vel, function, mode=None):
         if mode == None: mode = self.mode  
         try:
             if self.funcs[vel][mode]:
-                print ("{}: replacing {} with {}".format(self.coord, self.funcs[vel][mode], function))
+                print ('{}[vel={}][mode={}] replacing {} with {}'.format(self.coord, vel, mode, self.funcs[vel][mode], function))
                 self.funcs[vel][mode] = function
+
         except KeyError:
-                print ("{}: has no function yet, use add_func")
+                print ('{}[vel={}][mode={}] has no function yet, use add_func'.format(self.coord, vel, mode))
                        
     def add_func(self, vel, function, mode=None):
-        if mode == None: mode = self.mode            
-        self.funcs[vel][mode] = function
-        print (self.funcs[vel][mode])
+        if mode == None: mode = self.mode
+        print ('*' * 20)
+        print (self)
+        print ('*' * 20)
+        try: 
+            if isinstance(self.funcs[vel][mode], list):
+                    self.funcs[vel][mode].append(function)
+            elif self.funcs[vel][mode]:
+                print ('adding {} to currrent action {}'.format)
+        except KeyError:        
+            print ('{}[vel={}][mode={}]: adding function '.format(self.coord, vel, mode, function))
+            self.funcs[vel][mode] = function
         
     def press(self, vel, mode=None):
         if mode == None: mode = self.mode
         try: 
             action = self.funcs[vel][mode]
-            print (action, end= " ")
+            print (self.coord, action, end= ' ')
             action()
         except KeyError:
             print ('there is no assigned function yet')
@@ -57,34 +63,15 @@ class Button (Grid):
         pass
         
 def testfunc():
-    print ('successful function')
+    print ('first action')
 
 def testfunc2():
-    print ('secondary success')
+    print ('secondary action')
 
-if __name__ == "__main__":
-    Griddy = Grid(5,5)
-    Griddy.Buttons[1,1,].add_func(True, testfunc)
-    Griddy.Buttons[1,1,].press(True)
-    print ('test', Griddy.Buttons[1,1,])
+if __name__ == '__main__':
+    Matrix = Grid(5,5)
+    Matrix.Buttons[1,1,].add_func(True, testfunc)
+    Matrix.Buttons[1,1,].press(True)
     
-    Griddy.Buttons[1,1,].replace_func(True, testfunc2)
-    Griddy.Buttons[1,1,].press(True)  
-
-'''
-         
-Grid.button[(x,y)].press(vel, mode)
-Grid.press((x,y), vel, mode)
-Grid.button[(x,y)].press()                       
-'''
-
-'''
-class SuperLoop
-    def __init__(self):
-        self
-
-
-class Loop(Superloop):
-    def __init__(self):
-        self.state:
-'''
+    Matrix.Buttons[1,1,].add_func(True, testfunc2)
+    Matrix.Buttons[1,1,].press(True)  
