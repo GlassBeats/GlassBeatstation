@@ -1,5 +1,27 @@
 #/usr/bin/python3
 
+import rtmidi2, time, jack, pythonosc
+
+
+def openhandle(*args):
+    print (args)
+
+class MidiPort():
+    def __init__(self, name, direction="out"):
+        if direction == 'out' or direction == 'both':
+            self.outport = rtmidi2.MidiOut(name)
+            self.outport.open_virtual_port(name)
+        if direction == 'in' or direction == 'both':
+            self.inport = rtmidi2.MidiIn(name)
+            self.inport.open_virtual_port(name)
+
+    def callback(self, function):
+        print ('setting up callback')
+        self.inport.callback = function
+
+    def send(self, note, vel, channel=176):
+        self.outport.sendMessage(channel, note, vel)
+
 class Grid(object):
     mode = 0
     def __init__(self, rows, columns):
@@ -41,10 +63,10 @@ class Button (Grid):
             print (self,' : adding function ', function)
             self.funcs[vel][mode] = function
         elif numfuncs == 1:
-            print (self, 'adding {} to current action'.format(function))
+            print (self, 'adding {} to current button action'.format(function))
             self.funcs[vel][mode] = ([self.funcs[vel][mode],function])
         elif numfuncs > 2:
-            print (self, 'adding {} to current actions {}'.format(function))
+            print (self, 'adding {} to current button actions {}'.format(function))
             self.funcs[vel][mode].append(function)
 
         
@@ -59,7 +81,6 @@ class Button (Grid):
             for a in self.funcs[vel][mode]:
                 a()
 
-
 def testfunc():
     print ('first action')
 
@@ -68,11 +89,7 @@ def testfunc2():
 
 if __name__ == '__main__':
     Matrix = Grid(5,5)
-    Matrix.Buttons[1,1,].add_func(True, testfunc)
-    Matrix.Buttons[1,1,].press(True)
-    print ('*********')
-
-    
-    Matrix.Buttons[1,1,].add_func(True, testfunc2)
-    Matrix.Buttons[1,1,].press(True)
-    print(Matrix)
+    launchpadmidi = MidiPort('launchpad mk2', direction='both')
+    launchpadmidi.callback(openhandle)
+    while True:
+        time.sleep(.1)
