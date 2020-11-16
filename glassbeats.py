@@ -57,7 +57,7 @@ class Button (Grid):
         except KeyError:
             return 0
         
-    def change_action(self, vel, action, mode=None):
+    '''def change_action(self, vel, action, mode=None):
         if mode == None: mode = self.mode
         if self.check_action(vel, mode) > 1:
             print (self, 'replacing action {} with {}'.format(self.actions[vel][mode], action))
@@ -66,13 +66,14 @@ class Button (Grid):
                 print (self,'previously no action, adding action {}'.format(action))
         else:
             print ('there is no action to change')
+              /'''        
                        
-                       
-    def add_action(self, vel, action, mode=None): #activate action for given mode
+    def change_action(self, vel, action, mode=None, replace=False): #activate action for given mode
         if mode == None: mode = self.mode #default mode is current
         numactions = self.check_action(vel,mode)
-        if numactions == 0:
-            print (self,' : adding action ', action)
+        
+        if numactions == 0 or replace == True:
+            print (self,'new action : {}'.format(action))
             self.actions[vel][mode] = action
         elif numactions == 1:
             print (self, 'adding {} to current button action {}'.format(action, self.actions[vel][mode]))
@@ -96,7 +97,7 @@ class Button (Grid):
 
 
 
-class OSCClient():
+class OSCClient(): #setup client to send OSC messages
     def __init__(self, port, ipaddr="127.0.0.1"):
         self.client= udp_client.SimpleUDPClient(ipaddr, port)
         self.port = port
@@ -106,16 +107,17 @@ class OSCClient():
         if ipaddr==None: ipaddr = self.ipaddr
         self.client.send_message(ipaddr, port)
 
-idx = 0
+
 def test():
-    print (idx)
-    idx += 1
+    print ('test')
 
 if __name__ == '__main__':
+    
     Matrix = Grid(5,5)
     print(Matrix.mode)
-    Matrix.Button[0,0].change_action(0, 127, test)
-
+    Matrix.Button[0,0].change_action(True, test)
+    Matrix.Button[0,0].change_action(True, test, replace=True)
+    
     Matrix.Button[0,0].activate(True)
     
     LaunchPadMidi = MidiPort('launchpad mk2', direction='both')
