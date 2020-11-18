@@ -74,17 +74,16 @@ class Button (Grid):
         print ('*' * 10, numactions, self.actions[mode][vel])
         if numactions == 0 :
             print (self.coord,'new action : {}'.format(action))
-            #print (type(self.actions), self.actions, "****", args)
             self.actions[mode][vel] = [[action, args]]
             
 
         elif numactions == 1:
-            print (self, 'adding {} to current button action {}'.format(action, self.actions[mode][vel]))
+            print (self.coord, 'adding {} to current button action'.format(action, self.actions[mode][vel]))
             self.actions[mode][vel].append([action, args])
             
-        elif numactions > 2:
+        elif numactions > 1:
             print (self, 'adding {} to current {} actions {}'.format(action, numactions, self.actions[mode][vel]))
-            self.actions[mode][vel].append(function)
+            self.actions[mode][vel].append([action, args])
 
 
     def activate(self, vel, mode=None):
@@ -95,7 +94,7 @@ class Button (Grid):
             print (self.actions[mode][vel])
             self.actions[mode][vel][0][0](self.actions[mode][vel][0][1])
         elif numactions> 1:
-            print ('active', self.actions[mode][vel])
+            print ('\\\\active/////', self.actions[mode][vel])
             for a in range(len(self.actions[mode][vel])):
                 self.actions[mode][vel][a][0](self.actions[mode][vel][a][1])
 
@@ -117,18 +116,14 @@ if __name__ == '__main__':
     
     Matrix = Grid(5,5)   
     Matrix.Button[0,0].add_action(True, test, args='foxy')
-    Matrix.Button[0,0].add_action(True, test, args='foxy2')
+    Matrix.Button[0,0].activate(True)
+    Matrix.Button[0,0].add_action(True, test, args='cat')
+    Matrix.Button[0,0].activate(True)
+    Matrix.Button[0,0].add_action(True, test, args='dog')
+    
     Matrix.Button[0,0].activate(True)
     Matrix.Button[0,0].clear_action(True)
-    #print ('end test', Matrix.Button[0,0].actions)
     Matrix.Button[0,0].activate(True)
-##    Matrix.Button[0,0].activate(True)
-##    Matrix.Button[0,0].change_action(True, test, args='foxy2', replace=True)
-##    Matrix.Button[0,0].activate(True)
-##    Matrix.Button[0,0].change_action(True, test, args='foxy3')
-    #rint ('***')
-    #Matrix.Button[0,0].change_action(True, test, args='cat')
-    
     LaunchPadMidi = MidiPort('launchpad mk2', direction='both')
     LaunchPadMidi.callback(openhandle)
 
