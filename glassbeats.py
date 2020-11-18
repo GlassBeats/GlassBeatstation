@@ -56,20 +56,17 @@ class Button (Grid):
 
     def check_num(self, vel, mode, checkpoint):
         #check number of existing actions/args, return the # of actions/args
-        print ('checking num', checkpoint)
-        
-        try:
-            return len(checkpoint[mode][vel])
- 
-        except KeyError:
-            return 0
+       # print ('checking num', checkpoint)        
+        return len(checkpoint[mode][vel])
+
 
 
     def clear_action(self, vel, mode=None):
         if mode == None: mode = self.mode
         num_args = self.check_num(vel, mode, self.actions)
-        #self.actions[mode][vel].
-    
+        self.actions[mode][vel].clear()
+
+        
     def add_action(self, vel, action, args=None, mode=None): #activate action for given mode
         if mode == None: mode = self.mode #default mode is current
 
@@ -121,6 +118,9 @@ if __name__ == '__main__':
     Matrix = Grid(5,5)   
     Matrix.Button[0,0].add_action(True, test, args='foxy')
     Matrix.Button[0,0].add_action(True, test, args='foxy2')
+    Matrix.Button[0,0].activate(True)
+    Matrix.Button[0,0].clear_action(True)
+    #print ('end test', Matrix.Button[0,0].actions)
     Matrix.Button[0,0].activate(True)
 ##    Matrix.Button[0,0].activate(True)
 ##    Matrix.Button[0,0].change_action(True, test, args='foxy2', replace=True)
