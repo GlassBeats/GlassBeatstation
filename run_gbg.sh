@@ -9,7 +9,7 @@ jack_bufsize 256  &&
 
 sooperlooper -L ./interfaces/default.slsess -l 8 -m ./interfaces/sl_bindings.slb &
 
-interfaces/jackmatch.sh & # this script for automatically persisting midi connections with jack-matchmaker
+#interfaces/jackmatch.sh & # this script for automatically persisting midi connections with jack-matchmaker
 
 if [ $# = 1 ]
 

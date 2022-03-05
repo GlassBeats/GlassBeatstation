@@ -7,7 +7,7 @@ Python 3 (all available via pip3:)
     pip3 install jack-matchmaker
     
 Open Stage Control
-    https://openstagecontrol.ammd.net/
+    https://osc.ammd.net/
     or
     https://github.com/jean-emmanuel/open-stage-control
     
